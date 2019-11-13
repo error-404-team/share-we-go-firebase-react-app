@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Loading from './pages/loading';
+import PropTypes from 'prop-types';
+import SignInScreen from './pages/auth';
+import Private from './pages/private';
+import { useAuth, useLocation, useUsersPrivate } from './controllers'
 
-function App() {
+
+function App(props) {
+  const { isLoading, isAuth } = useAuth(props);
+  const { isUsersPrivate } = useUsersPrivate(props)
+  const { isLocation } = useLocation(props);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      {isLoading !== false
+        ? <Loading />
+        : <React.Fragment>
+          {isAuth !== null
+            ? <React.Fragment>
+              <Private db={props.db} isUsersPrivate={isUsersPrivate} isLocation={isLocation} />
+            </React.Fragment>
+            : <SignInScreen firebase={props.db} />
+          }
+        </React.Fragment>}
+
+    </React.Fragment>
   );
+}
+
+App.propTypes = {
+  db: PropTypes.object
 }
 
 export default App;
