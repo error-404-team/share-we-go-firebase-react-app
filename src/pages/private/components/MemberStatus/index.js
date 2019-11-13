@@ -1,16 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-
 import ConnectApiMaps, { Map } from 'maps-google-react';
-
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-
 import { StyleBaseLine } from '../StyleBaseLine';
 import ChatSlide from '../ChatSlide';
 import MemberTypeIconStatus from '../MemberModalTypeIconStatus';
@@ -24,7 +20,6 @@ import { useShare, useProfile, useUsers } from '../../../../controllers';
 
 const MemberStatus = (props) => {
 
-    // const [share, setShare] = useState(null);
     const [openChatSlide, setOpenChatSlide] = useState(false);
     const [openKeyDataTaxiCar, setOpenKeyDataTaxiCar] = useState(false);
     const [openMenuSlide, setOpenMenuSlide] = useState(false)
@@ -115,8 +110,6 @@ const MemberStatus = (props) => {
                             this.img = img;
                             this.maps = map
                             setMap(map)
-                            // this.google = google
-                            // setGoogle(google)
                         }
 
                         CustomMarker.prototype = new google.maps.OverlayView();
@@ -125,7 +118,6 @@ const MemberStatus = (props) => {
                             var self = this;
                             var div = this.div;
                             if (!div) {
-                                // Generate marker html
                                 div = this.div = document.createElement('div');
                                 div.className = 'custom-marker';
                                 div.style.position = 'absolute';
@@ -154,7 +146,6 @@ const MemberStatus = (props) => {
                                 let positionA = new this.google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
                                 this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
-                                // console.log(this.pos);
                                 this.div.style.left = this.pos.x + 'px';
                                 this.div.style.top = this.pos.y + 'px';
                             }
@@ -187,8 +178,6 @@ const MemberStatus = (props) => {
                             }
                         }
 
-                        // Sets a listener on a radio button to change the filter type on Places
-                        // Autocomplete.
                         AutocompleteDirectionsHandler.prototype.setupClickListener = function (mode) {
                             var me = this;
 
@@ -229,11 +218,9 @@ const MemberStatus = (props) => {
                                 function (response, status) {
                                     if (status === 'OK') {
                                         me.directionsRenderer.setDirections(response);
-                                        // console.log(response);
 
                                     } else {
                                         alert('Directions request failed due to ' + status);
-                                        // console.log(response, status);
 
                                     }
                                 });

@@ -3,16 +3,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import PropsTypes from 'prop-types';
 import { ThemeProvider,withStyles   } from '@material-ui/styles';
-// import { createMuiTheme } from '@material-ui/core/styles';
-// import '../css/share-location-bar.css';
-
-// const share_location_bar_theme = createMuiTheme({
-//     palette: {
-//         primary: {
-//             main: 'rgba(7, 81, 146, 0.87)',
-//         }
-//     },
-// });
 
 
 
@@ -26,11 +16,9 @@ class ChatBar extends React.Component {
         return (
             <div style={{
                 flexGrow: 1,
-                // position: 'absolute',
                 width: '-webkit-fill-available',
                 flexDirection: 'column'
             }}>
-                {/* <ThemeProvider theme={share_location_bar_theme}> */}
                     <AppBar color="inherit" position="absolute"
                         elevation={1}
                     >
@@ -39,7 +27,6 @@ class ChatBar extends React.Component {
                             {this.props.children}
                         </Toolbar>
                     </AppBar>
-                {/* </ThemeProvider> */}
             </div>
         )
     }

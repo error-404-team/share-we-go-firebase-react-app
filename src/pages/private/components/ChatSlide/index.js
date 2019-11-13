@@ -1,15 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-
-// core lib
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-
-// tag lib
 import IconButton from '@material-ui/core/IconButton';
 import Drawer from '@material-ui/core/Drawer';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
 import { Loading } from './components/Loading';
 import ChatBar from '../ChatBar';
 import InputCaht from '../InputChat';
@@ -17,8 +12,6 @@ import { dateTime } from '../../../../model/dateTime';
 import './styles/chat-box.css';
 import { useProfile, useShare } from '../../../../controllers';
 
-
-// style
 const useStyles = makeStyles(theme => ({
     drawer: {
         width: (window.innerWidth),
@@ -33,8 +26,6 @@ function ChatSlide(props) {
 
     const theme = useTheme();
     const classes = useStyles();
-
-    // const [profile, setProfile] = useState(null)
     const [chat, setChat] = useState(null)
     const [msg, setMsg] = React.useState(null)
     const { isProfile } = useProfile(props)

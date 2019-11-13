@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
-
 import { withStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-
-
 import MenuItem from '@material-ui/core/MenuItem';
-
-// import Personalform from "../components/personalInformation";
 import Button from '@material-ui/core/Button';
 import { Link, withRouter } from "react-router-dom";
-// import firebase from "../../connect/firebase";
-// import { post } from '../../RESTful_API';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';

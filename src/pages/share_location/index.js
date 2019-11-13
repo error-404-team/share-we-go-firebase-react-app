@@ -1,88 +1,31 @@
 import React, { useState } from 'react';
-// import Router from 'next/router';
-// import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-// import { ThemeProvider, withStyles } from '@material-ui/styles';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
-// import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types'
-// import { createMuiTheme } from '@material-ui/core/styles';
 import ShareLocationBar from './components/ShareLocationBar';
 import PlaceAutocompleteAndDirections from './components/PlaceAutocompleteAndDirections';
 import CustomDateTimePicker from './components/CustomDateTimePicker';
 import TravelCompanion from './components/TravelCompanion';
-// import geno from '../image/geno.svg'
 import Selectgender from './components/Selectgender';
 import { Link, withRouter } from 'react-router-dom';
 import CommuteIcon from '@material-ui/icons/Commute';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
-
-// import firebase from '../../connect/firebase';
-// import { post, get } from '../../RESTful_API';
 import { dateTime } from '../../module';
-// import { setDate } from 'date-fns';
 import AlertCheck from './components/AlertCheck';
-import { useProfile, useShareId } from '../../StoreData';
+import { useProfile, useShare } from '../../controllers';
 
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
-
-
-// const share_location_theme = createMuiTheme({
-//     palette: {
-//         primary: {
-//             main: 'rgba(255, 255, 255, 0)',
-//         }
-//     },
-// });
-
-// function QontoStepIcon(props) {
-//     const classes = useQontoStepIconStyles();
-//     const { active, completed } = props;
-
-//     return (
-//         <div
-//             className={clsx(classes.root, {
-//                 [classes.active]: active,
-//             })}
-//         >
-//             {completed ? <Check className={classes.completed} /> : <div className={classes.circle} />}
-//         </div>PlaceAutocompleteAndDirections
-//     )
-// }
-
-// const useQontoStepIconStyles = makeStyles({
-//     root: {
-//         color: '#eaeaf0',
-//         display: 'flex',
-//         height: 22,
-//         alignItems: 'center'
-//     },
-//     active: {
-//         color: '#784af4'
-//     },
-//     circle: {
-//         width: 8,
-//         height: 8,
-//         borderRadius: '50%',
-//         backgroundColor: 'currentColor'
-//     },
-//     completed: {
-//         color: '#784af4',
-//         zIndex: 1,
-//         fontSize: 18
-//     }
-// })
-
+////useisShare///
 
 function getSteps() {
     return ['เส้นทาง', 'วันเวลา', 'จำนวน', 'เพศ'];
@@ -152,8 +95,8 @@ function ShareLocation(props) {
     const [date, setDate] = useState(new Set());
     // const [user, setUser] = useState(new Set());
     const [open, setOpen] = useState(false);
-    const {profile} = useProfile(props.db,props.auth)
-    const {shareId} = useShareId(props.db,props.auth)
+    const {profile} = useProfile(props)
+    const {isShare} = useShare(props)
 
     // firebase.auth().onAuthStateChanged((user) => {
     //     setUser(user)
@@ -233,29 +176,29 @@ function ShareLocation(props) {
         if (activeStep === 0) {
             // get.share.location(user.uid).then(function (data) {
                 setLocation({
-                    start_address: shareId.location.routes[0].legs[0].start_address,
-                    end_address: shareId.location.routes[0].legs[0].end_address
+                    start_address: isShare.location.routes[0].legs[0].start_address,
+                    end_address: isShare.location.routes[0].legs[0].end_address
                 })
             // });
         }
         if (activeStep === 1) {
             // get.share.date(user.uid).then(function (data) {
                 setDate({
-                    end_time: shareId.date.end_time.value,
-                    start_time: shareId.date.start_time.value
+                    end_time: isShare.date.end_time.value,
+                    start_time: isShare.date.start_time.value
                 })
             // });
         }
 
         if (activeStep === 2) {
             // get.share.max_number(user.uid).then(function (data) {
-                setMaxNumber({ value: shareId.max_number.value })
+                setMaxNumber({ value: isShare.max_number.value })
             // });
         }
 
         if (activeStep === 3) {
             // get.share.sex(user.uid).then(function (data) {
-                setSex({ value: shareId.sex.value })
+                setSex({ value: isShare.sex.value })
             // });
 
         }

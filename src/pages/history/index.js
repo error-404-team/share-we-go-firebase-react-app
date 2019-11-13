@@ -1,28 +1,17 @@
 import React from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
-// import Router from 'next/router';
 import IconButton from '@material-ui/core/IconButton';
 import HistoryBar from './components/HistoryBar';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import AppBar from '@material-ui/core/AppBar';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-// import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-// import firebase from '../../connect/firebase';
-// import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-// import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import CommuteIcon from '@material-ui/icons/Commute';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-// import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import WcIcon from '@material-ui/icons/Wc';
-// import { get } from '../../RESTful_API'
-import { useHistoryId } from '../../StoreData';
+import { useHistory } from '../../controllers';
 
 
 
@@ -50,34 +39,18 @@ class History extends React.Component {
     };
 
     goBack() {
-        // Router.back();
+    
     }
 
-    componentDidMount() {
-        const { historyId } = useHistoryId(this.props.db, this.props.auth)
-        // firebase.auth().onAuthStateChanged((user) => {
-        //     const me = this;
-        //     if (user) {
-        //         firebase.database().ref(`history/${user.uid}`).once("value").then(function (snapshot) {
-        //             let data = (snapshot.val())
-        this.setState({ history: historyId })
-        // })
-        // get.history.id(user.uid).then((data) => {
-        //     console.log(data);
-
-        //     if (data !== null) {
-        //         me.setState({ history: data })
-        //     }
-        // })
-        // }
-        // })
+    componentDidMount() {              
+        const { isHistory } = useHistory(this.props)
+        this.setState({ history: isHistory })
 
     }
 
     render() {
         const { history } = this.state;
 
-        // console.log(Object.keys(history).length);
         if (history !== null) {
 
             console.log(history);
@@ -87,7 +60,6 @@ class History extends React.Component {
             <React.Fragment>
                 <CssBaseline />
 
-                {/* app-bar */}
                 <HistoryBar>
                     <IconButton onClick={this.props.history.goBack} style={{ position: "absolute", left: 0 }} >
                         <ChevronLeftIcon fontSize="large" />
@@ -101,7 +73,7 @@ class History extends React.Component {
                         <h2>ประวัติ</h2>
                     </div>
                 </HistoryBar>
-                {/* end-app-bar */}
+    
                 <div style={{ width: '100%', marginTop: '60px' }}>
                     {this.state.history !== null
                         ? (<React.Fragment>
