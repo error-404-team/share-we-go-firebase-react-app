@@ -11,26 +11,22 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+
 import Button from '@material-ui/core/Button';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
-// import Personalform from "../components/personalInformation";
 
-// import Link from "next/link";
-// import firebase from "../../connect/firebase";
 import { InputBase } from '@material-ui/core';
-// import { post, get } from '../../RESTful_API';
-// import { writeUserDataEdit } from '../firebase-database/write-data'
+
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Phone';
 import WcIcon from '@material-ui/icons/Wc';
 import FaceIcon from '@material-ui/icons/Face';
 import { dateTime } from '../../module';
-import { useProfile } from '../../StoreData';
+import { useProfile } from '../../controllers';
 
 
 
@@ -113,13 +109,6 @@ class Profile extends React.Component {
             age: this.state.age
         }
 
-        // firebase.auth().onAuthStateChanged((user) => {
-
-        //     post.users.profile(user.uid, data, dateTime)
-
-
-        // })
-
         let path = `users/${this.props.match.params.id}/profile`
         let _log = `users/${this.props.match.params.id}/profile/_log`
 
@@ -133,50 +122,48 @@ class Profile extends React.Component {
     }
 
     componentDidMount() {
-        const { profile } = useProfile(this.props.db, { uid: this.props.match.params.id })
+        const { isProfile } = useProfile(this.props)
         const me = this;
-        // firebase.auth().onAuthStateChanged((user) => {
-        this.setState({ uid: this.props.auth.uid })
-        // get.users.profile(this.props.match.params.id).then(function (data) {
-        console.log(profile);
-        if (profile) {
+
+        this.setState({ uid: this.props.isUsersPrivate.uid })
+
+        console.log(isProfile);
+        if (isProfile) {
             me.setState({ nullProfile: false })
         } else {
             me.setState({ nullProfile: true })
         }
 
-        if (profile.photoURL !== null) {
+        if (isProfile.photoURL !== null) {
 
-            me.setState({ photoURL: profile.photoURL });
+            me.setState({ photoURL: isProfile.photoURL });
         }
 
-        if (profile.displayName !== null) {
+        if (isProfile.displayName !== null) {
 
-            me.setState({ displayName: profile.displayName });
+            me.setState({ displayName: isProfile.displayName });
         }
 
-        if (profile.email !== null) {
+        if (isProfile.email !== null) {
 
-            me.setState({ email: profile.email });
+            me.setState({ email: isProfile.email });
         }
 
-        if (profile.phoneNumber !== null) {
+        if (isProfile.phoneNumber !== null) {
 
-            me.setState({ phoneNumber: profile.phoneNumber });
+            me.setState({ phoneNumber: isProfile.phoneNumber });
         }
 
-        if (profile.sex !== null) {
+        if (isProfile.sex !== null) {
 
-            me.setState({ sex: profile.sex });
+            me.setState({ sex: isProfile.sex });
         }
 
-        if (profile.age !== null) {
+        if (isProfile.age !== null) {
 
-            me.setState({ age: profile.age });
+            me.setState({ age: isProfile.age });
         }
-        // })
 
-        // })
     }
 
     render() {
@@ -353,4 +340,4 @@ const styles = {
     },
 }
 
-export default withStyles(styles)(withRouter(Profile));
+export default withStyles(styles)(withRouter(isProfile));
