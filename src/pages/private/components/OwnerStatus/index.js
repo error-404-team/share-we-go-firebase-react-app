@@ -61,7 +61,7 @@ const OwnerStatus = (props) => {
     }
 
     const startShareGroup = () => {
-        props.history.push('doc_taxi')
+        props.history.push(`doc_taxi/${props.isUsersPrivate.uid}`)
     }
 
     const exitShareGroup = () => {
@@ -322,7 +322,9 @@ const OwnerStatus = (props) => {
                                 share_id={props.isStatus.owner.uid}
                                 isShare={isShare}
                                 open={openModelExitShare}
-                                onClose={offModelExitShare} />
+                                onClose={offModelExitShare}
+                                isUsersPrivate={props.isUsersPrivate}
+                                db={props.db} />
                         </Map>
                         <ChatSlide
                             open={openChatSlide}

@@ -30,10 +30,14 @@ import { useProfile } from '../../controllers';
 
 
 
+
+
 class Profile extends React.Component {
 
     constructor(props) {
         super(props)
+
+        const { isProfile } = useProfile(this.props)
 
         this.state = {
             photoURL: 'https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiTltSo4MDkAhURUI8KHffBDJUQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.onlinewebfonts.com%2Ficon%2F227642&psig=AOvVaw0nPTqj6ZudRIcCKQWYbHEk&ust=1568015831780316',
@@ -59,13 +63,15 @@ class Profile extends React.Component {
             ],
             match: this.props.match,
             uid: '',
-            nullProfile: true
+            nullProfile: true,
+            isProfile: isProfile
         }
 
         this.displayNameInput = React.createRef()
         this.emailInput = React.createRef()
         this.sexInput = React.createRef()
         this.ageInput = React.createRef()
+
     }
 
 
@@ -122,46 +128,45 @@ class Profile extends React.Component {
     }
 
     componentDidMount() {
-        const { isProfile } = useProfile(this.props)
         const me = this;
 
         this.setState({ uid: this.props.isUsersPrivate.uid })
 
-        console.log(isProfile);
-        if (isProfile) {
+        console.log(this.state.isProfile);
+        if (this.state.isProfile) {
             me.setState({ nullProfile: false })
         } else {
             me.setState({ nullProfile: true })
         }
 
-        if (isProfile.photoURL !== null) {
+        if (this.state.isProfile.photoURL !== null) {
 
-            me.setState({ photoURL: isProfile.photoURL });
+            me.setState({ photoURL: this.state.isProfile.photoURL });
         }
 
-        if (isProfile.displayName !== null) {
+        if (this.state.isProfile.displayName !== null) {
 
-            me.setState({ displayName: isProfile.displayName });
+            me.setState({ displayName: this.state.isProfile.displayName });
         }
 
-        if (isProfile.email !== null) {
+        if (this.state.isProfile.email !== null) {
 
-            me.setState({ email: isProfile.email });
+            me.setState({ email: this.state.isProfile.email });
         }
 
-        if (isProfile.phoneNumber !== null) {
+        if (this.state.isProfile.phoneNumber !== null) {
 
-            me.setState({ phoneNumber: isProfile.phoneNumber });
+            me.setState({ phoneNumber: this.state.isProfile.phoneNumber });
         }
 
-        if (isProfile.sex !== null) {
+        if (this.state.isProfile.sex !== null) {
 
-            me.setState({ sex: isProfile.sex });
+            me.setState({ sex: this.state.isProfile.sex });
         }
 
-        if (isProfile.age !== null) {
+        if (this.state.isProfile.age !== null) {
 
-            me.setState({ age: isProfile.age });
+            me.setState({ age: this.state.isProfile.age });
         }
 
     }

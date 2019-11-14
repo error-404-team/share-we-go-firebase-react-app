@@ -25,16 +25,16 @@ const Private = (props) => {
                             {isStatus.member.value !== "false"
                                 ? (
                                     <React.Fragment>
-                                        {/* <MemberStatus
+                                        <MemberStatus
                                             db={props.db}
                                             isUsersPrivate={props.isUsersPrivate}
-                                            isStatus={isStatus} /> */}
+                                            isStatus={isStatus} />
                                     </React.Fragment>)
                                 : (<React.Fragment>
-                                    {/* <UserStatus
+                                    <UserStatus
                                         db={props.db}
                                         isUsersPrivate={props.isUsersPrivate}
-                                        isStatus={isStatus} /> */}
+                                        isStatus={isStatus} />
                                     {/* คาดว่าน่าจะ error ตรงนี้แหละ */}
                                 </React.Fragment>)
                             }

@@ -32,7 +32,7 @@ function App(props) {
                 <Route path="/private" >
                   <Private db={props.db} isUsersPrivate={isUsersPrivate} isLocation={isLocation} />
                 </Route>
-                <Route path="/profile:id" >
+                <Route path="/profile/:id" >
                   <Profile db={props.db} isUsersPrivate={isUsersPrivate} isLocation={isLocation} />
                 </Route>
                 <Route path="/share_location" >
@@ -41,7 +41,7 @@ function App(props) {
                 <Route path="/history" >
                   <History db={props.db} isUsersPrivate={isUsersPrivate} isLocation={isLocation} />
                 </Route>
-                <Route path="/doc_taxi" >
+                <Route path="/doc_taxi/:id" >
                   <DocTaxi db={props.db} isUsersPrivate={isUsersPrivate} isLocation={isLocation} />
                 </Route>
                 <Route path="/report/:id" >
