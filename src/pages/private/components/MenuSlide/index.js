@@ -55,7 +55,6 @@ function MenuSlide(props) {
         });
     }
 
-
     return (
         <Fragment>
             <Drawer
@@ -96,7 +95,7 @@ function MenuSlide(props) {
                         <List style={{
                             marginTop: '15px'
                         }}>
-                            <Link to={`/profile/${props.uid}`} style={{
+                            <Link to={`/profile/${props.isUsersPrivate.uid}`} style={{
                                 color: 'dimgray',
                                 textDecoration: 'blink'
                             }}>
@@ -149,8 +148,9 @@ function MenuSlide(props) {
 MenuSlide.protoType = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
-    uid: PropTypes.string,
-    db: PropTypes.object
+    isUsersPrivate: PropTypes.object,
+    db: PropTypes.object,
+    isUsersPrivate: PropTypes.object
 }
 
 export default MenuSlide;

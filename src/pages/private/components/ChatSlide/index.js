@@ -33,7 +33,6 @@ function ChatSlide(props) {
 
     const sendMsg = () => {
 
-
         let path = `share/${props.isStatus.member.uid}/chat`
 
         props.db.database().ref(`${path}`).push({
@@ -47,9 +46,13 @@ function ChatSlide(props) {
     }
 
     const updateMsg = (e) => {
-        setMsg(e.target.value)
+        setMsg(e.target.value);
+
+        if (isShare.chat !== null) {
+
+            setChat(isShare.chat)
+        }
     }
-    setChat(isShare.chat)
 
     return (
         <Fragment>
@@ -129,7 +132,8 @@ ChatSlide.protoType = {
     uid: PropTypes.string,
     isShare: PropTypes.object,
     isStatus: PropTypes.object,
-    db: PropTypes.object
+    db: PropTypes.object,
+    isUsersPrivate: PropTypes.object
 }
 
 export default ChatSlide;

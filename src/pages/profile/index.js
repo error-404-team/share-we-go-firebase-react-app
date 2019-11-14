@@ -25,7 +25,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Phone';
 import WcIcon from '@material-ui/icons/Wc';
 import FaceIcon from '@material-ui/icons/Face';
-import { dateTime } from '../../module';
+import { dateTime } from '../../model/dateTime';
 import { useProfile } from '../../controllers';
 
 
@@ -340,4 +340,4 @@ const styles = {
     },
 }
 
-export default withStyles(styles)(withRouter(isProfile));
+export default withStyles(styles)(withRouter(Profile));

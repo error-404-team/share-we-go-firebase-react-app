@@ -28,20 +28,20 @@ const useStyles = makeStyles(theme => ({
 
 const ModelJoinShare = (props) => {
     const classes = useStyles();
-    const { profile } = useProfile(props.db, props.auth)
+    const { isProfile } = useProfile(props)
 
     const joinShare = () => {
-        let path_status_member = `status/${props.auth.uid}/member`;
-        let path_share_member = `share/${props.auth.uid}/member`;
+        let path_status_member = `status/${props.isUsersPrivate.uid}/member`;
+        let path_share_member = `share/${props.isUsersPrivate.uid}/member`;
         let data_status_member = {
-            uid: `${props.auth.uid}`,
+            uid: `${props.isUsersPrivate.uid}`,
             share_id: `${props.share_id}`,
             value: 'true'
         }
         let data_share_member = {
-            uid: `${props.auth.uid}`,
+            uid: `${props.isUsersPrivate.uid}`,
             share_id: `${props.share_id}`,
-            profile: profile
+            profile: isProfile
 
         }
         props.db.database().ref(`${path_status_member}`).update(data_status_member)

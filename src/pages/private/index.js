@@ -5,10 +5,6 @@ import MemberStatus from './components/MemberStatus';
 import OwnerStatus from './components/OwnerStatus';
 import { useStatus } from '../../controllers';
 const Private = (props) => {
-    // const [isState] = useState(props)
-    // const a = JSON.stringify(props)
-    // console.log(JSON.parse(a));
-
 
     const { isStatus } = useStatus(props)
 
@@ -17,21 +13,30 @@ const Private = (props) => {
             {isStatus !== null
                 ? (<Fragment>
                     {isStatus.owner.value !== "false"
-                        ? <OwnerStatus
+                        ? (<React.Fragment>
+                            <OwnerStatus
                             db={props.db}
                             isUsersPrivate={props.isUsersPrivate}
                             isStatus={isStatus}
                         />
+                        {/* test */}
+                        </React.Fragment>)
                         : (<Fragment>
                             {isStatus.member.value !== "false"
-                                ? <MemberStatus
-                                    db={props.db}
-                                    isUsersPrivate={props.isUsersPrivate}
-                                    isStatus={isStatus} />
-                                : <UserStatus
-                                    db={props.db}
-                                    isUsersPrivate={props.isUsersPrivate}
-                                    isStatus={isStatus} />
+                                ? (
+                                    <React.Fragment>
+                                        {/* <MemberStatus
+                                            db={props.db}
+                                            isUsersPrivate={props.isUsersPrivate}
+                                            isStatus={isStatus} /> */}
+                                    </React.Fragment>)
+                                : (<React.Fragment>
+                                    {/* <UserStatus
+                                        db={props.db}
+                                        isUsersPrivate={props.isUsersPrivate}
+                                        isStatus={isStatus} /> */}
+                                    {/* คาดว่าน่าจะ error ตรงนี้แหละ */}
+                                </React.Fragment>)
                             }
                         </Fragment>)
                     }

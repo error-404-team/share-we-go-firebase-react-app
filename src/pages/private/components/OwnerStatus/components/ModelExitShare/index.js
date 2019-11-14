@@ -43,7 +43,7 @@ const ModelExitShare = (props) => {
         props.db.database().ref(`${path_history}`).push(props.share)
         props.db.database().ref(`${path_status_owner}`).update(data_status_owner)
         props.db.database().ref(`${path_status_owner_log}`).push({
-            owner: data_status_owner_log,
+            owner: data_status_owner,
             date: dateTime
         })
         props.db.database().ref(`${path_share_id}`).delete()
