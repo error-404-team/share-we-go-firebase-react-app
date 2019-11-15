@@ -10,7 +10,7 @@ const useProfile = (props) => {
   useEffect(() => {
     async function fetchData() {
       if (props.isUsersPrivate !== null) {
-        console.log(props.isUsersPrivate.uid);
+        // console.log(props.isUsersPrivate.uid);
 
         // const pathUser = `users/${props.isUsersPrivate.uid}/user`
         const pathProfile = `users/${props.isUsersPrivate.uid}/profile`;
@@ -36,7 +36,7 @@ const useProfile = (props) => {
         return unsubscribe;
       }
     }
-    fetchData(props);
+    fetchData();
   }, [props]);
   return profileState;
 }

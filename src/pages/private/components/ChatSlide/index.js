@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -33,7 +33,7 @@ function ChatSlide(props) {
 
     const sendMsg = () => {
 
-        let path = `share/${props.isStatus.member.uid}/chat`
+        let path = `share/${props.isStatus.member.share_id}/chat`
 
         props.db.database().ref(`${path}`).push({
             uid: props.isStatus.share.uid,
@@ -49,10 +49,23 @@ function ChatSlide(props) {
         setMsg(e.target.value);
 
         if (isShare.chat !== null) {
-
             setChat(isShare.chat)
         }
     }
+
+    useEffect(() => {
+        async function fetchData() {
+            let path_chat = `share/${props.isStatus.member.share_id}/chat`
+
+            await props.db.database().ref(`${path_chat}`).once("value").then(function (chat_value) {
+                let chatData = (chat_value.val())
+                if (chatData !== null) {
+                    setChat(chatData)
+                }
+            })
+        }
+        fetchData();
+    })
 
     return (
         <Fragment>
@@ -85,21 +98,23 @@ function ChatSlide(props) {
                                     ? (<Fragment>
                                         {Object.keys(chat).map((key) => (
                                             <Fragment>
-                                                {key !== props.uid
+                                                {props.isUsersPrivate.uid === chat[key].uid
                                                     ? (<Fragment>
                                                         <div class="container darker">
                                                             <img src={`${chat[key].profile.photoURL}`} alt="Avatar" class="right" />
                                                             <h4 style={{
                                                                 marginTop: 0
-                                                            }}>{chat[key].profile.displayName}</h4>
-                                                            <p>{chat[key].msg}</p>
+                                                            }} class="left">{chat[key].profile.displayName}</h4>
+                                                            <p class="left">{chat[key].msg}</p>
                                                         </div>
                                                     </Fragment>)
                                                     : (<Fragment>
                                                         <div class="container">
                                                             <img src={`${chat[key].profile.photoURL}`} alt="Avatar" class="left" />
-                                                            <h2>{chat[key].profile.displayName}</h2>
-                                                            <p>{chat[key].msg}</p>
+                                                            <h4 tyle={{
+                                                                marginTop: 0
+                                                            }}class="right">{chat[key].profile.displayName}</h4>
+                                                            <p class="right">{chat[key].msg}</p>
                                                         </div>
                                                     </Fragment>)
                                                 }
@@ -111,7 +126,7 @@ function ChatSlide(props) {
                             </div>
                         </div>
                         <div style={{
-                            position: 'absolute',
+                            position: 'fixed',
                             bottom: 0,
                             width: '-webkit-fill-available',
                             boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)',

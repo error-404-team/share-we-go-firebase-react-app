@@ -20,7 +20,7 @@ import MenuSlide from '../MenuSlide';
 
 import './styles/marker-custom.css';
 import { useUsers, useShareAll, useShare, useStatusAll } from '../../../../controllers';
-
+import { dateTime } from '../../../../model/dateTime';
 
 const UserStatus = (props) => {
 
@@ -55,10 +55,34 @@ const UserStatus = (props) => {
         setOpenMenuSlide(false)
     }
     const onModelJoinShare = (key) => {
+
+        props.db.database().ref(`status/${props.isUsersPrivate.uid}/member`).update({
+            share_id: key,
+            uid: props.isUsersPrivate.uid,
+            value: "true"
+        })
+
+        props.db.database().ref(`share/${key}/member/${props.isUsersPrivate.uid}`).update({
+            share_id: key,
+            uid: props.isUsersPrivate.uid,
+            profile: isUsers.profile
+        })
+
+        props.db.database().ref(`share/${key}/member/${props.isUsersPrivate.uid}/_log`).push({
+            member: {
+                share_id: key,
+                uid: props.isUsersPrivate.uid,
+                profile: isUsers.profile
+            },
+            date: dateTime
+        })
+
         setOpenModelJoinShare({
             key: `${key}`,
             bool: true
         })
+
+        window.location.reload()
     }
 
     const offModelJoinShare = () => {
@@ -82,132 +106,139 @@ const UserStatus = (props) => {
         <Fragment>
             <StyleBaseLine>
                 {isUsers !== null
-                    ? (<Map
-                        google={props.google}
-                        mapOptions={
-                            {
-                                zoom: 15,
-                                center: { lat: latlng.lat, lng: latlng.lat },
-                                disableDefaultUI: true,
-                                styles: [{
-                                    featureType: 'poi.business',
-                                    stylers: [{ visibility: 'on' }]
-                                },
-                                {
-                                    featureType: 'transit',
-                                    elementType: 'labels.icon',
-                                    stylers: [{ visibility: 'off' }]
-                                }]
-                            }}
-                        opts={(google, map) => {
+                    ? (
+                        <React.Fragment>
+                            {isShareAll !== null
+                                ? (
+                                    <React.Fragment>
+                                        {isStatusAll !== null
+                                            ? (<Map
+                                                google={props.google}
+                                                mapOptions={
+                                                    {
+                                                        zoom: 15,
+                                                        center: { lat: latlng.lat, lng: latlng.lat },
+                                                        disableDefaultUI: true,
+                                                        styles: [{
+                                                            featureType: 'poi.business',
+                                                            stylers: [{ visibility: 'on' }]
+                                                        },
+                                                        {
+                                                            featureType: 'transit',
+                                                            elementType: 'labels.icon',
+                                                            stylers: [{ visibility: 'off' }]
+                                                        }]
+                                                    }}
+                                                opts={(google, map) => {
 
-                            function CustomMarker(latlng, map, args, img) {
-                                this.latlng = latlng;
-                                this.args = args;
-                                this.img = img;
-                                this.setMap(map);
-                                this.maps = map
-                                setMap(map)
-                                setGoogle(google)
-                            }
+                                                    function CustomMarker(latlng, map, args, img) {
+                                                        this.latlng = latlng;
+                                                        this.args = args;
+                                                        this.img = img;
+                                                        this.setMap(map);
+                                                        this.maps = map
+                                                        setMap(map)
+                                                        setGoogle(google)
+                                                    }
 
-                            CustomMarker.prototype = new google.maps.OverlayView();
+                                                    CustomMarker.prototype = new google.maps.OverlayView();
 
-                            CustomMarker.prototype.onAdd = function () {
-                                var self = this;
-                                var div = this.div;
-                                if (!div) {
-                                    // Generate marker html
-                                    div = this.div = document.createElement('div');
-                                    div.className = 'custom-marker';
-                                    div.style.position = 'absolute';
-                                    var innerDiv = document.createElement('div');
-                                    innerDiv.className = 'custom-marker-inner';
-                                    innerDiv.innerHTML = `<img  src="${this.img}" style="border-radius: inherit;width: 20px;height: 20px;margin: 2px;"/>`
-                                    div.appendChild(innerDiv);
+                                                    CustomMarker.prototype.onAdd = function () {
+                                                        var self = this;
+                                                        var div = this.div;
+                                                        if (!div) {
+                                                            // Generate marker html
+                                                            div = this.div = document.createElement('div');
+                                                            div.className = 'custom-marker';
+                                                            div.style.position = 'absolute';
+                                                            var innerDiv = document.createElement('div');
+                                                            innerDiv.className = 'custom-marker-inner';
+                                                            innerDiv.innerHTML = `<img  src="${this.img}" style="border-radius: inherit;width: 20px;height: 20px;margin: 2px;"/>`
+                                                            div.appendChild(innerDiv);
 
-                                    if (typeof (self.args.marker_id) !== 'undefined') {
-                                        div.dataset.marker_id = self.args.marker_id;
-                                    }
+                                                            if (typeof (self.args.marker_id) !== 'undefined') {
+                                                                div.dataset.marker_id = self.args.marker_id;
+                                                            }
 
-                                    google.maps.event.addDomListener(div, "click", function (event) {
-                                        google.maps.event.trigger(self, "click");
-                                    });
+                                                            google.maps.event.addDomListener(div, "click", function (event) {
+                                                                google.maps.event.trigger(self, "click");
+                                                            });
 
-                                    var panes = this.getPanes();
-                                    panes.overlayImage.appendChild(div);
-                                }
-                            };
+                                                            var panes = this.getPanes();
+                                                            panes.overlayImage.appendChild(div);
+                                                        }
+                                                    };
 
-                            CustomMarker.prototype.draw = function () {
-                                // มี bug icon ไม่เกาะ map
-                                if (this.div) {
-                                    // กำหนด ตำแหน่ง ของhtml ที่สร้างไว้
-                                    let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
+                                                    CustomMarker.prototype.draw = function () {
+                                                        // มี bug icon ไม่เกาะ map
+                                                        if (this.div) {
+                                                            // กำหนด ตำแหน่ง ของhtml ที่สร้างไว้
+                                                            let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
-                                    this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
-                                    // console.log(this.pos);
-                                    this.div.style.left = this.pos.x + 'px';
-                                    this.div.style.top = this.pos.y + 'px';
-                                }
-                            };
+                                                            this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
+                                                            // console.log(this.pos);
+                                                            this.div.style.left = this.pos.x + 'px';
+                                                            this.div.style.top = this.pos.y + 'px';
+                                                        }
+                                                    };
 
-                            CustomMarker.prototype.getPosition = function () {
-                                return this.latlng;
-                            };
+                                                    CustomMarker.prototype.getPosition = function () {
+                                                        return this.latlng;
+                                                    };
 
-                            var myLatlng = new google.maps.LatLng(isUsers.location.coords.latitude, isUsers.location.coords.longitude);
-                            if (isUsers.profile !== undefined) {
-                                var marker1 = new CustomMarker(
-                                    myLatlng,
-                                    map,
-                                    {},
-                                    isUsers.profile.photoURL
-                                );
-                            } else {
-                                window.location.reload()
-                            }
+                                                    var myLatlng = new google.maps.LatLng(isUsers.location.coords.latitude, isUsers.location.coords.longitude);
+                                                    if (isUsers.profile !== undefined) {
+                                                        var marker1 = new CustomMarker(
+                                                            myLatlng,
+                                                            map,
+                                                            {},
+                                                            isUsers.profile.photoURL
+                                                        );
+                                                    } else {
+                                                        window.location.reload()
+                                                    }
 
-                            var pos = {
-                                lat: isUsers.location.coords.latitude,
-                                lng: isUsers.location.coords.longitude
-                            };
+                                                    var pos = {
+                                                        lat: isUsers.location.coords.latitude,
+                                                        lng: isUsers.location.coords.longitude
+                                                    };
 
-                            marker1.latlng = { lat: pos.lat, lng: pos.lng };
-                            marker1.draw();
+                                                    marker1.latlng = { lat: pos.lat, lng: pos.lng };
+                                                    marker1.draw();
 
-                            map.setCenter(pos);
+                                                    map.setCenter(pos);
 
-                            // share
-                            if (isShareAll !== null) {
-                                Object.keys(isShareAll).map((key) => {
-                                    // console.log(key); // all key
-                                    // get.status.share(key).then(function (status) {
-                                    if (isStatusAll[key].share.value !== "false") {
-                                        let latlng = new google.maps.LatLng(isShareAll[key].location.routes[0].legs[0].start_location.lat, isShareAll[key].location.routes[0].legs[0].start_location.lng);
-
-
-                                        const marker = new CustomMarker(
-                                            latlng,
-                                            map,
-                                            { marker_id: `${key}` },
-                                            "https://img.icons8.com/ios-glyphs/30/000000/car-cleaning.png"
-                                        )
-
-
-                                        var pos = {
-                                            lat: isShareAll[key].location.routes[0].legs[0].start_location.lat,
-                                            lng: isShareAll[key].location.routes[0].legs[0].start_location.lng
-                                        };
-
-                                        marker.latlng = { lat: pos.lat, lng: pos.lng };
-
-                                        marker.draw();
+                                                    console.log(isShareAll);
+                                                    // share
+                                                    if (isShareAll !== null) {
+                                                        Object.keys(isShareAll).map((key) => {
+                                                            console.log(key); // all key
+                                                            // get.status.share(key).then(function (status) {
+                                                            if (isStatusAll[key].share.value !== "false") {
+                                                                let latlng = new google.maps.LatLng(isShareAll[key].location.routes[0].legs[0].start_location.lat, isShareAll[key].location.routes[0].legs[0].start_location.lng);
 
 
-                                        map.setCenter(pos);
+                                                                const marker = new CustomMarker(
+                                                                    latlng,
+                                                                    map,
+                                                                    { marker_id: `${key}` },
+                                                                    "https://img.icons8.com/ios-glyphs/30/000000/car-cleaning.png"
+                                                                )
 
-                                        const content = `
+
+                                                                var pos = {
+                                                                    lat: isShareAll[key].location.routes[0].legs[0].start_location.lat,
+                                                                    lng: isShareAll[key].location.routes[0].legs[0].start_location.lng
+                                                                };
+
+                                                                marker.latlng = { lat: pos.lat, lng: pos.lng };
+
+                                                                marker.draw();
+
+
+                                                                map.setCenter(pos);
+
+                                                                const content = `
                                             <center>
                                             <h2>ข้อมูลการแชร์</h2>
                                             </center>
@@ -232,56 +263,62 @@ const UserStatus = (props) => {
                                             box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
                                             }" id="join-share-${key}" >เข้าร่วม</button></center>`
 
-                                        const infowindow = new google.maps.InfoWindow({
-                                            content: '',
-                                            maxWidth: 500
-                                        });
+                                                                const infowindow = new google.maps.InfoWindow({
+                                                                    content: '',
+                                                                    maxWidth: 500
+                                                                });
 
-                                        console.log(isShareAll[key]);
+                                                                console.log(isShareAll[key]);
 
-                                        const member_length = Object.keys(isShareAll[key].member).length
-                                        const max_number_value = isShareAll[key].max_number.value
+                                                                const member_length = Object.keys(isShareAll[key].member).length
+                                                                const max_number_value = isShareAll[key].max_number.value
 
-                                        marker.addListener('click', function (key) {
+                                                                marker.addListener('click', function (key) {
 
-                                            infowindow.setContent(content)
-                                            infowindow.open(map, marker);
+                                                                    infowindow.setContent(content)
+                                                                    infowindow.open(map, marker);
 
 
-                                            if (member_length > max_number_value) {
-                                                $(`#join-share-${key}`).attr("disabled", true)
-                                            }
+                                                                    if (member_length === max_number_value) {
+                                                                        $(`#join-share-${key}`).attr("disabled", true)
+                                                                    }
 
-                                        });
+                                                                });
 
-                                        $(document).on('click', `#join-share-${key}`, function () {
-                                            onModelJoinShare(key)
+                                                                $(document).on('click', `#join-share-${key}`, function () {
+                                                                    onModelJoinShare(key)
 
-                                        })
+                                                                })
 
-                                    }
-                                })
+                                                            }
+                                                        })
+                                                    }
+                                                    // })
+                                                }}
+                                            >
+                                                <SearchBar >
+                                                    <SearchMap
+                                                        onClick={onMenuSlide}
+                                                        map={map}
+                                                        google={google}
+                                                        {...props}
+
+                                                    />
+                                                </SearchBar>
+                                                <VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />
+                                                <Link to="/share_location">
+                                                    <Button variant="contained" style={{ backgroundColor: '#ffffff' }} className={props.classes.fab}>
+                                                        <AddIcon color="action" fontSize="large" />
+                                                    </Button>
+                                                </Link>
+                                            </Map>)
+                                            : (<React.Fragment>Loading</React.Fragment>)
+                                        }
+                                    </React.Fragment>
+                                )
+                                : (<React.Fragment>Loading</React.Fragment>)
                             }
-                            // })
-                        }}
-                    >
-                        <SearchBar >
-                            <SearchMap
-                                onClick={onMenuSlide}
-                                map={map}
-                                google={google}
-                                {...props}
-
-                            />
-                        </SearchBar>
-                        <VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />
-                        <Link to="/share_location">
-                            <Button variant="contained" style={{ backgroundColor: '#ffffff' }} className={props.classes.fab}>
-                                <AddIcon color="action" fontSize="large" />
-                            </Button>
-                        </Link>
-                    </Map>
-                    )
+                        </React.Fragment>)
                     : (<React.Fragment>Loading</React.Fragment>)}<MenuSlide db={props.db} open={openMenuSlide} onClose={offMenuSlide} isUsersPrivate={props.isUsersPrivate} />
             </StyleBaseLine>
         </Fragment>
@@ -291,7 +328,7 @@ const UserStatus = (props) => {
 
 UserStatus.propTypes = {
     uid: PropTypes.string,
-    isUserssPrivate: PropTypes.object,
+    isUsersPrivate: PropTypes.object,
     isStatus: PropTypes.object,
     db: PropTypes.object
 }

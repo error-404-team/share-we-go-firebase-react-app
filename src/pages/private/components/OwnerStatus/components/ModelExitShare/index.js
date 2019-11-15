@@ -32,6 +32,10 @@ const ModelExitShare = (props) => {
         let path_history = `history/${props.isUsersPrivate.uid}`;
         let path_status_owner = `status/${props.isUsersPrivate.uid}/owner`;
         let path_status_owner_log = `status/${props.isUsersPrivate.uid}/owner/_log`;
+        let path_status_member = `status/${props.isUsersPrivate.uid}/member`;
+        let path_status_member_log = `status/${props.isUsersPrivate.uid}/member/_log`;
+        let path_status_alert = `status/${props.isUsersPrivate.uid}/alert`;
+        let path_status_alert_log = `status/${props.isUsersPrivate.uid}/alert/_log`;
         let path_share_id = `share/${props.share_id}`
 
         setLoading(true)
@@ -42,10 +46,32 @@ const ModelExitShare = (props) => {
             value: 'false'
         }
 
+        let data_status_member = {
+            uid: `${props.isUsersPrivate.uid}`,
+            share_id: `${props.share_id}`,
+            value: 'false'
+        }
+
+        let data_status_alert = {
+            uid: `${props.isUsersPrivate.uid}`,
+            share_id: `${props.share_id}`,
+            value: 'false'
+        }
+
         props.db.database().ref(`${path_history}`).push(props.isShare)
         props.db.database().ref(`${path_status_owner}`).update(data_status_owner)
         props.db.database().ref(`${path_status_owner_log}`).push({
             owner: data_status_owner,
+            date: dateTime
+        })
+        props.db.database().ref(`${path_status_member}`).update(data_status_member)
+        props.db.database().ref(`${path_status_member_log}`).push({
+            member: data_status_member,
+            date: dateTime
+        })
+        props.db.database().ref(`${path_status_alert}`).update(data_status_alert)
+        props.db.database().ref(`${path_status_alert_log}`).push({
+            alert: data_status_alert,
             date: dateTime
         })
         const removeShare = props.db.database().ref(`${path_share_id}`)

@@ -23,6 +23,7 @@ import SearchBar from '../SearchBar';
 import SearchMap from '../SearchMap';
 import MenuSlide from '../MenuSlide';
 import { useShare, useProfile, useUsers } from '../../../../controllers';
+import { dateTime } from '../../../../model/dateTime';
 
 
 const OwnerStatus = (props) => {
@@ -31,12 +32,33 @@ const OwnerStatus = (props) => {
     const [openCallTaxi, setOpenCallTaxi] = useState(false)
     const [openMenuSlide, setOpenMenuSlide] = useState(false)
     const [openModelExitShare, setOpenModelExitShare] = useState(false)
-    const [locationShare, setLocationShare] = useState()
+    // const [locationShare, setLocationShare] = useState()
     const { isShare } = useShare(props);
     const { isProfile } = useProfile(props);
     const { isUsers } = useUsers(props);
 
     const onChatSlide = () => {
+
+        let path_chat = `share/${props.isStatus.member.share_id}/chat`
+
+        props.db.database().ref(`${path_chat}`).once("value").then(function (chat_value) {
+            let chatData = (chat_value.val())
+            if (chatData !== null) {
+            } else {
+                props.db.database().ref(`${path_chat}`).push({
+                    uid: props.isStatus.share.uid,
+                    share_id: props.isStatus.share.id,
+                    profile: {
+                        displayName: "Addmin",
+                        photoURL: ''
+                    },
+                    msg: 'เริ่มการสนทนา',
+                    date: dateTime
+                })
+            }
+
+        })
+
         setOpenChatSlide(true)
     }
 
@@ -106,9 +128,9 @@ const OwnerStatus = (props) => {
                                 }}
                             opts={(google, map) => {
 
-                                if (isShare !== null) {
-                                    setLocationShare(isShare)
-                                }
+                                // if (isShare !== null) {
+                                //     setLocationShare(isShare)
+                                // }
                                 function CustomMarker(latlng, map, args, img) {
                                     this.latlng = latlng;
                                     this.args = args;

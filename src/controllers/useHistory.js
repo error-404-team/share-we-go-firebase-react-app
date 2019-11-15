@@ -6,15 +6,20 @@ const useHistory = (props) => {
   });
 
   useEffect(() => {
-    let path = `history/${props.user.uid}`
+    async function fetchData() {
+      if (props.isUsersPrivate !== null) {
+        let path = `history/${props.isUsersPrivate.uid}`
 
-    const unsubscribe = props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
-      let data = (snapshot.val())
+        const unsubscribe = props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
+          let data = (snapshot.val())
 
-      setState({ isHistory: data })
+          setState({ isHistory: data })
 
-    })
-    return unsubscribe;
+        })
+        return unsubscribe;
+      }
+    }
+    fetchData();
   }, [props]);
   return historyState;
 }

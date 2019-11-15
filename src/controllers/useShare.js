@@ -7,13 +7,15 @@ const useShare = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      if (props.isUsersPrivate !== null) {
-        let path = `share/${props.isUsersPrivate.uid}`;
+      if (props.isStatus !== null) {
+        let path = `share/${props.isStatus.member.share_id}`;
 
         const unsubscribe = await props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
           let data = (snapshot.val())
 
           setState({ isShare: data })
+
+
 
         })
         return unsubscribe;

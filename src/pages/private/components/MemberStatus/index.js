@@ -26,7 +26,7 @@ const MemberStatus = (props) => {
     const [openModelExitShare, setOpenModelExitShare] = useState(false)
     const [alertShare, setAlertShare] = useState({})
     const [map, setMap] = useState(null);
-    const { isShare } = useShare(props)
+    const { isShare } = useShare(props);
     const { isProfile } = useProfile(props);
     const { isUsers } = useUsers(props);
 
@@ -84,223 +84,248 @@ const MemberStatus = (props) => {
     const { classes } = props;
 
     return (
-        <Fragment>
-            <StyleBaseLine>
-                <Map
-                    google={props.google}
-                    mapOptions={
-                        {
-                            zoom: 15,
-                            center: { lat: latlng.lat, lng: latlng.lat },
-                            disableDefaultUI: true,
-                            styles: [{
-                                featureType: 'poi.business',
-                                stylers: [{ visibility: 'on' }]
-                            },
-                            {
-                                featureType: 'transit',
-                                elementType: 'labels.icon',
-                                stylers: [{ visibility: 'off' }]
-                            }]
-                        }}
-                    opts={(google, map) => {
-                        function CustomMarker(latlng, map, args, img) {
-                            this.latlng = latlng;
-                            this.args = args;
-                            this.img = img;
-                            this.maps = map
-                            setMap(map)
-                        }
+        <React.Fragment>
+            {isUsers !== null
+                ? (<React.Fragment>
+                    <StyleBaseLine>
+                        <Map
+                            google={props.google}
+                            mapOptions={
+                                {
+                                    zoom: 15,
+                                    center: { lat: latlng.lat, lng: latlng.lat },
+                                    disableDefaultUI: true,
+                                    styles: [{
+                                        featureType: 'poi.business',
+                                        stylers: [{ visibility: 'on' }]
+                                    },
+                                    {
+                                        featureType: 'transit',
+                                        elementType: 'labels.icon',
+                                        stylers: [{ visibility: 'off' }]
+                                    }]
+                                }}
+                            opts={(google, map) => {
 
-                        CustomMarker.prototype = new google.maps.OverlayView();
-
-                        CustomMarker.prototype.onAdd = function () {
-                            var self = this;
-                            var div = this.div;
-                            if (!div) {
-                                div = this.div = document.createElement('div');
-                                div.className = 'custom-marker';
-                                div.style.position = 'absolute';
-                                var innerDiv = document.createElement('div');
-                                innerDiv.className = 'custom-marker-inner';
-                                innerDiv.innerHTML = `<img  src="${this.img}" style="border-radius: inherit;width: 20px;height: 20px;margin: 2px;"/>`
-                                div.appendChild(innerDiv);
-
-                                if (typeof (self.args.marker_id) !== 'undefined') {
-                                    div.dataset.marker_id = self.args.marker_id;
+                                // if (isShare !== null) {
+                                //     setLocationShare(isShare)
+                                // }
+                                function CustomMarker(latlng, map, args, img) {
+                                    this.latlng = latlng;
+                                    this.args = args;
+                                    this.img = img;
+                                    this.maps = map
+                                    setMap(map)
                                 }
 
-                                google.maps.event.addDomListener(div, "click", function (event) {
-                                    google.maps.event.trigger(self, "click");
-                                });
+                                CustomMarker.prototype = new google.maps.OverlayView();
 
-                                var panes = this.getPanes();
-                                panes.overlayImage.appendChild(div);
-                            }
-                        };
+                                CustomMarker.prototype.onAdd = function () {
+                                    var self = this;
+                                    var div = this.div;
+                                    if (!div) {
+                                        // Generate marker html
+                                        div = this.div = document.createElement('div');
+                                        div.className = 'custom-marker';
+                                        div.style.position = 'absolute';
+                                        var innerDiv = document.createElement('div');
+                                        innerDiv.className = 'custom-marker-inner';
+                                        innerDiv.innerHTML = `<img  src="${this.img}" style="border-radius: inherit;width: 20px;height: 20px;margin: 2px;"/>`
+                                        div.appendChild(innerDiv);
 
-                        CustomMarker.prototype.draw = function () {
-                            // มี bug icon ไม่เกาะ map
-                            if (this.div) {
-                                // กำหนด ตำแหน่ง ของhtml ที่สร้างไว้
-                                let positionA = new this.google.maps.LatLng(this.latlng.lat, this.latlng.lng);
+                                        if (typeof (self.args.marker_id) !== 'undefined') {
+                                            div.dataset.marker_id = self.args.marker_id;
+                                        }
 
-                                this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
-                                this.div.style.left = this.pos.x + 'px';
-                                this.div.style.top = this.pos.y + 'px';
-                            }
-                        };
+                                        google.maps.event.addDomListener(div, "click", function (event) {
+                                            google.maps.event.trigger(self, "click");
+                                        });
 
-                        CustomMarker.prototype.getPosition = function () {
-                            return this.latlng;
-                        };
+                                        var panes = this.getPanes();
+                                        panes.overlayImage.appendChild(div);
+                                    }
+                                };
 
-                        function AutocompleteDirectionsHandler(google, map, data) {
-                            this.map = map;
-                            this.originPlaceId = null;
-                            this.destinationPlaceId = null;
-                            this.travelMode = 'WALKING';
-                            this.directionsService = new google.maps.DirectionsService;
-                            this.directionsRenderer = new google.maps.DirectionsRenderer;
-                            this.directionsRenderer.setMap(this.map);
+                                CustomMarker.prototype.draw = function () {
+                                    // มี bug icon ไม่เกาะ map
+                                    if (this.div) {
+                                        // กำหนด ตำแหน่ง ของhtml ที่สร้างไว้
+                                        let positionA = new this.google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
-                            var me = this
+                                        this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
+                                        // console.log(this.pos);
+                                        this.div.style.left = this.pos.x + 'px';
+                                        this.div.style.top = this.pos.y + 'px';
+                                    }
+                                };
 
-                            if (data.share === true) {
-                                me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
-                                me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
-                                me.setupClickListener(data.request.travelMode);
+                                CustomMarker.prototype.getPosition = function () {
+                                    return this.latlng;
+                                };
 
-                            } else {
-                                me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
-                                me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
-                                me.setupClickListener(data.request.travelMode);
-                            }
-                        }
+                                function AutocompleteDirectionsHandler(google, map, data) {
+                                    this.map = map;
+                                    this.originPlaceId = null;
+                                    this.destinationPlaceId = null;
+                                    this.travelMode = 'WALKING';
+                                    this.directionsService = new google.maps.DirectionsService;
+                                    this.directionsRenderer = new google.maps.DirectionsRenderer;
+                                    this.directionsRenderer.setMap(this.map);
 
-                        AutocompleteDirectionsHandler.prototype.setupClickListener = function (mode) {
-                            var me = this;
+                                    var me = this
 
-                            me.travelMode = mode;
-                            me.route();
-                        };
-
-                        AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (
-                            place, mode) {
-                            var me = this;
-
-                            console.log(place);
-
-                            if (!place) {
-                                alert('Please select an option from the dropdown list.');
-                                return;
-                            }
-                            if (mode === 'ORIG') {
-                                me.originPlaceId = place;
-                            } else {
-                                me.destinationPlaceId = place;
-                            }
-                            me.route();
-                        };
-
-                        AutocompleteDirectionsHandler.prototype.route = function () {
-                            if (!this.originPlaceId || !this.destinationPlaceId) {
-                                return;
-                            }
-                            var me = this;
-
-                            this.directionsService.route(
-                                {
-                                    origin: { 'placeId': this.originPlaceId },
-                                    destination: { 'placeId': this.destinationPlaceId },
-                                    travelMode: this.travelMode
-                                },
-                                function (response, status) {
-                                    if (status === 'OK') {
-                                        me.directionsRenderer.setDirections(response);
+                                    if (data === true) {
+                                        me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
+                                        me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
+                                        me.setupClickListener(data.request.travelMode);
 
                                     } else {
-                                        alert('Directions request failed due to ' + status);
-
+                                        me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
+                                        me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
+                                        me.setupClickListener(data.request.travelMode);
                                     }
-                                });
-                        };
+                                }
 
-                        let myLatlng = new google.maps.LatLng(isUsers.location.coords.latitude, isUsers.location.coords.longitude);
+                                // Sets a listener on a radio button to change the filter type on Places
+                                // Autocomplete.
+                                AutocompleteDirectionsHandler.prototype.setupClickListener = function (mode) {
+                                    var me = this;
 
-                        let marker1 = new CustomMarker(
-                            myLatlng,
-                            map,
-                            {},
-                            isProfile.photoURL
-                        );
+                                    me.travelMode = mode;
+                                    me.route();
+                                };
 
-                        let pos = {
-                            lat: isUsers.location.coords.latitude,
-                            lng: isUsers.location.coords.longitude
-                        };
+                                AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (
+                                    place, mode) {
+                                    var me = this;
 
-                        marker1.latlng = { lat: pos.lat, lng: pos.lng };
-                        marker1.draw();
+                                    console.log(place);
 
-                        map.setCenter(pos);
+                                    if (!place) {
+                                        alert('Please select an option from the dropdown list.');
+                                        return;
+                                    }
+                                    if (mode === 'ORIG') {
+                                        me.originPlaceId = place;
+                                    } else {
+                                        me.destinationPlaceId = place;
+                                    }
+                                    me.route();
+                                };
 
-                        new AutocompleteDirectionsHandler(google, map, isShare.location);
+                                AutocompleteDirectionsHandler.prototype.route = function () {
+                                    if (!this.originPlaceId || !this.destinationPlaceId) {
+                                        return;
+                                    }
+                                    var me = this;
 
-                    }}
-                >
-                    <SearchBar >
-                        <SearchMap
-                            onClick={onMenuSlide}
-                            map={map}
-                            {...props}
+                                    this.directionsService.route(
+                                        {
+                                            origin: { 'placeId': this.originPlaceId },
+                                            destination: { 'placeId': this.destinationPlaceId },
+                                            travelMode: this.travelMode
+                                        },
+                                        function (response, status) {
+                                            if (status === 'OK') {
+                                                me.directionsRenderer.setDirections(response);
+                                                // console.log(response);
 
-                        />
-                    </SearchBar>
-                    <MemberTypeIconStatus isShare={isShare} uid={props.isUsersPrivate.uid} />
+                                            } else {
+                                                alert('Directions request failed due to ' + status);
+                                                // console.log(response, status);
 
-                    <Grid container style={{
-                        width: 'min-content',
-                        position: 'absolute',
-                        right: '15px',
-                        bottom: '80px',
+                                            }
+                                        });
+                                };
 
-                    }} >
-                        <Fab size="medium" onClick={onKeyDataTaxiCar} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
-                            <AssignmentIcon />
-                        </Fab>
-                        <Fab size="medium" onClick={onChatSlide} color="secondary" aria-label="add" className={classes.buttonChat}>
-                            <QuestionAnswerIcon />
-                        </Fab>
-                        <KeyDataTaxiCar {...alertShare} open={openKeyDataTaxiCar} onClose={offKeyDataTaxiCar} />
-                    </Grid>
-                    <Button variant="contained" onClick={exitShareGroup} style={{ backgroundColor: '#ffffff' }} className={classes.fab}>
-                        ออกจากกลุ่ม
+
+                                // get.users.location(props.isStatus.owner.uid).then((location) => {
+                                let myLatlng = new google.maps.LatLng(isUsers.location.coords.latitude, isUsers.location.coords.longitude);
+
+                                let marker1 = new CustomMarker(
+                                    myLatlng,
+                                    map,
+                                    {},
+                                    isProfile.photoURL
+                                );
+
+                                let pos = {
+                                    lat: isUsers.location.coords.latitude,
+                                    lng: isUsers.location.coords.longitude
+                                };
+
+                                marker1.latlng = { lat: pos.lat, lng: pos.lng };
+                                marker1.draw();
+
+                                map.setCenter(pos);
+
+                                // })
+
+                                // get.share.location(props.isStatus.owner.share_id).then(function (data) {
+                                new AutocompleteDirectionsHandler(google, map, isShare.location);
+                                // })
+                                // })
+                            }}
+                        >
+                            <SearchBar >
+                                <SearchMap
+                                    onClick={onMenuSlide}
+                                    map={map}
+                                    {...props}
+
+                                />
+                            </SearchBar>
+                            <MemberTypeIconStatus isShare={isShare} uid={props.isUsersPrivate.uid} />
+
+                            <Grid container style={{
+                                width: 'min-content',
+                                position: 'absolute',
+                                right: '15px',
+                                bottom: '80px',
+
+                            }} >
+                                <Fab size="medium" onClick={onKeyDataTaxiCar} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
+                                    <AssignmentIcon />
+                                </Fab>
+                                <Fab size="medium" onClick={onChatSlide} color="secondary" aria-label="add" className={classes.buttonChat}>
+                                    <QuestionAnswerIcon />
+                                </Fab>
+                                <KeyDataTaxiCar {...alertShare} open={openKeyDataTaxiCar} onClose={offKeyDataTaxiCar} />
+                            </Grid>
+                            <Button variant="contained" onClick={exitShareGroup} style={{ backgroundColor: '#ffffff' }} className={classes.fab}>
+                                ออกจากกลุ่ม
                         </Button>
-                    <ModelExitShare
-                        uid={props.isUsersPrivate.uid}
-                        share_id={props.isStatus.member.share_id}
-                        isShare={isShare}
-                        open={openModelExitShare}
-                        onClose={offModelExitShare} />
+                            <ModelExitShare
+                                db={props.db}
+                                isShare={isShare}
+                                isStatus={props.isStatus}
+                                open={openModelExitShare}
+                                onClose={offModelExitShare}
+                                isUsersPrivate={props.isUsersPrivate} />
 
-                </Map>
-                <ChatSlide
-                    open={openChatSlide}
-                    onClose={offChatSlide}
-                    isShare={isShare}
-                    isStatus={props.isStatus}
-                    uid={props.isUsersPrivate.uid}
-                    db={props.db}
-                />
-                <MenuSlide
-                    open={openMenuSlide}
-                    onClose={offMenuSlide}
-                    uid={props.isUsersPrivate.uid}
-                    db={props.db}
-                />
-            </StyleBaseLine>
-        </Fragment>
+                        </Map>
+                        <ChatSlide
+                            open={openChatSlide}
+                            onClose={offChatSlide}
+                            isShare={isShare}
+                            isStatus={props.isStatus}
+                            uid={props.isUsersPrivate.uid}
+                            db={props.db}
+                            isUsersPrivate={props.isUsersPrivate}
+                        />
+                        <MenuSlide
+                            open={openMenuSlide}
+                            onClose={offMenuSlide}
+                            uid={props.isUsersPrivate.uid}
+                            db={props.db}
+                            isUsersPrivate={props.isUsersPrivate}
+                        />
+                    </StyleBaseLine>
+                </React.Fragment>
+                )
+                : (<React.Fragment>Loading</React.Fragment>)
+            }
+        </React.Fragment>
     )
 }
 

@@ -19,7 +19,7 @@ class ChatBar extends React.Component {
                 width: '-webkit-fill-available',
                 flexDirection: 'column'
             }}>
-                    <AppBar color="inherit" position="absolute"
+                    <AppBar color="inherit" position="fixed"
                         elevation={1}
                     >
                         <Toolbar

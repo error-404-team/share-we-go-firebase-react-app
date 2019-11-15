@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,16 +27,18 @@ const useStyles = makeStyles(theme => ({
 
 const ModelExitShare = (props) => {
     const classes = useStyles();
+    const [loading, setLoading] = useState(false)
 
     const removeShare = () => {
-        let path_history = `history/${props.uid}`;
-        let path_status_member = `status/${props.uid}/member`;
-        let path_share_member = `share/${props.share_id}/member/${props.uid}`
+        let path_history = `history/${props.isStatus.member.uid}`;
+        let path_status_member = `status/${props.isStatus.member.uid}/member`;
+        let path_share_member = `share/${props.share_id}/member/${props.isStatus.member.uid}`
 
+        setLoading(true)
 
         let data_status_member = {
-            uid: `${props.uid}`,
-            share_id: `${props.share_id}`,
+            uid: `${props.isStatus.member.uid}`,
+            share_id: `${props.isStatus.member.share_id}`,
             value: 'false'
         }
 
@@ -47,7 +49,9 @@ const ModelExitShare = (props) => {
 
         props.db.database().ref(`${path_status_member}`).update(data_status_member)
 
-        props.db.database().ref(`${path_share_member}`).delete()
+        props.db.database().ref(`${path_share_member}`).remove().then(() => {
+            window.location.reload()
+        })
 
 
     }
@@ -66,15 +70,26 @@ const ModelExitShare = (props) => {
                 }}
             >
                 <Fade in={props.open}>
-                    <div className={classes.paper}>
-                        <Grid container justify="center" alignItems="center" >
-                            <center>
-                                <h1>คุณต้องการอยากจะออกจากกลุ่มแชร์</h1>
+                    {loading !== true
+                        ? (
+                            <div className={classes.paper}>
+                                <Grid container justify="center" alignItems="center" >
+                                    <center>
+                                        <h1>คุณต้องการอยากจะออกจากกลุ่มแชร์</h1>
 
-                                <Button onClick={removeShare} >ตกลง</Button>
-                            </center>
-                        </Grid>
-                    </div>
+                                        <Button onClick={removeShare} >ตกลง</Button>
+                                    </center>
+                                </Grid>
+                            </div>
+                        )
+                        : (<React.Fragment>
+                            <div className={classes.paper}>
+                                <Grid container justify="center" alignItems="center" >
+                                    <center>รอแป๊บ....</center>
+                                </Grid>
+                            </div></React.Fragment>)
+
+                    }
                 </Fade>
             </Modal>
         </React.Fragment>
@@ -87,7 +102,10 @@ const ModelExitShare = (props) => {
 ModelExitShare.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
-    isShare: PropTypes.object
+    isShare: PropTypes.object,
+    isStatus: PropTypes.object,
+    isUsersPrivate: PropTypes.object,
+    db: PropTypes.object
 }
 
 export default withRouter(ModelExitShare)
