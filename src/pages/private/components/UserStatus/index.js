@@ -261,27 +261,17 @@ const UserStatus = (props) => {
                                             border-radius: 12px;
                                             color: rgba(0, 0, 0, 0.87);
                                             box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
-                                            }" id="join-share-${key}" >เข้าร่วม</button></center>`
+                                            }" id="join-share-${key}" ${`${Object.keys(isShareAll[key].member).length - 1}` === isShareAll[key].max_number.value ? "disabled='disabled'" : null} >เข้าร่วม</button></center>`
 
                                                                 const infowindow = new google.maps.InfoWindow({
                                                                     content: '',
                                                                     maxWidth: 500
                                                                 });
 
-                                                                console.log(isShareAll[key]);
-
-                                                                const member_length = Object.keys(isShareAll[key].member).length
-                                                                const max_number_value = isShareAll[key].max_number.value
-
                                                                 marker.addListener('click', function (key) {
 
                                                                     infowindow.setContent(content)
                                                                     infowindow.open(map, marker);
-
-
-                                                                    if (member_length === max_number_value) {
-                                                                        $(`#join-share-${key}`).attr("disabled", true)
-                                                                    }
 
                                                                 });
 

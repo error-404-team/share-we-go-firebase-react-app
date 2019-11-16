@@ -19,8 +19,8 @@ import ModelExitShare from './components/ModelExitShare'
 import ChatSlide from '../ChatSlide';
 import MemberTypeIconStatus from '../MemberModalTypeIconStatus';
 import CallTaxiModal from './components/CallTaxiModal';
-import SearchBar from '../SearchBar';
-import SearchMap from '../SearchMap';
+import MenuIcon from '@material-ui/icons/Menu';
+
 import MenuSlide from '../MenuSlide';
 import { useShare, useProfile, useUsers } from '../../../../controllers';
 import { dateTime } from '../../../../model/dateTime';
@@ -288,14 +288,25 @@ const OwnerStatus = (props) => {
                                 // })
                             }}
                         >
-                            <SearchBar >
+                            {/* <SearchBar >
                                 <SearchMap
                                     onClick={onMenuSlide}
                                     map={map}
                                     {...props}
 
                                 />
-                            </SearchBar>
+                            </SearchBar> */}
+
+                            <Grid container style={{
+                                width: 'min-content',
+                                position: 'absolute',
+                                top: '30px',
+                                left: '5px'
+                            }} >
+                                <Fab size="medium" onClick={onMenuSlide} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
+                                    <MenuIcon />
+                                </Fab>
+                            </Grid>
 
                             <MemberTypeIconStatus isShare={isShare} uid={props.isUsersPrivate.uid} />
 

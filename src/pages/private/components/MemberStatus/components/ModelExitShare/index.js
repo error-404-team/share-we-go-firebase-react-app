@@ -32,7 +32,7 @@ const ModelExitShare = (props) => {
     const removeShare = () => {
         let path_history = `history/${props.isStatus.member.uid}`;
         let path_status_member = `status/${props.isStatus.member.uid}/member`;
-        let path_share_member = `share/${props.share_id}/member/${props.isStatus.member.uid}`
+        let path_share_member = `share/${props.isStatus.member.share_id}/member/${props.isUsersPrivate.uid}`
 
         setLoading(true)
 
