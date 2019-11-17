@@ -1,14 +1,9 @@
 import 'date-fns';
 import React from 'react';
-// import io from 'socket.io-client';
 import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
 import DateFnsUtils from '@date-io/date-fns';
-// import SnoozeIcon from "@material-ui/icons/Snooze";
-// import AlarmIcon from "@material-ui/icons/AddAlarm";
-// import { IconButton, InputAdornment } from "@material-ui/core";
-// import { post } from '../../../../RESTful_API';
-import { dateTime } from '../../../../module'; 
-// import firebase from '../../../../connect/firebase'
+import { dateTime } from '../../../../model/dateTime'; 
 import {
   MuiPickersUtilsProvider,
   KeyboardDateTimePicker
@@ -16,8 +11,6 @@ import {
 import lightBlue from "@material-ui/core/colors/lightBlue";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
-// import {dateTime} from '../../../../module'
-// import './styles/index.css';
 
 const materialTheme = createMuiTheme({
   overrides: {
@@ -106,8 +99,8 @@ export default function CustomDateTimePicker(props) {
     // firebase.auth().onAuthStateChanged((user) => {
     //   post.share.date(user.uid, timer, dateTime)
     // })
-    let path = `share/${props.auth.uid}`;
-    let _log = `share/${props.auth.uid}/_log`;
+    let path = `share/${props.isUsersPrivate.uid}/date`;
+    let _log = `share/${props.isUsersPrivate.uid}/date/_log`;
     props.db.database().ref(`${path}`).update(timer)
     props.db.database().ref(`${_log}`).push({
       data: timer,
@@ -146,4 +139,9 @@ export default function CustomDateTimePicker(props) {
       </MuiPickersUtilsProvider>
     </div>
   );
+}
+
+CustomDateTimePicker.propTypes = {
+  db: PropTypes.object,
+  isUsersPrivate: PropTypes.object
 }

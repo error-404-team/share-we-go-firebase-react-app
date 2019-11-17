@@ -1,24 +1,11 @@
 import React from 'react';
 import ConnectApiMaps, { Map } from 'maps-google-react';
-// import { post } from '../../../../RESTful_API';
-import { dateTime } from '../../../../module';
-// import firebase from '../../../../connect/firebase';
+import PropTypes from 'prop-types';
+import { dateTime } from '../../../../model/dateTime';
 import './styles/place-autocomplete-and-directions.css';
 
 
 function PlaceAutocompleteAndDirections(props) {
-    // const [map,setMap] = React.useState({});
-    // const [google,setGoogle] = React.useState({});
-
-    // function initMap(google, map) {
-    //     // var map = new google.maps.Map(docType, {
-    //     //     mapTypeControl: false,
-    //     //     center: { lat: -33.8688, lng: 151.2195 },
-    //     //     zoom: 13
-    //     // });
-
-    //     new AutocompleteDirectionsHandler(google, map);
-    // }
 
     const [originRoute, setOriginRoute] = React.useState()
     const [destinationRoute, setDestinationRoute] = React.useState()
@@ -119,12 +106,14 @@ function PlaceAutocompleteAndDirections(props) {
                     me.directionsRenderer.setDirections(response);
                     console.log(response);
                     // socket.emit('origin_destination_route', response)
-                    let path = `share/${props.auth.uid}/location`;
-                    let _log = `share/${props.auth.uid}/location/_log`;
+                    const res = JSON.stringify(response)
 
-                    props.db.database().ref(`${path}`).update(response)
+                    let path = `share/${props.isUsersPrivate.uid}/location`;
+                    let _log = `share/${props.isUsersPrivate.uid}/location/_log`;
+
+                    props.db.database().ref(`${path}`).update(JSON.parse(res))
                     props.db.database().ref(`${_log}`).push({
-                        location: response,
+                        location: JSON.parse(res),
                         date: dateTime
                     })
 
@@ -140,6 +129,7 @@ function PlaceAutocompleteAndDirections(props) {
 
                 }
             });
+
     };
 
 
@@ -160,89 +150,99 @@ function PlaceAutocompleteAndDirections(props) {
     // }
 
     return (
-        <Map google={props.google}
-            setStyle={{
-                marginTop: '100px',
-                position: "absolute",
-                overflow: "hidden",
-                height: (window.innerHeight - 100),
-                width: "100%",
-            }}
-            mapOptions={{
-                zoom: 15,
-                center: { lat: -33.8688, lng: 151.2195 },
-                disableDefaultUI: true,
-                styles: [{
-                    featureType: 'poi.business',
-                    stylers: [{ visibility: 'on' }]
-                },
-                {
-                    featureType: 'transit',
-                    elementType: 'labels.icon',
-                    stylers: [{ visibility: 'off' }]
-                }]
-            }}
-            opts={(google, map) => {
-                // initMap(google, map)
-                //    setGoogle(google);
-                //    setMap(map)
-                console.log();
-
-
-
-                new AutocompleteDirectionsHandler(google, map);
-            }}
-        >
-            <div style={{ display: 'block' }}>
-                <input
-                    ref={originSearchInput}
-                    onChange={originRouteUpdate}
-                    // onFocus={onFocusOrigin}
-                    id="origin-input"
-                    className="controls"
-                    type="text"
-                    placeholder="ต้นทาง"
-                    style={{
-                        zIndex: 0,
-                        position: 'relative',
-                        top: '50px',
-                        borderRadius: '8px',
+        <React.Fragment>
+            {props.isUsersPrivate !== null
+                ? (<Map google={props.google}
+                    setStyle={{
+                        marginTop: '100px',
+                        position: "absolute",
+                        overflow: "hidden",
+                        height: (window.innerHeight - 100),
+                        width: "100%",
                     }}
-                />
-                <input
-                    ref={destinationSearchInput}
-                    onChange={destinationRouteUpdate}
-                    // onFocus={onFocusDestination}
-                    id="destination-input"
-                    className="controls"
-                    type="text"
-                    placeholder="ปลายทาง"
-                    style={{
-                        borderRadius: '8px',
+                    mapOptions={{
+                        zoom: 15,
+                        center: { lat: -33.8688, lng: 151.2195 },
+                        disableDefaultUI: true,
+                        styles: [{
+                            featureType: 'poi.business',
+                            stylers: [{ visibility: 'on' }]
+                        },
+                        {
+                            featureType: 'transit',
+                            elementType: 'labels.icon',
+                            stylers: [{ visibility: 'off' }]
+                        }]
                     }}
-                />
+                    opts={(google, map) => {
+                        // initMap(google, map)
+                        //    setGoogle(google);
+                        //    setMap(map)
+                        console.log();
 
-                <div
-                    id="mode-selector"
-                    className="controls"
-                    style={{
-                        borderRadius: '8px',
-                        marginRight: '10px'
+
+
+                        new AutocompleteDirectionsHandler(google, map);
                     }}
                 >
-                    <input type="radio" name="type" id="changemode-walking" />
-                    <label htmlFor="changemode-walking">Walking</label>
-                    <br />
-                    <input type="radio" name="type" id="changemode-transit" />
-                    <label htmlFor="changemode-transit">Transit</label>
-                    <br />
-                    <input type="radio" name="type" id="changemode-driving" checked="checked" />
-                    <label htmlFor="changemode-driving">Driving</label>
-                </div>
-            </div>
-        </Map>
+                    <div style={{ display: 'block' }}>
+                        <input
+                            ref={originSearchInput}
+                            onChange={originRouteUpdate}
+                            // onFocus={onFocusOrigin}
+                            id="origin-input"
+                            className="controls"
+                            type="text"
+                            placeholder="ต้นทาง"
+                            style={{
+                                zIndex: 0,
+                                position: 'relative',
+                                top: '50px',
+                                borderRadius: '8px',
+                            }}
+                        />
+                        <input
+                            ref={destinationSearchInput}
+                            onChange={destinationRouteUpdate}
+                            // onFocus={onFocusDestination}
+                            id="destination-input"
+                            className="controls"
+                            type="text"
+                            placeholder="ปลายทาง"
+                            style={{
+                                borderRadius: '8px',
+                            }}
+                        />
+
+                        <div
+                            id="mode-selector"
+                            className="controls"
+                            style={{
+                                borderRadius: '8px',
+                                marginRight: '10px'
+                            }}
+                        >
+                            <input type="radio" name="type" id="changemode-walking" />
+                            <label htmlFor="changemode-walking">Walking</label>
+                            <br />
+                            <input type="radio" name="type" id="changemode-transit" />
+                            <label htmlFor="changemode-transit">Transit</label>
+                            <br />
+                            <input type="radio" name="type" id="changemode-driving" checked="checked" />
+                            <label htmlFor="changemode-driving">Driving</label>
+                        </div>
+                    </div>
+                </Map>
+                )
+                : (<React.Fragment>Loading</React.Fragment>)}
+        </React.Fragment>
     )
 
+}
+
+PlaceAutocompleteAndDirections.propTypes = {
+    isUsersPrivate: PropTypes.object,
+    db: PropTypes.object
 }
 
 export default ConnectApiMaps({

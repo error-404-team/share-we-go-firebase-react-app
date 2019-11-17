@@ -1,12 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import { Link } from "react-router-dom";
-
-// core lib
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-
-// tag lib
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -15,21 +10,15 @@ import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-
-// icon lib
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import HistoryIcon from '@material-ui/icons/History';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
-// import { get } from '../../../../RESTful_API';
-// import firebase from '../../../../connect/firebase';
 import { Loading } from './components/Loading';
 import { useProfile } from '../../../../controllers';
 
 
-// style
 const useStyles = makeStyles(theme => ({
     drawer: {
         width: (window.innerWidth),
@@ -58,17 +47,13 @@ function MenuSlide(props) {
     const theme = useTheme();
     const classes = useStyles();
     const { isProfile } = useProfile(props)
-    // const [profile, setProfile] = useState(null)
 
     function Logout() {
         props.db.auth().signOut().then(function () {
-            // Sign-out successful.
             window.location.reload()
         }).catch(function (error) {
-            // An error happened.
         });
     }
-
 
     return (
         <Fragment>
@@ -83,7 +68,6 @@ function MenuSlide(props) {
             >
                 {isProfile !== null
                     ? (<Fragment>
-                        {/* <Loading /> */}
                         <div className={classes.drawerHeader}>
                             <IconButton onClick={props.onClose} style={{ position: "absolute" }}>
                                 {theme.direction === 'ltr' ? <ChevronLeftIcon fontSize="large" /> : <ChevronRightIcon fontSize="large" />}
@@ -111,7 +95,7 @@ function MenuSlide(props) {
                         <List style={{
                             marginTop: '15px'
                         }}>
-                            <Link to={`/profile/${props.uid}`} style={{
+                            <Link to={`/profile/${props.isUsersPrivate.uid}`} style={{
                                 color: 'dimgray',
                                 textDecoration: 'blink'
                             }}>
@@ -147,7 +131,6 @@ function MenuSlide(props) {
                                 onClick={Logout}
                                 variant="contained"
                                 color="primary"
-                                // className={classes.button}
                                 style={{
                                     width: '-webkit-fill-available',
                                     height: '56px',
@@ -165,8 +148,9 @@ function MenuSlide(props) {
 MenuSlide.protoType = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
-    uid: PropTypes.string,
-    db: PropTypes.object
+    isUsersPrivate: PropTypes.object,
+    db: PropTypes.object,
+    isUsersPrivate: PropTypes.object
 }
 
 export default MenuSlide;

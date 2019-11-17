@@ -6,16 +6,19 @@ const useStatusAll = (props) => {
   });
 
   useEffect(() => {
+    async function fetchData() {
     let path = `status`
     // let _log = `users/${user.uid}/_log/`
 
-    const unsubscribe = props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
+    const unsubscribe = await props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
       let data = (snapshot.val())
 
       setState({ isStatusAll: data })
 
     })
     return unsubscribe;
+  }
+  fetchData();
   }, [props]);
   return statusAllState;
 }

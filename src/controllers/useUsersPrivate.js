@@ -30,7 +30,7 @@ const useUsersPrivate = (props) => {
         else {
           props.db.database().ref(`${path}`).update(JSON.parse(stringifyData))
           props.db.database().ref(`${_log}`).push(JSON.parse(stringifyDataLog))
-          // setState({ isUsersPrivate: JSON.parse(stringifyData) })
+          setState({ isUsersPrivate: JSON.parse(stringifyData) })
         }
       })
     })

@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
-
 import { withStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-
-
 import MenuItem from '@material-ui/core/MenuItem';
-
-// import Personalform from "../components/personalInformation";
 import Button from '@material-ui/core/Button';
 import { Link, withRouter } from "react-router-dom";
-// import firebase from "../../connect/firebase";
-// import { post } from '../../RESTful_API';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import DocTaxiBar from './components/DocTaxiBar';
-import { dateTime } from '../../module';
+import { dateTime } from '../../model/dateTime';
 
 class DocTaxi extends React.Component {
 
@@ -27,7 +21,8 @@ class DocTaxi extends React.Component {
 
         this.state = {
             select: 'เหลือง',
-            license_plate: ""
+            license_plate: "",
+            status: false
         }
 
         this.displayNameInput = React.createRef()
@@ -55,23 +50,24 @@ class DocTaxi extends React.Component {
 
     onSend() {
 
-        let path = `share/${this.props.auth.uid}/alert`;
-        let _log = `share/${this.props.auth.uid}/alert/_log`;
-        let path_status = `status/${this.props.auth.uid}/alert`;
-        let _log_status = `status/${this.props.auth.uid}/alert/_log`;
+        let path = `share/${this.props.match.params.id}/alert`;
+        let _log = `share/${this.props.match.params.id}/alert/_log`;
+        let path_status = `status/${this.props.match.params.id}/alert`;
+        let _log_status = `status/${this.props.match.params.id}/alert/_log`;
+
 
 
         let data = {
-            uid: `${this.props.auth.uid}`,
-            sahre_id: `${this.props.auth.uid}`,
+            uid: `${this.props.match.params.id}`,
+            sahre_id: `${this.props.match.params.id}`,
             select: `${this.state.select}`,
             license_plate: `${this.state.license_plate}`
 
         }
 
         let data_status = {
-            uid: `${this.props.auth.uid}`,
-            share_id: `${this.props.auth.uid}`,
+            uid: `${this.props.match.params.id}`,
+            share_id: `${this.props.match.params.id}`,
             value: 'true'
         }
 
@@ -87,78 +83,91 @@ class DocTaxi extends React.Component {
             date: dateTime
         })
 
+        this.setState({ status: true })
+
     }
 
-    componentDidMount() {
-
+    goBack() {
+        this.props.history.push('/')
     }
 
     render() {
         const { classes } = this.props;
         return (
             <React.Fragment>
-
-                <div className={classes.drawerHeader}>
-                    <DocTaxiBar>
-                        <IconButton onClick={this.props.history.goBack} style={{ position: "absolute", left: 0 }}>
-                            <ChevronLeftIcon fontSize="large" />
-                        </IconButton>
-                        <div
-                            style={{
-                                position: 'absolute',
-                                left: (window.innerWidth / 2.5),
-                            }}
-                        >
-                            <h2>ข้อมูลรถ</h2>
-                        </div>
-                    </DocTaxiBar>
-                    <Grid container justify="center" alignItems="center"
-                        style={{
-                            position: 'absolute',
-                            top: (window.innerHeight / 4),
-                        }}
-                    >
-                        <center>
-                            <h1>ทะเบียนรถ</h1>
-                            <Paper className={classes.root}>
-                                <InputBase
-                                    value={this.state.license_plate}
-                                    onChange={this.InputUpdate.bind(this)}
-                                    className={classes.input}
-                                    placeholder="กรอกทะเบียนรถ"
-                                    inputProps={{ 'aria-label': 'กรอกทะเบียนรถ' }}
-                                />
-                            </Paper>
-                            <h1>สีรถ</h1>
-                            <FormControl className={classes.formControl}>
-                                <Select
-                                    value={this.state.select}
-                                    onChange={this.handleChange.bind(this)}
-                                    className={classes.selectEmpty}
-                                    input={<InputBase
-                                        id="age-customized-native-simple"
-                                        name="age"
-                                    />}
+                {this.state.status !== true
+                    ? (<React.Fragment>
+                        <div className={classes.drawerHeader}>
+                            <DocTaxiBar>
+                                <IconButton onClick={this.props.history.goBack} style={{ position: "absolute", left: 0 }}>
+                                    <ChevronLeftIcon fontSize="large" />
+                                </IconButton>
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        left: (window.innerWidth / 2.5),
+                                    }}
                                 >
-                                    <MenuItem value="เหลือง">
-                                        <em>เหลือง</em>
-                                    </MenuItem>
-                                    <MenuItem value="เขียว">เขียว</MenuItem>
-                                    <MenuItem value="ชมพู">ชมพู</MenuItem>
-                                    <MenuItem value="ฟ้า">ฟ้า</MenuItem>
-                                    <MenuItem value="แดง">แดง</MenuItem>
-                                    <MenuItem value="ส้ม">ส้ม</MenuItem>
-                                    <MenuItem value="เหลือง/เขียว">เหลือง/เขียว</MenuItem>
-                                    <MenuItem value="เหลือง/แดง">เหลือง/แดง</MenuItem>
-                                    <MenuItem value="เหลือง/ส้ม">เหลือง/ส้ม</MenuItem>
-                                    <MenuItem value="ฟ้า/แดง">ฟ้า/แดง</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </center>
-                    </Grid>
-                </div>
-                <Button onClick={this.onSend.bind(this)} variant="contained" style={{ backgroundColor: 'rgb(210, 210, 210)' }} className={classes.fab}>บันทึก</Button>
+                                    <h2>ข้อมูลรถ</h2>
+                                </div>
+                            </DocTaxiBar>
+                            <Grid container justify="center" alignItems="center"
+                                style={{
+                                    position: 'absolute',
+                                    top: (window.innerHeight / 4),
+                                }}
+                            >
+                                <center>
+                                    <h1>ทะเบียนรถ</h1>
+                                    <Paper className={classes.root}>
+                                        <InputBase
+                                            value={this.state.license_plate}
+                                            onChange={this.InputUpdate.bind(this)}
+                                            className={classes.input}
+                                            placeholder="กรอกทะเบียนรถ"
+                                            inputProps={{ 'aria-label': 'กรอกทะเบียนรถ' }}
+                                        />
+                                    </Paper>
+                                    <h1>สีรถ</h1>
+                                    <FormControl className={classes.formControl}>
+                                        <Select
+                                            value={this.state.select}
+                                            onChange={this.handleChange.bind(this)}
+                                            className={classes.selectEmpty}
+                                            input={<InputBase
+                                                id="age-customized-native-simple"
+                                                name="age"
+                                            />}
+                                        >
+                                            <MenuItem value="เหลือง">
+                                                <em>เหลือง</em>
+                                            </MenuItem>
+                                            <MenuItem value="เขียว">เขียว</MenuItem>
+                                            <MenuItem value="ชมพู">ชมพู</MenuItem>
+                                            <MenuItem value="ฟ้า">ฟ้า</MenuItem>
+                                            <MenuItem value="แดง">แดง</MenuItem>
+                                            <MenuItem value="ส้ม">ส้ม</MenuItem>
+                                            <MenuItem value="เหลือง/เขียว">เหลือง/เขียว</MenuItem>
+                                            <MenuItem value="เหลือง/แดง">เหลือง/แดง</MenuItem>
+                                            <MenuItem value="เหลือง/ส้ม">เหลือง/ส้ม</MenuItem>
+                                            <MenuItem value="ฟ้า/แดง">ฟ้า/แดง</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </center>
+                            </Grid>
+                        </div>
+                        <Button onClick={this.onSend.bind(this)} variant="contained" style={{ backgroundColor: 'rgb(210, 210, 210)' }} className={classes.fab}>บันทึก</Button>
+                    </React.Fragment>)
+                    : (<React.Fragment>
+                        <div>
 
+                            <center>
+                                <h1>บันทึกเส็จสิ้น</h1>
+                                <Button onClick={this.goBack.bind(this)} variant="contained" style={{ backgroundColor: 'rgb(210, 210, 210)' }}>ปิดหน้านี้</Button>
+                            </center>
+                        </div>
+                    </React.Fragment>)
+                }
             </React.Fragment>
 
         );
@@ -207,6 +216,12 @@ const styles = {
     selectEmpty: {
         marginTop: 0,
     },
+}
+
+DocTaxi.propType = {
+    isUsersPrivate: PropTypes.object,
+    db: PropTypes.object,
+    isLocation: PropTypes.object
 }
 
 export default withStyles(styles)(withRouter(DocTaxi));

@@ -52,7 +52,7 @@ export const Loading = (props) => {
                     color: 'dimgray',
                     textDecoration: 'blink'
                 }}>
-                    <ListItem button key={0}>
+                    <ListItem button key="0">
                         <ListItemIcon style={{
                             minWidth: 0,
                             marginLeft: 15,
@@ -65,7 +65,7 @@ export const Loading = (props) => {
                     color: 'dimgray',
                     textDecoration: 'blink'
                 }}>
-                    <ListItem button key={1}>
+                    <ListItem button key="1">
                         <ListItemIcon style={{
                             minWidth: 0,
                             marginLeft: 15,

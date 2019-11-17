@@ -7,16 +7,19 @@ const useShareAll = (props) => {
   });
 
   useEffect(() => {
-    let path = `share`
-    // let _log = `users/${user.uid}/_log/`
+    async function fetchData() {
+        let path = `share`
+        // let _log = `users/${user.uid}/_log/`
 
-    const unsubscribe = props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
-      let data = (snapshot.val())
+        const unsubscribe = await props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
+          const data = (snapshot.val())
 
-      setState({ isShareAll: data })
+          setState({ isShareAll: data })
 
-    })
-    return unsubscribe;
+        })
+        return unsubscribe;
+    }
+    fetchData();
   }, [props]);
   return shareAllState;
 }

@@ -1,12 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Radio from '@material-ui/core/Radio';
+import PropTypes from 'prop-types';
 import RadioGroup from '@material-ui/core/RadioGroup';
-// import FormHelperText from '@material-ui/core/FormHelperText';
-// import io from 'socket.io-client';
-// import { post } from '../../../../RESTful_API';
-import { dateTime } from '../../../../module';
-// import firebase from '../../../../connect/firebase'
+import { dateTime } from '../../../../model/dateTime';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -34,8 +31,8 @@ export default function RadioButtonsGroup(props) {
         setValue(event.target.value);
     }
 
-    let path =`share/${props.auth.uid}/max_number`
-    let _log =`share/${props.auth.uid}/max_number/_log`
+    let path =`share/${props.isUsersPrivate.uid}/max_number`
+    let _log =`share/${props.isUsersPrivate.uid}/max_number/_log`
 
     props.db.database().ref(`${path}`).update({ value: value })
     props.db.database().ref(`${_log}`).push({max_number:{ value: value },date:dateTime})
@@ -69,4 +66,10 @@ export default function RadioButtonsGroup(props) {
             </center>
         </div>
     );
+}
+
+
+RadioButtonsGroup.propTypes = {
+    isUsersPrivate: PropTypes.object,
+    db: PropTypes.object
 }
