@@ -219,7 +219,8 @@ function PlaceAutocompleteAndDirections(props) {
                             className="controls"
                             style={{
                                 borderRadius: '8px',
-                                marginRight: '10px'
+                                marginRight: '10px',
+                                display: 'none'
                             }}
                         >
                             <input type="radio" name="type" id="changemode-walking" />

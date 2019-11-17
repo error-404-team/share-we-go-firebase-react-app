@@ -8,7 +8,7 @@ const useShare = (props) => {
   useEffect(() => {
     async function fetchData() {
       if (props.isStatus !== null) {
-        let path = `share/${props.isStatus.share.share_id}`;
+        let path = `share/${props.isStatus.share.id}`;
 
         const unsubscribe = await props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
           let data = (snapshot.val())

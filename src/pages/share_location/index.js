@@ -274,7 +274,7 @@ function ShareLocation(props) {
                                             (completed.has(activeStep) ? (
                                                 <Typography variant="caption" className={classes.completed}>Step {activeStep + 1} already completed</Typography>
                                             ) : (
-                                                    <Button variant="contained" color="primary" className={classes.nextStaps} onClick={handleComplete}>
+                                                    <Button variant="contained" style={{ backgroundColor: '#274D7D', color: 'white', borderRadius: '12px' }} className={classes.nextStaps} onClick={handleComplete}>
                                                         {completedSteps() === totalSteps() - 1 ? 'เสร็จสิ้นขั้นตอน' : 'ขั้นตอนถัดไป'}
                                                     </Button>
                                                 ))}

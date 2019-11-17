@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CommuteIcon from '@material-ui/icons/Commute';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -76,50 +76,66 @@ function Report(props) {
     return (
         <React.Fragment>
             {isReport !== null
-                ? (<div>
-                    <center>
-                        <div bgcolor="99FF99" shadow="5">
-                            <h2>แชร์เส้นทางเสร็จสิ้น <CheckCircleIcon></CheckCircleIcon></h2>
-                            <hr />
-                        </div>
-                    </center>
-                    <br />
-                    <div bgcolor="#DCDCDC">
-                        <center>
-                            <hr border="5" shadow="5" />
+                ? (<React.Fragment>
+                    <div style={{
+                        position: 'absolute',
+                        top: ((window.innerHeight - 400) / 2.5),
+                        left: ((window.innerWidth - 370) / 2),
+                        width: 370,
+                        heeight: 400,
+                        backgroundColor: 'white',
+                        borderRadius: '10px',
+                        boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)'
 
-                            <div>
-                                <div>
-                                    <h2><CommuteIcon align></CommuteIcon> ต้นทาง - ปลายทาง</h2>
-                                </div>
-                                <b>ต้นทาง:</b> {isReport.location.routes[0].legs[0].start_address}
-                                <br />
-                                <b>ปลายทาง:</b> {isReport.location.routes[0].legs[0].end_address}
-                                <br />
-                                <h2><RecentActorsIcon></RecentActorsIcon> ข้อมูลการแชร์</h2>
-                                <b>เริ่มการแชร์:</b> {isReport.date.end_time.value}
-                                <br />
-                                <b>ปิดการแชร์:</b> {isReport.date.start_time.value}
-                                <br />
-                                <b>ต้องการผู้ร่วมเดินทางเพิ่ม:</b> {isReport.max_number.value} คน
-                                    <br />
-                                <b>ต้องการร่วมเดินทางกับเพศ: {isReport.sex.value}</b>
-                                <hr border="5" shadow="5" />
+                    }}>
+                        <center>
+                            <div bgcolor="99FF99" shadow="5">
+                                <h2>สร้างการแชร์เส้นทางเสร็จสิ้น <CheckCircleIcon></CheckCircleIcon></h2>
+                                <div style={{
+                                    height: '1px',
+                                    width: '-webkit-fill-available',
+                                    backgroundColor: 'whitesmoke'
+                                }} />
                             </div>
                         </center>
-                    </div>
+                        <br />
+                        <div bgcolor="#DCDCDC">
+                            <center>
+                                {/* <hr border="5" shadow="5" /> */}
 
+                                <div style={{ marginBottom: 20 }}>
+                                    <div>
+                                        <h2><CommuteIcon align></CommuteIcon> ต้นทาง - ปลายทาง</h2>
+                                    </div>
+                                    <b>ต้นทาง:</b> {isReport.location.routes[0].legs[0].start_address}
+                                    <br />
+                                    <b>ปลายทาง:</b> {isReport.location.routes[0].legs[0].end_address}
+                                    <br />
+                                    <h2><RecentActorsIcon></RecentActorsIcon> ข้อมูลการแชร์</h2>
+                                    <b>เริ่มการแชร์:</b> {isReport.date.end_time.value}
+                                    <br />
+                                    <b>ปิดการแชร์:</b> {isReport.date.start_time.value}
+                                    <br />
+                                    <b>ต้องการผู้ร่วมเดินทางเพิ่ม:</b> {isReport.max_number.value} คน
+                                    <br />
+                                    <b>ต้องการร่วมเดินทางกับเพศ: {isReport.sex.value}</b>
+                                    {/* <hr border="5" shadow="5" /> */}
+                                </div>
+                            </center>
+                        </div>
+
+                    </div>
                     <div style={{
                         position: "fixed",
                         bottom: '25px',
                         width: '-webkit-fill-available'
                     }}>
                         <center >
-                            <Button variant="contained" onClick={handleReset} color="primary" >เปิดแชร์</Button>
+                            <Button variant="contained" onClick={handleReset} style={{ backgroundColor: '#274D7D', color: "aliceblue" }} >เปิดแชร์</Button>
                         </center>
                     </div>
                     <AlertCheck open={open} onClose={handleClose} />
-                </div>)
+                </React.Fragment>)
                 : (<React.Fragment>Loading</React.Fragment>)
             }
         </React.Fragment>

@@ -3,7 +3,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import DateFnsUtils from '@date-io/date-fns';
-import { dateTime } from '../../../../model/dateTime'; 
+import { dateTime } from '../../../../model/dateTime';
 import {
   MuiPickersUtilsProvider,
   KeyboardDateTimePicker
@@ -116,7 +116,7 @@ export default function CustomDateTimePicker(props) {
   var h = h_max / 2
 
   return (
-    <div style={{ marginTop: h }}>
+    <div style={{ marginTop: h, backgroundColor: props.backgroundColor }}>
       <MuiPickersUtilsProvider utils={DateFnsUtils} >
         <Grid
           container justify="space-around">
@@ -143,5 +143,6 @@ export default function CustomDateTimePicker(props) {
 
 CustomDateTimePicker.propTypes = {
   db: PropTypes.object,
-  isUsersPrivate: PropTypes.object
+  isUsersPrivate: PropTypes.object,
+  backgroundColor: PropTypes.string
 }

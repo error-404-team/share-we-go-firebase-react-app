@@ -297,8 +297,8 @@ const UserStatus = (props) => {
                                                 </SearchBar>
                                                 <VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />
                                                 <Link to="/share_location">
-                                                    <Button variant="contained" style={{ backgroundColor: '#ffffff' }} className={props.classes.fab}>
-                                                        <AddIcon color="action" fontSize="large" />
+                                                    <Button variant="contained" style={{ backgroundColor: '#274D7D' }} className={props.classes.fab}>
+                                                        <snap style={{color: 'white'}}>สร้างการแชร์เส้นทาง</snap>
                                                     </Button>
                                                 </Link>
                                             </Map>)
@@ -411,8 +411,8 @@ const UserStatus = (props) => {
                                                 </SearchBar>
                                                 <VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />
                                                 <Link to="/share_location">
-                                                    <Button variant="contained" style={{ backgroundColor: '#ffffff' }} className={props.classes.fab}>
-                                                        <AddIcon color="action" fontSize="large" />
+                                                    <Button variant="contained" style={{ backgroundColor: '#274D7D' }} className={props.classes.fab}>
+                                                        <snap style={{color: 'white'}}>สร้างการแชร์เส้นทาง</snap>
                                                     </Button>
                                                 </Link>
                                             </Map>)
