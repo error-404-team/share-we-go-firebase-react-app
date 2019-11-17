@@ -108,10 +108,10 @@ const UserStatus = (props) => {
                 {isUsers !== null
                     ? (
                         <React.Fragment>
-                            {isShareAll !== null
+                            {isStatusAll !== null
                                 ? (
                                     <React.Fragment>
-                                        {isStatusAll !== null
+                                        {isShareAll !== null
                                             ? (<Map
                                                 google={props.google}
                                                 mapOptions={
@@ -302,7 +302,120 @@ const UserStatus = (props) => {
                                                     </Button>
                                                 </Link>
                                             </Map>)
-                                            : (<React.Fragment>Loading</React.Fragment>)
+                                            : (<Map
+                                                google={props.google}
+                                                mapOptions={
+                                                    {
+                                                        zoom: 15,
+                                                        center: { lat: latlng.lat, lng: latlng.lat },
+                                                        disableDefaultUI: true,
+                                                        styles: [{
+                                                            featureType: 'poi.business',
+                                                            stylers: [{ visibility: 'on' }]
+                                                        },
+                                                        {
+                                                            featureType: 'transit',
+                                                            elementType: 'labels.icon',
+                                                            stylers: [{ visibility: 'off' }]
+                                                        }]
+                                                    }}
+                                                opts={(google, map) => {
+
+                                                    function CustomMarker(latlng, map, args, img) {
+                                                        this.latlng = latlng;
+                                                        this.args = args;
+                                                        this.img = img;
+                                                        this.setMap(map);
+                                                        this.maps = map
+                                                        setMap(map)
+                                                        setGoogle(google)
+                                                    }
+
+                                                    CustomMarker.prototype = new google.maps.OverlayView();
+
+                                                    CustomMarker.prototype.onAdd = function () {
+                                                        var self = this;
+                                                        var div = this.div;
+                                                        if (!div) {
+                                                            // Generate marker html
+                                                            div = this.div = document.createElement('div');
+                                                            div.className = 'custom-marker';
+                                                            div.style.position = 'absolute';
+                                                            var innerDiv = document.createElement('div');
+                                                            innerDiv.className = 'custom-marker-inner';
+                                                            innerDiv.innerHTML = `<img  src="${this.img}" style="border-radius: inherit;width: 20px;height: 20px;margin: 2px;"/>`
+                                                            div.appendChild(innerDiv);
+
+                                                            if (typeof (self.args.marker_id) !== 'undefined') {
+                                                                div.dataset.marker_id = self.args.marker_id;
+                                                            }
+
+                                                            google.maps.event.addDomListener(div, "click", function (event) {
+                                                                google.maps.event.trigger(self, "click");
+                                                            });
+
+                                                            var panes = this.getPanes();
+                                                            panes.overlayImage.appendChild(div);
+                                                        }
+                                                    };
+
+                                                    CustomMarker.prototype.draw = function () {
+                                                        // มี bug icon ไม่เกาะ map
+                                                        if (this.div) {
+                                                            // กำหนด ตำแหน่ง ของhtml ที่สร้างไว้
+                                                            let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
+
+                                                            this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
+                                                            // console.log(this.pos);
+                                                            this.div.style.left = this.pos.x + 'px';
+                                                            this.div.style.top = this.pos.y + 'px';
+                                                        }
+                                                    };
+
+                                                    CustomMarker.prototype.getPosition = function () {
+                                                        return this.latlng;
+                                                    };
+
+                                                    var myLatlng = new google.maps.LatLng(isUsers.location.coords.latitude, isUsers.location.coords.longitude);
+                                                    if (isUsers.profile !== undefined) {
+                                                        var marker1 = new CustomMarker(
+                                                            myLatlng,
+                                                            map,
+                                                            {},
+                                                            isUsers.profile.photoURL
+                                                        );
+                                                    } else {
+                                                        window.location.reload()
+                                                    }
+
+                                                    var pos = {
+                                                        lat: isUsers.location.coords.latitude,
+                                                        lng: isUsers.location.coords.longitude
+                                                    };
+
+                                                    marker1.latlng = { lat: pos.lat, lng: pos.lng };
+                                                    marker1.draw();
+
+                                                    map.setCenter(pos);
+
+                                                }}
+                                            >
+                                                <SearchBar >
+                                                    <SearchMap
+                                                        onClick={onMenuSlide}
+                                                        map={map}
+                                                        google={google}
+                                                        {...props}
+
+                                                    />
+                                                </SearchBar>
+                                                <VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />
+                                                <Link to="/share_location">
+                                                    <Button variant="contained" style={{ backgroundColor: '#ffffff' }} className={props.classes.fab}>
+                                                        <AddIcon color="action" fontSize="large" />
+                                                    </Button>
+                                                </Link>
+                                            </Map>)
                                         }
                                     </React.Fragment>
                                 )
