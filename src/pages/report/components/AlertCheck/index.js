@@ -5,6 +5,8 @@ import Backdrop from '@material-ui/core/Backdrop';
 import { useSpring, animated } from 'react-spring';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
+import Button from '@material-ui/core/Button';
+
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -64,9 +66,13 @@ export default function AlertCheck(props) {
       >
         <Fade in={props.open}>
           <div className={classes.paper}>
-            <h2 id="spring-modal-title">คุณได้ทำการเปิดการแชร์โลเคชันแล้ว</h2>
-            <p>กดปุ่ม ตกลง เพื่อเข้าสู้หน้าแรก</p>
-            <Link to='/'>ตกลง</Link>
+            <center>
+              <h2 id="spring-modal-title">คุณได้ทำการเปิดการแชร์โลเคชันแล้ว</h2>
+              <p>กดปุ่ม ตกลง เพื่อเข้าสู้หน้าแรก</p>
+              <Button variant="contained" style={{ backgroundColor: '#274D7D' }}>
+                <Link style={{ color: "aliceblue" }} to='/'>ตกลง</Link>
+              </Button>
+            </center>
           </div>
         </Fade>
       </Modal>
