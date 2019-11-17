@@ -9,14 +9,14 @@ import 'firebase/auth';
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
-    apiKey: "AIzaSyCe5WE0chj6pwyUd82JfvNKkiv9YW5U45k",
-    authDomain: "share-we-go-app.firebaseapp.com",
-    databaseURL: "https://share-we-go-app.firebaseio.com",
-    projectId: "share-we-go-app",
-    storageBucket: "share-we-go-app.appspot.com",
-    messagingSenderId: "323869691396",
-    appId: "1:323869691396:web:a0471adc525dc674b12f51",
-    measurementId: "G-RP811B1PKK"
+    apiKey: "AIzaSyA77no0xwPQBpR5vmWCb1CHn4ofCaAmwj4",
+    authDomain: "test-projeck-share-we-go.firebaseapp.com",
+    databaseURL: "https://test-projeck-share-we-go.firebaseio.com",
+    projectId: "test-projeck-share-we-go",
+    storageBucket: "test-projeck-share-we-go.appspot.com",
+    messagingSenderId: "159987611648",
+    appId: "1:159987611648:web:e472c7802c41ac574c40e5",
+    measurementId: "G-NEQZ0L0PEV"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
