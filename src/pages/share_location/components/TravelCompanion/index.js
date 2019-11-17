@@ -42,7 +42,7 @@ export default function RadioButtonsGroup(props) {
     // socket.emit('number_of_travel', { number_of_travel: value })
 
     return (
-        <div className={classes.root}>
+        <div style={{backgroundColor: props.backgroundColor}} className={classes.root}>
             <center>
                 <FormControl component="fieldset" className={classes.formControl}>
                     <FormLabel component="legend">Travel Companion</FormLabel>
@@ -71,5 +71,6 @@ export default function RadioButtonsGroup(props) {
 
 RadioButtonsGroup.propTypes = {
     isUsersPrivate: PropTypes.object,
-    db: PropTypes.object
+    db: PropTypes.object,
+    backgroundColor: PropTypes.string
 }

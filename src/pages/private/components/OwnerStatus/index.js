@@ -106,7 +106,7 @@ const OwnerStatus = (props) => {
 
     return (
         <React.Fragment>
-            {isUsers !== null
+            {isUsers !== null && isShare !== null
                 ? (<React.Fragment>
                     <StyleBaseLine>
                         <Map

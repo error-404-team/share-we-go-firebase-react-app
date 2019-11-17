@@ -35,7 +35,7 @@ export default function RadioButtonsGroup(props) {
     let _log = `share/${props.isUsersPrivate.uid}/sex/_log`
 
     props.db.database().ref(`${path}`).update({ value: value })
-    props.db.database().ref(`${_log}`).push({sex:{ value: value }, date:dateTime})
+    props.db.database().ref(`${_log}`).push({ sex: { value: value }, date: dateTime })
 
     // firebase.auth().onAuthStateChanged((user) => {
     //     post.share.sex(user.uid, { value: value }, dateTime)
@@ -44,7 +44,7 @@ export default function RadioButtonsGroup(props) {
 
 
     return (
-        <div className={classes.root}>
+        <div style={{ backgroundColor: props.backgroundColor }} className={classes.root}>
             <center>
                 <FormControl component="fieldset" className={classes.formControl}>
 
@@ -69,5 +69,6 @@ export default function RadioButtonsGroup(props) {
 
 RadioButtonsGroup.propTypes = {
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object
-  }
+    isUsersPrivate: PropTypes.object,
+    backgroundColor: PropTypes.string
+}
