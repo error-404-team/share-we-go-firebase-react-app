@@ -49,6 +49,27 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 export default function AlertCheck(props) {
   const classes = useStyles();
 
+  function updateChat() {
+    let path_chat = `share/${props.isUsersPrivate.uid}/chat`
+
+    props.db.database().ref(`${path_chat}`).once("value").then(function (chat_value) {
+      let chatData = (chat_value.val())
+      if (chatData !== null) {
+      } else {
+        props.db.database().ref(`${path_chat}`).push({
+          uid: props.isUsersPrivate.uid,
+          share_id: props.isUsersPrivate.id,
+          profile: {
+            displayName: "Addmin",
+            photoURL: ''
+          },
+          msg: 'เริ่มการสนทนา',
+          date: dateTime
+        })
+      }
+
+    })
+  }
 
   return (
     <div>
@@ -69,7 +90,7 @@ export default function AlertCheck(props) {
             <center>
               <h2 id="spring-modal-title">คุณได้ทำการเปิดการแชร์โลเคชันแล้ว</h2>
               <p>กดปุ่ม ตกลง เพื่อเข้าสู้หน้าแรก</p>
-              <Button variant="contained" style={{ backgroundColor: '#274D7D' }}>
+              <Button variant="contained" onClick={{ updateChat }} style={{ backgroundColor: '#274D7D' }}>
                 <Link style={{ color: "aliceblue" }} to='/'>ตกลง</Link>
               </Button>
             </center>
@@ -80,7 +101,10 @@ export default function AlertCheck(props) {
   );
 }
 
+
 AlertCheck.propTypes = {
   open: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  db: PropTypes.object,
+  isUsersPrivate: PropTypes.object
 }

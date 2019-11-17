@@ -77,7 +77,7 @@ const ModelExitShare = (props) => {
                                     <center>
                                         <h1>คุณต้องการอยากจะออกจากกลุ่มแชร์</h1>
 
-                                        <Button onClick={removeShare} >ตกลง</Button>
+                                        <Button onClick={removeShare} variant="contained" style={{ backgroundColor: '#274D7D', color: '#fff' }} >ตกลง</Button>
                                     </center>
                                 </Grid>
                             </div>

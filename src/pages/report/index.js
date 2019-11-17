@@ -134,7 +134,7 @@ function Report(props) {
                             <Button variant="contained" onClick={handleReset} style={{ backgroundColor: '#274D7D', color: "aliceblue" }} >เปิดแชร์</Button>
                         </center>
                     </div>
-                    <AlertCheck open={open} onClose={handleClose} />
+                    <AlertCheck open={open} onClose={handleClose} db={props.db} isUsersPrivate={props.isUsersPrivate}/>
                 </React.Fragment>)
                 : (<React.Fragment>Loading</React.Fragment>)
             }

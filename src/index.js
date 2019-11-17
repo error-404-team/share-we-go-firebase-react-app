@@ -10,15 +10,15 @@ import 'firebase/database';
 import 'firebase/auth';
 
 // Your web app's Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyCe5WE0chj6pwyUd82JfvNKkiv9YW5U45k",
-    authDomain: "share-we-go-app.firebaseapp.com",
-    databaseURL: "https://share-we-go-app.firebaseio.com",
-    projectId: "share-we-go-app",
-    storageBucket: "share-we-go-app.appspot.com",
-    messagingSenderId: "323869691396",
-    appId: "1:323869691396:web:a0471adc525dc674b12f51",
-    measurementId: "G-RP811B1PKK"
+const firebaseConfig = {
+    apiKey: "AIzaSyDYdayNz5sI9528jYWs3j7Qwoj3cnNQSqI",
+    authDomain: "swg-app-develop-test.firebaseapp.com",
+    databaseURL: "https://swg-app-develop-test.firebaseio.com",
+    projectId: "swg-app-develop-test",
+    storageBucket: "swg-app-develop-test.appspot.com",
+    messagingSenderId: "221226147521",
+    appId: "1:221226147521:web:5344ecab4618cbffeb7e40",
+    measurementId: "G-ZY2LRC9485"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
@@ -26,7 +26,7 @@ firebase.initializeApp(firebaseConfig);
 window.addEventListener('appinstalled', (evt) => {
     evt.preventDefault();
     console.log('a2hs installed');
-  });
+});
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition, showError);

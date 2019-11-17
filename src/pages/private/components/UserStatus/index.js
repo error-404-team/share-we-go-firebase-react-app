@@ -222,7 +222,7 @@ const UserStatus = (props) => {
                                                                     latlng,
                                                                     map,
                                                                     { marker_id: `${key}` },
-                                                                    "https://img.icons8.com/ios-glyphs/30/000000/car-cleaning.png"
+                                                                    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAACRklEQVRIie2Vu2tUQRSHz7iPgDEvA6K9teAfkMZCBYOFja/CJgQEDUEkoJWF4FqIraS1FauQRtQNpnBbFS18NLqKj9UYsi5G5bO455rDZO51btYQAv7gcmfPnDnfnNlz5opsBgFV4AzwEGgDS8AccARw6wUtAQ2y1QEWdCMnC21EM7oKvAWaQA2o6lyP2l4Cx4Ed+pxQm68ZYGssuBYIUPM2Vg6sKwO9wIAe+3Nd+xloAfeAQ3ngZgDcjD6ylTjDwKNArMvrCtZYFWAI2AVMAT803urMM476is4dCMz5WgaeAKfxikvhAHdD4KrCm5jiAhxwJwJsdc2LvVPtX4scWxnojfDrAcaAX/rsMXNDCu4AW6LhRQTcUsgNb1Ov1D5mnW0PQ9IKt4FTwLDxO6z/4/0c8KjGWAS2Gft+tT+zzqHCSvUTqJPcSqnmcsAV4IOfHUmvA3Ssc6iVUn0344/AWaCi684D74GnwAPgJkkF19W/YRgjoYzz1A8cBc4Bg+pfAiZZ6c887dM1x/T3VBQ4cJQHgccRwFQdYK+u3Y3t8RgwcAmYLwC0ms0qiBhwrC6QFNJFY1u0PGeDBnckIs459zcfT33OuSWgT0T+ANM4IiL2BpmPDBqjCZL+nchy8C/yNKPrOjcpsqaMwzCT8aqPuuqFv6l/rSzwp40CtzLsX/TdLyIlHbdFZFnHCyKCvtsiMlIUHMzYObc9K1BIeTWR9V1sKbxbvTHj13bCz7guyTG+k+TIGiLyrQvwuIhMa6zxLuL819r1G2V6qhlNJzPyAAAAAElFTkSuQmCC"
                                                                 )
 
 
@@ -259,9 +259,10 @@ const UserStatus = (props) => {
                                             font-size: 17px;
                                             width: -webkit-fill-available;
                                             border-radius: 12px;
-                                            color: rgba(0, 0, 0, 0.87);
+                                            color:  #ffffff;
                                             box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
-                                            }" id="join-share-${key}" ${`${Object.keys(isShareAll[key].member).length - 1}` === isShareAll[key].max_number.value ? "disabled='disabled'" : null} >เข้าร่วม</button></center>`
+                                            background-color: rgb(39, 77, 125);
+                                            " id="join-share-${key}" ${`${Object.keys(isShareAll[key].member).length - 1}` === isShareAll[key].max_number.value ? "disabled='disabled'" : null} >เข้าร่วม</button></center>`
 
                                                                 const infowindow = new google.maps.InfoWindow({
                                                                     content: '',
@@ -298,7 +299,7 @@ const UserStatus = (props) => {
                                                 <VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />
                                                 <Link to="/share_location">
                                                     <Button variant="contained" style={{ backgroundColor: '#274D7D' }} className={props.classes.fab}>
-                                                        <snap style={{color: 'white'}}>สร้างการแชร์เส้นทาง</snap>
+                                                        <snap style={{ color: 'white' }}>สร้างการแชร์เส้นทาง</snap>
                                                     </Button>
                                                 </Link>
                                             </Map>)
@@ -412,7 +413,7 @@ const UserStatus = (props) => {
                                                 <VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />
                                                 <Link to="/share_location">
                                                     <Button variant="contained" style={{ backgroundColor: '#274D7D' }} className={props.classes.fab}>
-                                                        <snap style={{color: 'white'}}>สร้างการแชร์เส้นทาง</snap>
+                                                        <snap style={{ color: 'white' }}>สร้างการแชร์เส้นทาง</snap>
                                                     </Button>
                                                 </Link>
                                             </Map>)

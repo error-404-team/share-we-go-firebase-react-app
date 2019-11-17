@@ -39,26 +39,6 @@ const OwnerStatus = (props) => {
 
     const onChatSlide = () => {
 
-        let path_chat = `share/${props.isStatus.member.share_id}/chat`
-
-        props.db.database().ref(`${path_chat}`).once("value").then(function (chat_value) {
-            let chatData = (chat_value.val())
-            if (chatData !== null) {
-            } else {
-                props.db.database().ref(`${path_chat}`).push({
-                    uid: props.isStatus.share.uid,
-                    share_id: props.isStatus.share.id,
-                    profile: {
-                        displayName: "Addmin",
-                        photoURL: ''
-                    },
-                    msg: 'เริ่มการสนทนา',
-                    date: dateTime
-                })
-            }
-
-        })
-
         setOpenChatSlide(true)
     }
 
@@ -303,7 +283,10 @@ const OwnerStatus = (props) => {
                                 top: '30px',
                                 left: '5px'
                             }} >
-                                <Fab size="medium" onClick={onMenuSlide} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
+                                <Fab size="medium" onClick={onMenuSlide} aria-label="menu" style={{
+                                    backgroundColor: '#274D7D',
+                                    color: 'white'
+                                }} className={classes.buttonTaxiDoc}>
                                     <MenuIcon />
                                 </Fab>
                             </Grid>
@@ -320,7 +303,10 @@ const OwnerStatus = (props) => {
                                 <Fab size="medium" onClick={onCallTaxi} aria-label="add" className={classes.buttonTaxi}>
                                     <LocalTaxiIcon />
                                 </Fab>
-                                <Fab size="medium" onClick={onChatSlide} color="secondary" aria-label="add" className={classes.buttonChat}>
+                                <Fab size="medium" onClick={onChatSlide} color="secondary" aria-label="chat" style={{
+                                    backgroundColor: '#274D7D',
+                                    color: 'white'
+                                }} className={classes.buttonChat}>
                                     <QuestionAnswerIcon />
                                 </Fab>
                                 <CallTaxiModal
@@ -337,16 +323,27 @@ const OwnerStatus = (props) => {
                                         bottom: '80px',
 
                                     }} >
-                                        <Fab size="medium" onClick={exitShareGroup} aria-label="exit-share" className={classes.buttonExitShare}>
+                                        <Fab size="medium" onClick={exitShareGroup} aria-label="exit-share"
+                                            style={{
+                                                backgroundColor: 'slategrey',
+                                                color: 'white'
+
+                                            }} className={classes.buttonExitShare}>
                                             <MeetingRoomIcon />
                                         </Fab>
                                     </Grid>
-                                    <Button variant="contained" onClick={startShareGroup} style={{ backgroundColor: '#ffffff' }} className={classes.fab}>
+                                    <Button variant="contained" onClick={startShareGroup} style={{
+                                        backgroundColor: '#274D7D',
+                                        color: 'white'
+                                    }} className={classes.fab}>
                                         เริ่มการเดินทาง
                         </Button>
                                 </Fragment>)
                                 : (<Fragment>
-                                    <Button variant="contained" onClick={exitShareGroup} style={{ backgroundColor: '#ffffff' }} className={classes.fab}>
+                                    <Button variant="contained" onClick={exitShareGroup} style={{
+                                        backgroundColor: '#274D7D',
+                                        color: 'white'
+                                    }} className={classes.fab}>
                                         สิ้นสุดการเดินทาง
                         </Button>
                                 </Fragment>)}

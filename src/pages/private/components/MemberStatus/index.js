@@ -283,7 +283,7 @@ const MemberStatus = (props) => {
                                 top: '30px',
                                 left: '5px'
                             }} >
-                                <Fab size="medium" onClick={onMenuSlide} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
+                                <Fab size="medium" style={{ backgroundColor: '#274D7D', color: '#fff' }} onClick={onMenuSlide} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
                                     <MenuIcon />
                                 </Fab>
                             </Grid>
@@ -296,15 +296,18 @@ const MemberStatus = (props) => {
                                 bottom: '80px',
 
                             }} >
-                                <Fab size="medium" onClick={onKeyDataTaxiCar} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
+                                <Fab size="medium" style={{ backgroundColor: '#274D7D', color: '#fff' }} onClick={onKeyDataTaxiCar} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
                                     <AssignmentIcon />
                                 </Fab>
-                                <Fab size="medium" onClick={onChatSlide} color="secondary" aria-label="add" className={classes.buttonChat}>
+                                <Fab size="medium" style={{ backgroundColor: '#274D7D', color: '#fff' }} onClick={onChatSlide} color="secondary" aria-label="add" className={classes.buttonChat}>
                                     <QuestionAnswerIcon />
                                 </Fab>
                                 <KeyDataTaxiCar {...alertShare} open={openKeyDataTaxiCar} onClose={offKeyDataTaxiCar} />
                             </Grid>
-                            <Button variant="contained" onClick={exitShareGroup} style={{ backgroundColor: '#ffffff' }} className={classes.fab}>
+                            <Button variant="contained" onClick={exitShareGroup} style={{
+                                backgroundColor: 'slategrey',
+                                color: 'white'
+                            }} className={classes.fab}>
                                 ออกจากกลุ่ม
                         </Button>
                             <ModelExitShare
