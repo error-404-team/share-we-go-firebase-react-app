@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CommuteIcon from '@material-ui/icons/Commute';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import AlertCheck from './components/AlertCheck';
-import { useProfile, useShare } from '../../controllers';
+import { useProfile } from '../../controllers';
 import { dateTime } from '../../model/dateTime';
 import Button from '@material-ui/core/Button';
 import { Link, withRouter } from 'react-router-dom';
@@ -12,8 +12,29 @@ import { Link, withRouter } from 'react-router-dom';
 function Report(props) {
 
     const [open, setOpen] = useState(false);
+    const [isReport, setReport] = useState(null);
     const { isProfile } = useProfile(props);
-    const { isShare } = useShare(props);
+    // const { isShare } = useShare(props);
+
+    useEffect(() => {
+        async function fetchData() {
+            if (props.isUsersPrivate !== null) {
+                let path = `share/${props.match.params.id}`;
+
+                const unsubscribe = await props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
+                    let data = (snapshot.val())
+
+                    setReport(data)
+
+
+
+                })
+                return unsubscribe;
+            }
+        }
+        fetchData();
+    });
+
 
 
     const handleClose = () => {
@@ -54,7 +75,7 @@ function Report(props) {
 
     return (
         <React.Fragment>
-            {isShare !== null
+            {isReport !== null
                 ? (<div>
                     <center>
                         <div bgcolor="99FF99" shadow="5">
@@ -71,18 +92,18 @@ function Report(props) {
                                 <div>
                                     <h2><CommuteIcon align></CommuteIcon> ต้นทาง - ปลายทาง</h2>
                                 </div>
-                                <b>ต้นทาง:</b> {isShare.location.routes[0].legs[0].start_address}
+                                <b>ต้นทาง:</b> {isReport.location.routes[0].legs[0].start_address}
                                 <br />
-                                <b>ปลายทาง:</b> {isShare.location.routes[0].legs[0].end_address}
+                                <b>ปลายทาง:</b> {isReport.location.routes[0].legs[0].end_address}
                                 <br />
                                 <h2><RecentActorsIcon></RecentActorsIcon> ข้อมูลการแชร์</h2>
-                                <b>เริ่มการแชร์:</b> {isShare.date.end_time.value}
+                                <b>เริ่มการแชร์:</b> {isReport.date.end_time.value}
                                 <br />
-                                <b>ปิดการแชร์:</b> {isShare.date.start_time.value}
+                                <b>ปิดการแชร์:</b> {isReport.date.start_time.value}
                                 <br />
-                                <b>ต้องการผู้ร่วมเดินทางเพิ่ม:</b> {isShare.max_number.value} คน
+                                <b>ต้องการผู้ร่วมเดินทางเพิ่ม:</b> {isReport.max_number.value} คน
                                     <br />
-                                <b>ต้องการร่วมเดินทางกับเพศ: {isShare.sex.value}</b>
+                                <b>ต้องการร่วมเดินทางกับเพศ: {isReport.sex.value}</b>
                                 <hr border="5" shadow="5" />
                             </div>
                         </center>
