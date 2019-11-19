@@ -5,21 +5,23 @@ import App from './App';
 import GeoError from './GeoError';
 // import NotSupported from './NotSupported';
 import * as serviceWorker from './serviceWorker';
-import * as firebase from 'firebase/app';
+// import * as admin from "firebase-admin";
+import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
+import 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDYdayNz5sI9528jYWs3j7Qwoj3cnNQSqI",
-    authDomain: "swg-app-develop-test.firebaseapp.com",
-    databaseURL: "https://swg-app-develop-test.firebaseio.com",
-    projectId: "swg-app-develop-test",
-    storageBucket: "swg-app-develop-test.appspot.com",
-    messagingSenderId: "221226147521",
-    appId: "1:221226147521:web:5344ecab4618cbffeb7e40",
-    measurementId: "G-ZY2LRC9485"
-};
+    apiKey: "AIzaSyB1F6O_Obk0xkqbN_0_tLOlz9L2US0yWQo",
+    authDomain: "swg-dev-test.firebaseapp.com",
+    databaseURL: "https://swg-dev-test.firebaseio.com",
+    projectId: "swg-dev-test",
+    storageBucket: "swg-dev-test.appspot.com",
+    messagingSenderId: "712121508420",
+    appId: "1:712121508420:web:04966f8bd2c813046a9211",
+    measurementId: "G-7PVYKPJW62"
+  };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
@@ -29,15 +31,27 @@ window.addEventListener('appinstalled', (evt) => {
 });
 
 if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
+    navigator.geolocation.watchPosition(showPosition, showError);
 } else {
     ReactDOM.render(<GeoError db={firebase} error="Geolocation is not supported" />, document.getElementById('root'));
     console.log("Geolocation is not supported by this browser.");
 }
 
 function showPosition(position) {
+    let pos = {
+        coords: {
+            accuracy: position.coords.accuracy,
+            altitude: position.coords.altitude,
+            altitudeAccuracy: position.coords.altitudeAccuracy,
+            heading: position.coords.heading,
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            speed: position.coords.speed,
+        },
+        timestamp: position.timestamp
+    }
 
-    return ReactDOM.render(<App db={firebase} />, document.getElementById('root'));
+    return ReactDOM.render(<App db={firebase} position={pos} />, document.getElementById('root'));
 }
 
 function showError(error) {

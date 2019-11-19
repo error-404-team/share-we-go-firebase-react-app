@@ -12,7 +12,7 @@ import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import DocTaxiBar from './components/DocTaxiBar';
-import { dateTime } from '../../model/dateTime';
+// import { dateTime } from '../../model/dateTime';
 
 class DocTaxi extends React.Component {
 
@@ -50,38 +50,19 @@ class DocTaxi extends React.Component {
 
     onSend() {
 
-        let path = `share/${this.props.match.params.id}/alert`;
-        let _log = `share/${this.props.match.params.id}/alert/_log`;
-        let path_status = `status/${this.props.match.params.id}/alert`;
-        let _log_status = `status/${this.props.match.params.id}/alert/_log`;
 
-
-
-        let data = {
+        this.props.db.firestore().collection(`share`).doc(this.props.match.params.id+'/alert').update({
             uid: `${this.props.match.params.id}`,
             sahre_id: `${this.props.match.params.id}`,
             select: `${this.state.select}`,
             license_plate: `${this.state.license_plate}`
+        });
 
-        }
-
-        let data_status = {
+        this.props.db.database().ref(`status/${this.props.match.params.id}/alert`).update({
             uid: `${this.props.match.params.id}`,
             share_id: `${this.props.match.params.id}`,
             value: 'true'
-        }
-
-        this.props.db.database().ref(`${path}`).update(data)
-        this.props.db.database().ref(`${_log}`).update({
-            alert: data,
-            date: dateTime
-        })
-
-        this.props.db.database().ref(`${path_status}`).update(data_status)
-        this.props.db.database().ref(`${_log_status}`).update({
-            alert: data_status,
-            date: dateTime
-        })
+        });
 
         this.setState({ status: true })
 
@@ -219,9 +200,7 @@ const styles = {
 }
 
 DocTaxi.propType = {
-    isUsersPrivate: PropTypes.object,
-    db: PropTypes.object,
-    isLocation: PropTypes.object
+    db: PropTypes.object
 }
 
 export default withStyles(styles)(withRouter(DocTaxi));

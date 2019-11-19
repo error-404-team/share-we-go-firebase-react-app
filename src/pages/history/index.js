@@ -12,16 +12,27 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CommuteIcon from '@material-ui/icons/Commute';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import WcIcon from '@material-ui/icons/Wc';
-import { useHistory } from '../../controllers';
+// import { useHistory } from '../../controllers';
 
 
 
 function History(props) {
 
-    // const [history, setHistory] = useState(null)
-    const [expanded, setExpanded] = useState(true)
+    const [isHistory, setHistory] = useState(null);
+    const [expanded, setExpanded] = useState(true);
+    // const { isHistory } = useHistory(props)
 
-    const { isHistory } = useHistory(props)
+    useEffect(() => {
+        if (props.isAuth !== null) {
+
+            props.db.firestore().collection(`history`).doc(props.isAuth.uid).then(function (doc) {
+
+                setHistory(doc.data())
+
+            });
+        }
+
+    });
 
 
     // const updateHistory = data => {
@@ -63,7 +74,7 @@ function History(props) {
             </HistoryBar>
 
             <div style={{ width: '-webkit-fill-available', height: '-webkit-fill-available' }}>
-                <div style={{padding: 30}}></div>
+                <div style={{ padding: 30 }}></div>
                 {isHistory !== null
                     ? (<React.Fragment>
                         {Object.keys(isHistory).map((key) => (
@@ -120,8 +131,7 @@ function History(props) {
 
 History.propTypes = {
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
-    isLocation: PropTypes.object,
+    isAuth: PropTypes.object,
 }
 
 export default withRouter(History)

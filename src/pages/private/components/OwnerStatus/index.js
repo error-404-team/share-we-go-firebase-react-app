@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
@@ -16,26 +16,78 @@ import { withRouter } from 'react-router-dom'
 import { StyleBaseLine } from '../StyleBaseLine';
 import ModelExitShare from './components/ModelExitShare'
 
-import ChatSlide from '../ChatSlide';
+import ChatSlide from './components/ChatSlide';
 import MemberTypeIconStatus from '../MemberModalTypeIconStatus';
 import CallTaxiModal from './components/CallTaxiModal';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import MenuSlide from '../MenuSlide';
-import { useShare, useProfile, useUsers } from '../../../../controllers';
-import { dateTime } from '../../../../model/dateTime';
+
+import Loading from '../../../loading';
+// import { useShare, useProfile, useUsers } from '../../../../controllers';
+// import { dateTime } from '../../../../model/dateTime';
 
 
 const OwnerStatus = (props) => {
-    const [map, setMap] = useState(null);
+    const [isMap, setMap] = useState(null);
     const [openChatSlide, setOpenChatSlide] = useState(false);
-    const [openCallTaxi, setOpenCallTaxi] = useState(false)
-    const [openMenuSlide, setOpenMenuSlide] = useState(false)
-    const [openModelExitShare, setOpenModelExitShare] = useState(false)
-    // const [locationShare, setLocationShare] = useState()
-    const { isShare } = useShare(props);
-    const { isProfile } = useProfile(props);
-    const { isUsers } = useUsers(props);
+    const [openCallTaxi, setOpenCallTaxi] = useState(false);
+    const [openMenuSlide, setOpenMenuSlide] = useState(false);
+    const [openModelExitShare, setOpenModelExitShare] = useState(false);
+    const [isAlertStatus, setAlertStatus] = useState(null);
+    const [isProfile, setProfile] = useState(null);
+    const [isShare, setShare] = useState(null);
+    // const { isShare } = useShare(props);
+    // const { isProfile } = useProfile(props);
+    // const { isUsers } = useUsers(props);
+
+    useEffect(() => {
+        if (props.isAuth !== null) {
+console.log(props.isAuth);
+
+            props.db.database().ref(`status/${props.isAuth.uid}/alert`).once("value").then(function (snapshot) {
+                let data = (snapshot.val());
+                let stringifyData = JSON.stringify(data);
+
+                if (data !== null) {
+                    setAlertStatus(stringifyData)
+                } else {
+                    let statusData = {
+                        share_id: '',
+                        uid: `${props.isAuth.uid}`,
+                        value: false
+
+                    }
+
+                    props.db.database().ref(`status/${props.isAuth.uid}/alert`).update(statusData)
+
+                    setAlertStatus(statusData)
+                }
+            });
+
+            props.db.firestore().collection('users').doc(props.isAuth.uid+'/profile').get().then(function (doc) {
+
+                if (!doc.exists) {
+                    props.db.firestore().collection('users').doc(props.isAuth.uid+'/profile').set(props.isAuth.providerData[0])
+
+                    setProfile(props.isAuth.providerData[0])
+                } else {
+                    setProfile(doc.data())
+
+                }
+            });
+
+            props.db.firestore().collection(`share`).doc(props.isAuth.uid).get().then(function (doc) {
+
+                if (!doc.exists) {
+                    console.log('ไม่มีข้อมูล');
+
+                } else {
+                    setShare(doc.data())
+                }
+            });
+        }
+    });
 
     const onChatSlide = () => {
 
@@ -63,7 +115,7 @@ const OwnerStatus = (props) => {
     }
 
     const startShareGroup = () => {
-        props.history.push(`doc_taxi/${props.isUsersPrivate.uid}`)
+        props.history.push(`doc_taxi/${props.isAuth.uid}`)
     }
 
     const exitShareGroup = () => {
@@ -86,7 +138,7 @@ const OwnerStatus = (props) => {
 
     return (
         <React.Fragment>
-            {isUsers !== null && isShare !== null
+            {isProfile && isShare && isAlertStatus !== null
                 ? (<React.Fragment>
                     <StyleBaseLine>
                         <Map
@@ -108,13 +160,11 @@ const OwnerStatus = (props) => {
                                 }}
                             opts={(google, map) => {
 
-                                // if (isShare !== null) {
-                                //     setLocationShare(isShare)
-                                // }
                                 function CustomMarker(latlng, map, args, img) {
                                     this.latlng = latlng;
                                     this.args = args;
                                     this.img = img;
+                                    this.setMap(map);
                                     this.maps = map
                                     setMap(map)
                                 }
@@ -151,7 +201,7 @@ const OwnerStatus = (props) => {
                                     // มี bug icon ไม่เกาะ map
                                     if (this.div) {
                                         // กำหนด ตำแหน่ง ของhtml ที่สร้างไว้
-                                        let positionA = new this.google.maps.LatLng(this.latlng.lat, this.latlng.lng);
+                                        let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
                                         this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
                                         // console.log(this.pos);
@@ -239,44 +289,63 @@ const OwnerStatus = (props) => {
                                         });
                                 };
 
+                                var myLatlng = new google.maps.LatLng(props.isLocation.coords.latitude, props.isLocation.coords.longitude);
+                                if (isProfile !== null) {
+                                    var markerOwner = new CustomMarker(
+                                        myLatlng,
+                                        map,
+                                        {},
+                                        isProfile.photoURL
+                                    );
+                                } else {
+                                    window.location.reload()
+                                }
 
-                                // get.users.location(props.isStatus.owner.uid).then((location) => {
-                                let myLatlng = new google.maps.LatLng(isUsers.location.coords.latitude, isUsers.location.coords.longitude);
-
-                                let marker1 = new CustomMarker(
-                                    myLatlng,
-                                    map,
-                                    {},
-                                    isProfile.photoURL
-                                );
-
-                                let pos = {
-                                    lat: isUsers.location.coords.latitude,
-                                    lng: isUsers.location.coords.longitude
+                                var ownerPosistion = {
+                                    lat: props.isLocation.coords.latitude,
+                                    lng: props.isLocation.coords.longitude
                                 };
 
-                                marker1.latlng = { lat: pos.lat, lng: pos.lng };
-                                marker1.draw();
+                                markerOwner.latlng = { lat: ownerPosistion.lat, lng: ownerPosistion.lng };
+                                markerOwner.draw();
 
-                                map.setCenter(pos);
+                                map.setCenter(ownerPosistion);
 
-                                // })
+                                Object.keys(isShare.member).map((key) => {
+                                    if (key !== props.isAuth.uid) {
+                                        props.db.database().ref(`users/${key}/location`).once("value").then(function (snapshot) {
+                                            let data = (snapshot.val());
 
-                                // get.share.location(props.isStatus.owner.share_id).then(function (data) {
+                                            var memberLatlng = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
+                                            if (isShare.member !== null) {
+                                                var markerMember = new CustomMarker(
+                                                    memberLatlng,
+                                                    map,
+                                                    {},
+                                                    isShare.member[key].photoURL
+                                                );
+                                            } else {
+                                                window.location.reload()
+                                            }
+
+                                            var memberPosition = {
+                                                lat: data.coords.latitude,
+                                                lng: data.coords.longitude
+                                            };
+
+                                            markerMember.latlng = { lat: memberPosition.lat, lng: memberPosition.lng };
+                                            markerMember.draw();
+
+                                            map.setCenter(memberPosition);
+                                        });
+                                    }
+                                })
+
                                 new AutocompleteDirectionsHandler(google, map, isShare.location);
                                 // })
                                 // })
                             }}
                         >
-                            {/* <SearchBar >
-                                <SearchMap
-                                    onClick={onMenuSlide}
-                                    map={map}
-                                    {...props}
-
-                                />
-                            </SearchBar> */}
-
                             <Grid container style={{
                                 width: 'min-content',
                                 position: 'absolute',
@@ -291,7 +360,7 @@ const OwnerStatus = (props) => {
                                 </Fab>
                             </Grid>
 
-                            <MemberTypeIconStatus isShare={isShare} uid={props.isUsersPrivate.uid} />
+                            <MemberTypeIconStatus isShare={isShare} />
 
                             <Grid container style={{
                                 width: 'min-content',
@@ -310,12 +379,11 @@ const OwnerStatus = (props) => {
                                     <QuestionAnswerIcon />
                                 </Fab>
                                 <CallTaxiModal
-                                    uid={props.isStatus.uid}
                                     open={openCallTaxi}
                                     onClose={offCallTaxi} />
                             </Grid>
-                            {props.isStatus.alert.value !== "true"
-                                ? (<Fragment>
+                            {isAlertStatus.value !== true
+                                ? (<React.Fragment>
                                     <Grid container style={{
                                         width: 'min-content',
                                         position: 'absolute',
@@ -338,46 +406,42 @@ const OwnerStatus = (props) => {
                                     }} className={classes.fab}>
                                         เริ่มการเดินทาง
                         </Button>
-                                </Fragment>)
-                                : (<Fragment>
+                                </React.Fragment>)
+                                : (<React.Fragment>
                                     <Button variant="contained" onClick={exitShareGroup} style={{
                                         backgroundColor: '#274D7D',
                                         color: 'white'
                                     }} className={classes.fab}>
                                         สิ้นสุดการเดินทาง
                         </Button>
-                                </Fragment>)}
+                                </React.Fragment>)}
                             <ModelExitShare
-                                uid={props.isUsersPrivate.uid}
-                                share_id={props.isStatus.owner.uid}
+                                uid={props.isAuth.uid}
                                 isShare={isShare}
                                 open={openModelExitShare}
                                 onClose={offModelExitShare}
-                                isUsersPrivate={props.isUsersPrivate}
                                 db={props.db} />
                         </Map>
                         <ChatSlide
                             open={openChatSlide}
                             onClose={offChatSlide}
-                            isShare={isShare}
-                            isStatus={props.isStatus}
-                            uid={props.isUsersPrivate.uid}
+                            uid={props.isAuth.uid}
                             db={props.db}
-                            isUsersPrivate={props.isUsersPrivate}
+                            isProfile={isProfile}
                         />
                         <MenuSlide
                             open={openMenuSlide}
                             onClose={offMenuSlide}
-                            uid={props.isUsersPrivate.uid}
+                            uid={props.isAuth.uid}
+                            isProfile={isProfile}
                             db={props.db}
-                            isUsersPrivate={props.isUsersPrivate}
                         />
                     </StyleBaseLine>
                 </React.Fragment>
                 )
-                : (<React.Fragment>Loading</React.Fragment>)
+                : (<React.Fragment><Loading /></React.Fragment>)
             }
-        </React.Fragment>
+        </React.Fragment >
     )
 }
 
@@ -405,9 +469,9 @@ const styles = {
 }
 
 OwnerStatus.propTypes = {
-    isStatus: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
-    db: PropTypes.object
+    isAuth: PropTypes.object,
+    db: PropTypes.object,
+    isLocaation: PropTypes.object
 }
 
 export default ConnectApiMaps({

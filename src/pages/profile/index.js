@@ -76,10 +76,23 @@ function Profile(props) {
             value: 2,
             label: 'Women',
         }
-    ])
-    const { isProfile } = useProfile(props)
+    ]);
+    const [isProfile, setProfile] = useState(null);
+    // const { isProfile } = useProfile(props)
 
     useEffect(() => {
+
+        props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').get().then(function (doc) {
+
+            if (!doc.exists) {
+                props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').set(props.isAuth.providerData[0])
+
+                setProfile(props.isAuth.providerData[0])
+            } else {
+                setProfile(doc.data())
+
+            }
+        });
 
         if (statusEdit !== false) {
             if (isProfile !== null) {
@@ -178,29 +191,20 @@ function Profile(props) {
 
 
     const onSave = () => {
-        let data = {
+        // console.log(data);
+
+        props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').update({
             displayName: displayName,
             email: email,
             photoURL: photoURL,
             phoneNumber: phoneNumber,
             sex: sex,
             age: age
-        }
-        console.log(data);
-
-        let path = `users/${props.match.params.id}/profile/`
-        let _log = `users/${props.match.params.id}/profile/_log/`
-
-
-        props.db.database().ref(`${path}`).set(data).then(() => {
-            props.db.database().ref(`${_log}`).push({
-                profile: data,
-                date: dateTime
-            }).then(() => {
-                setStatusEdit(true)
-                window.location.reload()
-            })
+        }).then(() => {
+            setStatusEdit(true)
+            window.location.reload()
         })
+
 
 
     }
@@ -320,7 +324,7 @@ function Profile(props) {
                             </ListItemText>
                         </ListItem>
                     </List>
-                    {props.match.params.id === props.isUsersPrivate.uid
+                    {props.match.params.id === props.isAuth.uid
                         ? (<React.Fragment>
                             <div style={{
                                 position: "absolute",
@@ -387,8 +391,7 @@ const styles = {
 
 Profile.propTypes = {
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
-    isLocation: PropTypes.object,
+    isAuth: PropTypes.object
 }
 
 export default withStyles(styles)(withRouter(Profile));

@@ -74,18 +74,18 @@ function ShareLocation(props) {
         switch (stepIndex) {
             case 0:
                 // หน้าสร้างเเชร์ Form 1 ต้นทาง-ปลายทาง 
-                return (<PlaceAutocompleteAndDirections isUsersPrivate={props.isUsersPrivate} db={props.db} />);
+                return (<PlaceAutocompleteAndDirections isAuth={props.isAuth} db={props.db} />);
 
             case 1:
                 // หน้าสร้างเชร์ ตั้งค่าเวลา Form 2
-                return (<CustomDateTimePicker isUsersPrivate={props.isUsersPrivate} db={props.db} />);
+                return (<CustomDateTimePicker isAuth={props.isAuth} db={props.db} />);
             case 2:
                 // หน้าสร้างเชร์ จำนวนเพื่อนร่วมทาง (ขาดเพศ) 
-                return (<TravelCompanion isUsersPrivate={props.isUsersPrivate} db={props.db} />);
+                return (<TravelCompanion isAuth={props.isAuth} db={props.db} />);
 
             case 3:
                 //หน้าเเชร์เลือกเพศ
-                return (<Selectgender isUsersPrivate={props.isUsersPrivate} db={props.db} />);
+                return (<Selectgender isAuth={props.isAuth} db={props.db} />);
 
             default:
                 return 'Uknown stepIndex';
@@ -163,7 +163,7 @@ function ShareLocation(props) {
         console.log(activeStep);
 
         if (completedSteps() === totalSteps() - 1) {
-            props.history.push(`/report/${props.isUsersPrivate.uid}`)
+            props.history.push(`/report/${props.isAuth.uid}`)
         }
 
 
@@ -201,7 +201,7 @@ function ShareLocation(props) {
 
     return (
         <React.Fragment>
-            {props.isUsersPrivate !== null
+            {props.isAuth !== null
                 ? (<div className={classes.root}>
                     <ShareLocationBar>
                         <Button onClick={goBack}>
@@ -294,7 +294,7 @@ function ShareLocation(props) {
 ShareLocation.propTypes = {
     onClose: PropTypes.func,
     map: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
+    isAuth: PropTypes.object,
     db: PropTypes.object,
     isLocation: PropTypes.object
 };

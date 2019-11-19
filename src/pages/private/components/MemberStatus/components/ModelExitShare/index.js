@@ -30,28 +30,21 @@ const ModelExitShare = (props) => {
     const [loading, setLoading] = useState(false)
 
     const removeShare = () => {
-        let path_history = `history/${props.isStatus.member.uid}`;
-        let path_status_member = `status/${props.isStatus.member.uid}/member`;
-        let path_share_member = `share/${props.isStatus.member.share_id}/member/${props.isUsersPrivate.uid}`
 
         setLoading(true)
 
-        let data_status_member = {
-            uid: `${props.isStatus.member.uid}`,
-            share_id: `${props.isStatus.member.share_id}`,
+        props.db.firestore().collection(`history`).doc(props.isMemberStatus.uid).add(props.isShare);
+        props.db.database().ref('status/'+props.isMemberStatus.uid+'/member').update({
+            uid: `${props.isMemberStatus.uid}`,
+            share_id: `${props.isMemberStatus.share_id}`,
             value: 'false'
-        }
-
-        // post.history.id(props.auth.uid, props.share, dateTime);
-
-        props.db.database().ref(`${path_history}`).push(props.isShare)
-
-
-        props.db.database().ref(`${path_status_member}`).update(data_status_member)
-
-        props.db.database().ref(`${path_share_member}`).remove().then(() => {
+        });
+        props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id+'/member/'+props.isMemberStatus.uid).delete().then(function () {
+            console.log("Remove succeeded.")
             window.location.reload()
-        })
+        }).catch(function (error) {
+            console.log("Remove failed: " + error.message)
+        });
 
 
     }
@@ -103,8 +96,7 @@ ModelExitShare.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     isShare: PropTypes.object,
-    isStatus: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
+    isMemberStatus: PropTypes.object,
     db: PropTypes.object
 }
 

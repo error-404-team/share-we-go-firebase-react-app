@@ -99,13 +99,7 @@ export default function CustomDateTimePicker(props) {
     // firebase.auth().onAuthStateChanged((user) => {
     //   post.share.date(user.uid, timer, dateTime)
     // })
-    let path = `share/${props.isUsersPrivate.uid}/date`;
-    let _log = `share/${props.isUsersPrivate.uid}/date/_log`;
-    props.db.database().ref(`${path}`).update(timer)
-    props.db.database().ref(`${_log}`).push({
-      data: timer,
-      date: dateTime
-    })
+    props.db.firestore().collection(`share`).doc(props.isAuth.uid+'/date').update(timer)
   }
 
   function updateOpen() {

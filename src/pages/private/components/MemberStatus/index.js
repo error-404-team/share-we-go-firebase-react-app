@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import ConnectApiMaps, { Map } from 'maps-google-react';
@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { StyleBaseLine } from '../StyleBaseLine';
-import ChatSlide from '../ChatSlide';
+import ChatSlide from './components/ChatSlide';
 import MemberTypeIconStatus from '../MemberModalTypeIconStatus';
 import KeyDataTaxiCar from './components/KeyDataTaxiCar';
 // import SearchBar from '../SearchBar';
@@ -16,7 +16,8 @@ import KeyDataTaxiCar from './components/KeyDataTaxiCar';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuSlide from '../MenuSlide';
 import ModelExitShare from './components/ModelExitShare';
-import { useShare, useProfile, useUsers } from '../../../../controllers';
+import Loading from '../../../loading';
+// import { useShare, useProfile, useUsers } from '../../../../controllers';
 
 
 const MemberStatus = (props) => {
@@ -26,10 +27,58 @@ const MemberStatus = (props) => {
     const [openMenuSlide, setOpenMenuSlide] = useState(false)
     const [openModelExitShare, setOpenModelExitShare] = useState(false)
     const [alertShare, setAlertShare] = useState({})
-    const [map, setMap] = useState(null);
-    const { isShare } = useShare(props);
-    const { isProfile } = useProfile(props);
-    const { isUsers } = useUsers(props);
+    const [isMap, setMap] = useState(null);
+    const [isAlertStatus, setAlertStatus] = useState(null);
+    const [isProfile, setProfile] = useState(null);
+    const [isShare, setShare] = useState(null);
+
+
+    useEffect(() => {
+        if (props.isAuth !== null) {
+
+            props.db.database().ref(`status/${props.isAuth.uid}/alert`).once("value").then(function (snapshot) {
+                let data = (snapshot.val());
+                let stringifyData = JSON.stringify(data);
+
+                if (data !== null) {
+                    setAlertStatus(stringifyData)
+                } else {
+                    let statusData = {
+                        share_id: '',
+                        uid: `${props.isAuth.uid}`,
+                        value: false
+
+                    }
+
+                    props.db.database().ref(`status/${props.isAuth.uid}/alert`).update(statusData)
+
+                    setAlertStatus(statusData)
+                }
+            });
+
+            props.db.firestore().collection('users').doc(props.isAuth.uid+'/profile').get().then(function (doc) {
+
+                if (!doc.exists) {
+                    props.db.firestore().collection('users').doc(props.isAuth.uid+'/profile').set(props.isAuth.providerData[0])
+
+                    setProfile(props.isAuth.providerData[0])
+                } else {
+                    setProfile(doc.data())
+
+                }
+            });
+
+            props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id).get().then(function (doc) {
+
+                if (!doc.exists) {
+                    console.log('ไม่มีข้อมูล');
+
+                } else {
+                    setShare(doc.data())
+                }
+            });
+        }
+    });
 
     const onChatSlide = () => {
         setOpenChatSlide(true)
@@ -40,12 +89,12 @@ const MemberStatus = (props) => {
     }
 
     const onKeyDataTaxiCar = () => {
-        if (props.isStatus.alert.value !== 'false') {
+        if (isAlertStatus.value !== 'false') {
             setAlertShare(isShare.alert)
         } else {
             setAlertShare({
-                uid: `${props.isStatus.alert.uid}`,
-                share_id: `${props.isStatus.alert.share_id}`,
+                uid: `${isAlertStatus.uid}`,
+                share_id: `${isAlertStatus.share_id}`,
                 select: 'กำลังรอข้อมูล',
                 license_plate: 'กำลังรอข้อมูล'
 
@@ -86,7 +135,7 @@ const MemberStatus = (props) => {
 
     return (
         <React.Fragment>
-            {isUsers !== null
+            {isProfile && isShare !== null
                 ? (<React.Fragment>
                     <StyleBaseLine>
                         <Map
@@ -108,13 +157,11 @@ const MemberStatus = (props) => {
                                 }}
                             opts={(google, map) => {
 
-                                // if (isShare !== null) {
-                                //     setLocationShare(isShare)
-                                // }
                                 function CustomMarker(latlng, map, args, img) {
                                     this.latlng = latlng;
                                     this.args = args;
                                     this.img = img;
+                                    this.setMap(map);
                                     this.maps = map
                                     setMap(map)
                                 }
@@ -151,7 +198,7 @@ const MemberStatus = (props) => {
                                     // มี bug icon ไม่เกาะ map
                                     if (this.div) {
                                         // กำหนด ตำแหน่ง ของhtml ที่สร้างไว้
-                                        let positionA = new this.google.maps.LatLng(this.latlng.lat, this.latlng.lng);
+                                        let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
                                         this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
                                         // console.log(this.pos);
@@ -163,7 +210,6 @@ const MemberStatus = (props) => {
                                 CustomMarker.prototype.getPosition = function () {
                                     return this.latlng;
                                 };
-
                                 function AutocompleteDirectionsHandler(google, map, data) {
                                     this.map = map;
                                     this.originPlaceId = null;
@@ -240,42 +286,63 @@ const MemberStatus = (props) => {
                                 };
 
 
-                                // get.users.location(props.isStatus.owner.uid).then((location) => {
-                                let myLatlng = new google.maps.LatLng(isUsers.location.coords.latitude, isUsers.location.coords.longitude);
+                                var myLatlng = new google.maps.LatLng(props.isLocation.coords.latitude, props.isLocation.coords.longitude);
+                                if (isProfile !== null) {
+                                    var markerUser = new CustomMarker(
+                                        myLatlng,
+                                        map,
+                                        {},
+                                        isProfile.photoURL
+                                    );
+                                } else {
+                                    window.location.reload()
+                                }
 
-                                let marker1 = new CustomMarker(
-                                    myLatlng,
-                                    map,
-                                    {},
-                                    isProfile.photoURL
-                                );
-
-                                let pos = {
-                                    lat: isUsers.location.coords.latitude,
-                                    lng: isUsers.location.coords.longitude
+                                var userPosistion = {
+                                    lat: props.isLocation.coords.latitude,
+                                    lng: props.isLocation.coords.longitude
                                 };
 
-                                marker1.latlng = { lat: pos.lat, lng: pos.lng };
-                                marker1.draw();
+                                markerUser.latlng = { lat: userPosistion.lat, lng: userPosistion.lng };
+                                markerUser.draw();
 
-                                map.setCenter(pos);
+                                map.setCenter(userPosistion);
 
-                                // })
+                                Object.keys(isShare.member).map((key) => {
+                                    if (key !== props.isAuth.uid) {
+                                        props.db.database().ref(`users/${key}/location`).once("value").then(function (snapshot) {
+                                            let data = (snapshot.val());
 
+                                            var memberLatlng = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
+                                            if (isShare.member !== null) {
+                                                var markerMember = new CustomMarker(
+                                                    memberLatlng,
+                                                    map,
+                                                    {},
+                                                    isShare.member[key].photoURL
+                                                );
+                                            } else {
+                                                window.location.reload()
+                                            }
+
+                                            var memberPosition = {
+                                                lat: data.coords.latitude,
+                                                lng: data.coords.longitude
+                                            };
+
+                                            markerMember.latlng = { lat: memberPosition.lat, lng: memberPosition.lng };
+                                            markerMember.draw();
+
+                                            map.setCenter(memberPosition);
+                                        });
+                                    }
+                                })
                                 // get.share.location(props.isStatus.owner.share_id).then(function (data) {
                                 new AutocompleteDirectionsHandler(google, map, isShare.location);
                                 // })
                                 // })
                             }}
                         >
-                            {/* <SearchBar >
-                                <SearchMap
-                                    onClick={onMenuSlide}
-                                    map={map}
-                                    {...props}
-
-                                />
-                            </SearchBar> */}
 
                             <Grid container style={{
                                 width: 'min-content',
@@ -287,7 +354,7 @@ const MemberStatus = (props) => {
                                     <MenuIcon />
                                 </Fab>
                             </Grid>
-                            <MemberTypeIconStatus isShare={isShare} uid={props.isUsersPrivate.uid} />
+                            <MemberTypeIconStatus isShare={isShare} />
 
                             <Grid container style={{
                                 width: 'min-content',
@@ -313,32 +380,30 @@ const MemberStatus = (props) => {
                             <ModelExitShare
                                 db={props.db}
                                 isShare={isShare}
-                                isStatus={props.isStatus}
+                                isMemberStatus={props.isMemberStatus}
                                 open={openModelExitShare}
                                 onClose={offModelExitShare}
-                                isUsersPrivate={props.isUsersPrivate} />
+                            />
 
                         </Map>
                         <ChatSlide
                             open={openChatSlide}
                             onClose={offChatSlide}
-                            isShare={isShare}
-                            isStatus={props.isStatus}
-                            uid={props.isUsersPrivate.uid}
+                            isProfile={isProfile}
+                            isMemberStatus={props.isMemberStatus}
                             db={props.db}
-                            isUsersPrivate={props.isUsersPrivate}
                         />
                         <MenuSlide
                             open={openMenuSlide}
                             onClose={offMenuSlide}
-                            uid={props.isUsersPrivate.uid}
+                            uid={props.isAuth.uid}
+                            isProfile={isProfile}
                             db={props.db}
-                            isUsersPrivate={props.isUsersPrivate}
                         />
                     </StyleBaseLine>
                 </React.Fragment>
                 )
-                : (<React.Fragment>Loading</React.Fragment>)
+                : (<React.Fragment><Loading/></React.Fragment>)
             }
         </React.Fragment>
     )
@@ -368,9 +433,10 @@ const styles = {
 }
 
 MemberStatus.propTypes = {
-    isUsersPrivate: PropTypes.object,
-    isStatus: PropTypes.object,
-    db: PropTypes.object
+    isAuth: PropTypes.object,
+    isMemberStatus: PropTypes.object,
+    db: PropTypes.object,
+    isLocation: PropTypes.object,
 }
 
 export default ConnectApiMaps({

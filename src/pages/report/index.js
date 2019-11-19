@@ -13,26 +13,30 @@ function Report(props) {
 
     const [open, setOpen] = useState(false);
     const [isReport, setReport] = useState(null);
-    const { isProfile } = useProfile(props);
+    const [isProfile, setProfile] = useState(null);
+
     // const { isShare } = useShare(props);
 
     useEffect(() => {
-        async function fetchData() {
-            if (props.isUsersPrivate !== null) {
-                let path = `share/${props.match.params.id}`;
+        if (props.isAuth !== null) {
 
-                const unsubscribe = await props.db.database().ref(`${path}`).once("value").then(function (snapshot) {
-                    let data = (snapshot.val())
+            props.db.firestore().collection(`share`).doc(props.match.params.id).get().then(function (doc) {
+                // let data = (doc.data())
+                setReport(doc.data())
+            })
 
-                    setReport(data)
+            props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').get().then(function (doc) {
 
+                if (!doc.exists) {
+                    props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').set(props.isAuth.providerData[0])
 
+                    setProfile(props.isAuth.providerData[0])
+                } else {
+                    setProfile(doc.data())
 
-                })
-                return unsubscribe;
-            }
+                }
+            });
         }
-        fetchData();
     });
 
 
@@ -42,31 +46,32 @@ function Report(props) {
     };
 
     function handleReset() {
-        let path_status_share = `status/${props.match.params.id}/share`
-        let path_status_share_log = `status/${props.match.params.id}/share/_log`
-        let path_status_owner = `status/${props.match.params.id}/owner`
-        let path_status_owner_log = `status/${props.match.params.id}/owner/_log`
-        let path_share_owner = `share/${props.match.params.id}/owner`
-        let path_share_owner_log = `share/${props.match.params.id}/owner/_log`
-        let path_share_member = `share/${props.match.params.id}/member`
-        let path_share_member_log = `share/${props.match.params.id}/member/${props.isUsersPrivate.uid}/_log`
 
-        let data_status_share = { value: "true", uid: props.isUsersPrivate.uid, id: props.isUsersPrivate.uid }
-        let data_status_owner = { value: "true", uid: props.isUsersPrivate.uid, id: props.isUsersPrivate.uid }
-        let data_share_owner = { id: props.isUsersPrivate.uid, profile: isProfile }
-        let data_share_member = { [props.isUsersPrivate.uid]: { share_id: props.isUsersPrivate.uid, uid: props.isUsersPrivate.uid, profile: isProfile } }
 
-        props.db.database().ref(`${path_status_share}`).update(data_status_share)
-        props.db.database().ref(`${path_status_share_log}`).push({ share: data_status_share, date: dateTime })
+        props.db.database().ref(`status/${props.match.params.id}/owner`).update({
+            value: true,
+            uid: props.isAuth.uid,
+            id: props.isAuth.uid
+        })
 
-        props.db.database().ref(`${path_status_owner}`).update(data_status_owner)
-        props.db.database().ref(`${path_status_owner_log}`).push({ owner: data_status_owner, date: dateTime })
+        props.db.firestore().collection(`share`).doc(props.match.params.id + '/statu').update({
+            value: true,
+            uid: props.isAuth.uid,
+            id: props.match.params.id
+        })
 
-        props.db.database().ref(`${path_share_owner}`).update(data_share_owner)
-        props.db.database().ref(`${path_share_owner_log}`).push({ owner: data_share_owner, date: dateTime })
+        props.db.firestore().collection(`share`).doc(props.match.params.id + '/owner').update({
+            id: props.isAuth.uid,
+            photoURL: isProfile.photoURL,
+            diaplayName: isProfile.diaplayName
+        });
 
-        props.db.database().ref(`${path_share_member}`).update(data_share_member)
-        props.db.database().ref(`${path_share_member_log}`).push({ member: data_share_member, date: dateTime })
+        props.db.firestore().collection(`share`).doc(props.match.params.id + '/membe/' + props.isAuth.uid).update({
+            share_id: props.match.params.id,
+            uid: props.isAuth.uid,
+            photoURL: isProfile.photoURL,
+            diaplayName: isProfile.diaplayName
+        })
 
 
         setOpen(true)
@@ -134,7 +139,7 @@ function Report(props) {
                             <Button variant="contained" onClick={handleReset} style={{ backgroundColor: '#274D7D', color: "aliceblue" }} >เปิดแชร์</Button>
                         </center>
                     </div>
-                    <AlertCheck open={open} onClose={handleClose} db={props.db} isUsersPrivate={props.isUsersPrivate}/>
+                    <AlertCheck open={open} onClose={handleClose} db={props.db} isUsersPrivate={props.isUsersPrivate} />
                 </React.Fragment>)
                 : (<React.Fragment>Loading</React.Fragment>)
             }
@@ -144,7 +149,7 @@ function Report(props) {
 
 Report.propTypes = {
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
+    isAuth: PropTypes.object,
     isLocation: PropTypes.object
 }
 

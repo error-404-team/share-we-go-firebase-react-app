@@ -6,7 +6,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import { dateTime } from '../../../../model/dateTime';
+// import { dateTime } from '../../../../model/dateTime';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,11 +31,7 @@ export default function RadioButtonsGroup(props) {
         setValue(event.target.value);
     }
 
-    let path = `share/${props.isUsersPrivate.uid}/sex`
-    let _log = `share/${props.isUsersPrivate.uid}/sex/_log`
-
-    props.db.database().ref(`${path}`).update({ value: value })
-    props.db.database().ref(`${_log}`).push({ sex: { value: value }, date: dateTime })
+    props.db.firestore().collection(`share`).doc(props.isAuth.uid+'/sex').update({ value: value })
 
     // firebase.auth().onAuthStateChanged((user) => {
     //     post.share.sex(user.uid, { value: value }, dateTime)
@@ -69,6 +65,6 @@ export default function RadioButtonsGroup(props) {
 
 RadioButtonsGroup.propTypes = {
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
+    isAuth: PropTypes.object,
     backgroundColor: PropTypes.string
 }

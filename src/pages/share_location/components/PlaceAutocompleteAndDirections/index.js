@@ -1,8 +1,9 @@
 import React from 'react';
 import ConnectApiMaps, { Map } from 'maps-google-react';
 import PropTypes from 'prop-types';
-import { dateTime } from '../../../../model/dateTime';
+// import { dateTime } from '../../../../model/dateTime';
 import './styles/place-autocomplete-and-directions.css';
+import Loading from '../../../loading';
 
 
 function PlaceAutocompleteAndDirections(props) {
@@ -108,14 +109,8 @@ function PlaceAutocompleteAndDirections(props) {
                     // socket.emit('origin_destination_route', response)
                     const res = JSON.stringify(response)
 
-                    let path = `share/${props.isUsersPrivate.uid}/location`;
-                    let _log = `share/${props.isUsersPrivate.uid}/location/_log`;
 
-                    props.db.database().ref(`${path}`).update(JSON.parse(res))
-                    props.db.database().ref(`${_log}`).push({
-                        location: JSON.parse(res),
-                        date: dateTime
-                    })
+                    props.db.firestore().collection(`share`).doc(props.isAuth.uid+'/location').update(JSON.parse(res))
 
                     // firebase.auth().onAuthStateChanged((user) => {
                     //     post.share.location(user.uid, response, dateTime)
@@ -151,7 +146,7 @@ function PlaceAutocompleteAndDirections(props) {
 
     return (
         <React.Fragment>
-            {props.isUsersPrivate !== null
+            {props.isAuth !== null
                 ? (<Map google={props.google}
                     setStyle={{
                         marginTop: '100px',
@@ -235,14 +230,14 @@ function PlaceAutocompleteAndDirections(props) {
                     </div>
                 </Map>
                 )
-                : (<React.Fragment>Loading</React.Fragment>)}
+                : (<React.Fragment><Loading /></React.Fragment>)}
         </React.Fragment>
     )
 
 }
 
 PlaceAutocompleteAndDirections.propTypes = {
-    isUsersPrivate: PropTypes.object,
+    isAuth: PropTypes.object,
     db: PropTypes.object
 }
 
