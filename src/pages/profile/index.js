@@ -28,8 +28,34 @@ import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Phone';
 import WcIcon from '@material-ui/icons/Wc';
 import FaceIcon from '@material-ui/icons/Face';
-import { dateTime } from '../../model/dateTime';
-import { useProfile } from '../../controllers';
+// import { dateTime } from '../../model/dateTime';
+// import { useProfile } from '../../controllers';
+
+function useProfile(props) {
+    const [updateProfile, setState] = useState({
+        isProfile: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(doc => {
+                    if (!doc.exists) {
+                      console.log('No such document!');
+                    } else {
+                      console.log('Document data:', doc.data());
+                    }
+                  })
+                  .catch(err => {
+                    console.log('Error getting document', err);
+                  });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateProfile;
+};
 
 
 function TextMaskCustom(props) {
@@ -77,22 +103,10 @@ function Profile(props) {
             label: 'Women',
         }
     ]);
-    const [isProfile, setProfile] = useState(null);
-    // const { isProfile } = useProfile(props)
+    // const [isProfile, setProfile] = useState(null);
+    const { isProfile } = useProfile(props)
 
     useEffect(() => {
-
-        props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').get().then(function (doc) {
-
-            if (!doc.exists) {
-                props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').set(props.isAuth.providerData[0])
-
-                setProfile(props.isAuth.providerData[0])
-            } else {
-                setProfile(doc.data())
-
-            }
-        });
 
         if (statusEdit !== false) {
             if (isProfile !== null) {
@@ -193,16 +207,17 @@ function Profile(props) {
     const onSave = () => {
         // console.log(data);
 
-        props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').update({
+        props.db.firestore().collection('users').doc(props.isAuth.uid ).update({
+            profile:{
             displayName: displayName,
             email: email,
             photoURL: photoURL,
             phoneNumber: phoneNumber,
             sex: sex,
             age: age
-        }).then(() => {
+        }}).then(() => {
             setStatusEdit(true)
-            window.location.reload()
+            // window.location.reload()
         })
 
 

@@ -4,40 +4,75 @@ import CommuteIcon from '@material-ui/icons/Commute';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import AlertCheck from './components/AlertCheck';
-import { useProfile } from '../../controllers';
+// import { useProfile } from '../../controllers';
 import { dateTime } from '../../model/dateTime';
 import Button from '@material-ui/core/Button';
 import { Link, withRouter } from 'react-router-dom';
 
+function useProfile(props) {
+    const [updateProfile, setState] = useState({
+        isProfile: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).collection('profile').get().then(function (doc) {
+
+                    if (!doc.exists) {
+                        console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
+
+                        props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
+                        setState({ isProfile: props.isAuth.providerData[0] })
+                    } else {
+                        console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
+                        setState({ isProfile: doc.data() })
+
+                    }
+                });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateProfile;
+};
+
+function useShare(props) {
+    const [updateShare, setState] = useState({
+        isShare: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection(`share`).doc(props.isAuth.uid).get().then(function (doc) {
+
+                    if (!doc.exists) {
+                        console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
+                        setState({ isShare: null })
+                    } else {
+                        console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
+                        console.log('share: ', doc.data());
+
+                        setState({ isShare: doc.data() })
+                    }
+                });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateShare;
+};
+
 function Report(props) {
 
     const [open, setOpen] = useState(false);
-    const [isReport, setReport] = useState(null);
-    const [isProfile, setProfile] = useState(null);
-
-    // const { isShare } = useShare(props);
-
-    useEffect(() => {
-        if (props.isAuth !== null) {
-
-            props.db.firestore().collection(`share`).doc(props.match.params.id).get().then(function (doc) {
-                // let data = (doc.data())
-                setReport(doc.data())
-            })
-
-            props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').get().then(function (doc) {
-
-                if (!doc.exists) {
-                    props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').set(props.isAuth.providerData[0])
-
-                    setProfile(props.isAuth.providerData[0])
-                } else {
-                    setProfile(doc.data())
-
-                }
-            });
-        }
-    });
+    // const [isShare, setReport] = useState(null);
+    // const [isProfile, setProfile] = useState(null);
+    const { isProfile } = useProfile(props);
+    const { isShare } = useShare(props);
 
 
 
@@ -52,26 +87,46 @@ function Report(props) {
             value: true,
             uid: props.isAuth.uid,
             id: props.isAuth.uid
+        }).then(()=>{
+            console.log('อัพเดต สถานะ owner แล้ว เคป๊ะ 😛');
+            
         })
 
-        props.db.firestore().collection(`share`).doc(props.match.params.id + '/statu').update({
-            value: true,
-            uid: props.isAuth.uid,
-            id: props.match.params.id
+        props.db.firestore().collection(`share`).doc(props.match.params.id).update({
+            statu: {
+                value: true,
+                uid: props.isAuth.uid,
+                id: props.match.params.id
+            }
+        }).then(()=>{
+            console.log('อัพเดต สถานะ share แล้ว เคป๊ะ 😛');
+            
         })
 
-        props.db.firestore().collection(`share`).doc(props.match.params.id + '/owner').update({
-            id: props.isAuth.uid,
-            photoURL: isProfile.photoURL,
-            diaplayName: isProfile.diaplayName
+        props.db.firestore().collection(`share`).doc(props.match.params.id).update({
+            owner: {
+                id: props.isAuth.uid,
+                photoURL: isProfile.photoURL,
+                displayName: isProfile.displayName
+            }
+        }).then(()=>{
+            console.log('อัพเดต ข้อมูล owner ของ share แล้ว เคนะ 😛');
+            
         });
 
-        props.db.firestore().collection(`share`).doc(props.match.params.id + '/membe/' + props.isAuth.uid).update({
-            share_id: props.match.params.id,
-            uid: props.isAuth.uid,
-            photoURL: isProfile.photoURL,
-            diaplayName: isProfile.diaplayName
-        })
+        props.db.firestore().collection(`share`).doc(props.match.params.id).update({
+            member: {
+                [props.isAuth.uid]: {
+                    share_id: props.match.params.id,
+                    uid: props.isAuth.uid,
+                    photoURL: isProfile.photoURL,
+                    displayName: isProfile.displayName
+                }
+            }
+        }).then(()=>{
+            console.log('อัพเดต ข้อมูล membe ของ share แล้ว เคนะ 😛');
+            
+        });
 
 
         setOpen(true)
@@ -80,7 +135,7 @@ function Report(props) {
 
     return (
         <React.Fragment>
-            {isReport !== null
+            {isShare !== null
                 ? (<React.Fragment>
                     <div style={{
                         position: 'absolute',
@@ -112,18 +167,18 @@ function Report(props) {
                                     <div>
                                         <h2><CommuteIcon align></CommuteIcon> ต้นทาง - ปลายทาง</h2>
                                     </div>
-                                    <b>ต้นทาง:</b> {isReport.location.routes[0].legs[0].start_address}
+                                    <b>ต้นทาง:</b> {isShare.location.start_address}
                                     <br />
-                                    <b>ปลายทาง:</b> {isReport.location.routes[0].legs[0].end_address}
+                                    <b>ปลายทาง:</b> {isShare.location.end_address}
                                     <br />
                                     <h2><RecentActorsIcon></RecentActorsIcon> ข้อมูลการแชร์</h2>
-                                    <b>เริ่มการแชร์:</b> {isReport.date.end_time.value}
+                                    <b>เริ่มการแชร์:</b> {isShare.date.end_time.value}
                                     <br />
-                                    <b>ปิดการแชร์:</b> {isReport.date.start_time.value}
+                                    <b>ปิดการแชร์:</b> {isShare.date.start_time.value}
                                     <br />
-                                    <b>ต้องการผู้ร่วมเดินทางเพิ่ม:</b> {isReport.max_number.value} คน
+                                    <b>ต้องการผู้ร่วมเดินทางเพิ่ม:</b> {isShare.max_number.value} คน
                                     <br />
-                                    <b>ต้องการร่วมเดินทางกับเพศ: {isReport.sex.value}</b>
+                                    <b>ต้องการร่วมเดินทางกับเพศ: {isShare.sex.value}</b>
                                     {/* <hr border="5" shadow="5" /> */}
                                 </div>
                             </center>
@@ -136,10 +191,17 @@ function Report(props) {
                         width: '-webkit-fill-available'
                     }}>
                         <center >
-                            <Button variant="contained" onClick={handleReset} style={{ backgroundColor: '#274D7D', color: "aliceblue" }} >เปิดแชร์</Button>
+                            <Button
+                                variant="contained"
+                                onClick={handleReset}
+                                style={{
+                                    backgroundColor: '#274D7D',
+                                    color: "aliceblue"
+                                }}
+                            >เปิดแชร์</Button>
                         </center>
                     </div>
-                    <AlertCheck open={open} onClose={handleClose} db={props.db} isUsersPrivate={props.isUsersPrivate} />
+                    <AlertCheck open={open} onClose={handleClose} db={props.db} isAuth={props.isAuth} />
                 </React.Fragment>)
                 : (<React.Fragment>Loading</React.Fragment>)
             }

@@ -22,7 +22,7 @@ function PlaceAutocompleteAndDirections(props) {
         this.map = map;
         this.originPlaceId = null;
         this.destinationPlaceId = null;
-        this.travelMode = 'WALKING';
+        this.travelMode = 'DRIVING';
         this.directionsService = new window.google.maps.DirectionsService;
         this.directionsRenderer = new window.google.maps.DirectionsRenderer;
         this.directionsRenderer.setMap(map);
@@ -109,8 +109,27 @@ function PlaceAutocompleteAndDirections(props) {
                     // socket.emit('origin_destination_route', response)
                     const res = JSON.stringify(response)
 
+                    props.db.firestore().collection(`share`).doc(props.isAuth.uid).set({
+                        location: {
+                            request: response.request,
+                            distance: response.routes[0].legs[0].distance,
+                            duration: response.routes[0].legs[0].duration,
+                            end_address: response.routes[0].legs[0].end_address,
+                            end_location: {
+                                lat: response.routes[0].legs[0].end_location.lat(),
+                                lng: response.routes[0].legs[0].end_location.lng(),
+                            },
+                            start_address: response.routes[0].legs[0].start_address,
+                            start_location: {
+                                lat: response.routes[0].legs[0].start_location.lat(),
+                                lng: response.routes[0].legs[0].start_location.lng(),
+                            },
+                        }
+                    }).then(() => {
 
-                    props.db.firestore().collection(`share`).doc(props.isAuth.uid+'/location').update(JSON.parse(res))
+                        console.log('สร้าง locationc ขึ้นมาใหม่ 😁');
+                    })
+
 
                     // firebase.auth().onAuthStateChanged((user) => {
                     //     post.share.location(user.uid, response, dateTime)

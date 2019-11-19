@@ -27,6 +27,98 @@ import Loading from '../../../loading';
 // import { useShare, useProfile, useUsers } from '../../../../controllers';
 // import { dateTime } from '../../../../model/dateTime';
 
+function useAlertStatus(props) {
+    const [updateAlertStatus, setState] = useState({
+        isAlertStatus: null
+    });
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = props.db.database().ref(`status/${props.isAuth.uid}/alert`).once("value").then(function (snapshot) {
+                    let data = (snapshot.val());
+                    // let stringifyData = JSON.stringify(data);
+
+                    if (data !== null) {
+                        setState({ isAlertStatus: data })
+                    } else {
+                        let statusData = {
+                            share_id: '',
+                            uid: `${props.isAuth.uid}`,
+                            value: false
+
+                        }
+
+                        props.db.database().ref(`status/${props.isAuth.uid}/alert`).update(statusData)
+
+                        setState({ isAlertStatus: statusData })
+                    }
+                });
+                return unsubscribe;
+            }
+        }
+        update();
+    })
+    return updateAlertStatus;
+}
+
+function useProfile(props) {
+    const [updateProfile, setState] = useState({
+        isProfile: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).collection('profile').get().then(function (doc) {
+
+                    if (!doc.exists) {
+                        console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
+
+                        props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
+                        setState({ isProfile: props.isAuth.providerData[0] })
+                    } else {
+                        console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
+                        setState({ isProfile: doc.data() })
+
+                    }
+                });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateProfile;
+};
+
+function useShare(props) {
+    const [updateShare, setState] = useState({
+        isShare: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection(`share`).doc(props.isAuth.uid).get().then(function (doc) {
+
+                    if (!doc.exists) {
+                        console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
+                        setState({ isShare: null })
+                    } else {
+                        console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
+                        console.log('share: ', doc.data());
+
+                        setState({ isShare: doc.data() })
+                    }
+                });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateShare;
+};
+
 
 const OwnerStatus = (props) => {
     const [isMap, setMap] = useState(null);
@@ -34,60 +126,12 @@ const OwnerStatus = (props) => {
     const [openCallTaxi, setOpenCallTaxi] = useState(false);
     const [openMenuSlide, setOpenMenuSlide] = useState(false);
     const [openModelExitShare, setOpenModelExitShare] = useState(false);
-    const [isAlertStatus, setAlertStatus] = useState(null);
-    const [isProfile, setProfile] = useState(null);
-    const [isShare, setShare] = useState(null);
-    // const { isShare } = useShare(props);
-    // const { isProfile } = useProfile(props);
-    // const { isUsers } = useUsers(props);
-
-    useEffect(() => {
-        if (props.isAuth !== null) {
-console.log(props.isAuth);
-
-            props.db.database().ref(`status/${props.isAuth.uid}/alert`).once("value").then(function (snapshot) {
-                let data = (snapshot.val());
-                let stringifyData = JSON.stringify(data);
-
-                if (data !== null) {
-                    setAlertStatus(stringifyData)
-                } else {
-                    let statusData = {
-                        share_id: '',
-                        uid: `${props.isAuth.uid}`,
-                        value: false
-
-                    }
-
-                    props.db.database().ref(`status/${props.isAuth.uid}/alert`).update(statusData)
-
-                    setAlertStatus(statusData)
-                }
-            });
-
-            props.db.firestore().collection('users').doc(props.isAuth.uid+'/profile').get().then(function (doc) {
-
-                if (!doc.exists) {
-                    props.db.firestore().collection('users').doc(props.isAuth.uid+'/profile').set(props.isAuth.providerData[0])
-
-                    setProfile(props.isAuth.providerData[0])
-                } else {
-                    setProfile(doc.data())
-
-                }
-            });
-
-            props.db.firestore().collection(`share`).doc(props.isAuth.uid).get().then(function (doc) {
-
-                if (!doc.exists) {
-                    console.log('ไม่มีข้อมูล');
-
-                } else {
-                    setShare(doc.data())
-                }
-            });
-        }
-    });
+    // const [isAlertStatus, setAlertStatus] = useState(null);
+    // const [isProfile, setProfile] = useState(null);
+    // const [isShare, setShare] = useState(null);
+    const { isAlertStatus } = useAlertStatus(props);
+    const { isProfile } = useProfile(props);
+    const { isShare } = useShare(props);
 
     const onChatSlide = () => {
 
@@ -138,7 +182,7 @@ console.log(props.isAuth);
 
     return (
         <React.Fragment>
-            {isProfile && isShare && isAlertStatus !== null
+            {isProfile && isShare !== null
                 ? (<React.Fragment>
                     <StyleBaseLine>
                         <Map
@@ -226,13 +270,13 @@ console.log(props.isAuth);
                                     var me = this
 
                                     if (data === true) {
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
+                                        me.setupPlaceChangedListener(data.request.origin.placeId, 'ORIG');
+                                        me.setupPlaceChangedListener(data.request.destination.placeId, 'DEST');
                                         me.setupClickListener(data.request.travelMode);
 
                                     } else {
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
+                                        me.setupPlaceChangedListener(data.request.origin.placeId, 'ORIG');
+                                        me.setupPlaceChangedListener(data.request.destination.placeId, 'DEST');
                                         me.setupClickListener(data.request.travelMode);
                                     }
                                 }
@@ -312,6 +356,8 @@ console.log(props.isAuth);
                                 map.setCenter(ownerPosistion);
 
                                 Object.keys(isShare.member).map((key) => {
+                                    console.log(key);
+
                                     if (key !== props.isAuth.uid) {
                                         props.db.database().ref(`users/${key}/location`).once("value").then(function (snapshot) {
                                             let data = (snapshot.val());
@@ -382,40 +428,48 @@ console.log(props.isAuth);
                                     open={openCallTaxi}
                                     onClose={offCallTaxi} />
                             </Grid>
-                            {isAlertStatus.value !== true
+                            {isAlertStatus !== null
                                 ? (<React.Fragment>
-                                    <Grid container style={{
-                                        width: 'min-content',
-                                        position: 'absolute',
-                                        left: '15px',
-                                        bottom: '80px',
+                                    {isAlertStatus.value !== true
+                                        ? (<React.Fragment>
+                                            <Grid container style={{
+                                                width: 'min-content',
+                                                position: 'absolute',
+                                                left: '15px',
+                                                bottom: '80px',
 
-                                    }} >
-                                        <Fab size="medium" onClick={exitShareGroup} aria-label="exit-share"
-                                            style={{
-                                                backgroundColor: 'slategrey',
+                                            }} >
+                                                <Fab size="medium" onClick={exitShareGroup} aria-label="exit-share"
+                                                    style={{
+                                                        backgroundColor: 'slategrey',
+                                                        color: 'white'
+
+                                                    }} className={classes.buttonExitShare}>
+                                                    <MeetingRoomIcon />
+                                                </Fab>
+                                            </Grid>
+                                            <Button variant="contained" onClick={startShareGroup} style={{
+                                                backgroundColor: '#274D7D',
                                                 color: 'white'
-
-                                            }} className={classes.buttonExitShare}>
-                                            <MeetingRoomIcon />
-                                        </Fab>
-                                    </Grid>
-                                    <Button variant="contained" onClick={startShareGroup} style={{
-                                        backgroundColor: '#274D7D',
-                                        color: 'white'
-                                    }} className={classes.fab}>
-                                        เริ่มการเดินทาง
+                                            }} className={classes.fab}>
+                                                เริ่มการเดินทาง
                         </Button>
+                                        </React.Fragment>)
+                                        : (<React.Fragment>
+                                            <Button variant="contained" onClick={exitShareGroup} style={{
+                                                backgroundColor: '#274D7D',
+                                                color: 'white'
+                                            }} className={classes.fab}>
+                                                สิ้นสุดการเดินทาง
+                        </Button>
+                                        </React.Fragment>
+                                        )}
                                 </React.Fragment>)
                                 : (<React.Fragment>
-                                    <Button variant="contained" onClick={exitShareGroup} style={{
-                                        backgroundColor: '#274D7D',
-                                        color: 'white'
-                                    }} className={classes.fab}>
-                                        สิ้นสุดการเดินทาง
-                        </Button>
-                                </React.Fragment>)}
-                            <ModelExitShare
+                                    <Loading />
+                                </React.Fragment>)
+                            }
+                            < ModelExitShare
                                 uid={props.isAuth.uid}
                                 isShare={isShare}
                                 open={openModelExitShare}

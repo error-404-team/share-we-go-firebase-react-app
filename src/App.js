@@ -12,31 +12,40 @@ import History from './pages/history';
 import Report from './pages/report';
 // import { useAuth, useLocation, useUsersPrivate } from './controllers'
 
+const useAuth = (props) => {
+  const [updateAuth, setState] = useState({
+    isLoading: true,
+    isAuth: null
+  });
+
+  useEffect(() => {
+    const unsubscribe = props.db.auth().onAuthStateChanged((user) => {
+      let stringifyData = JSON.stringify(user)
+      if(user) {
+        console.log('มีการ login อยู่นะ 😂');
+        
+      props.db.firestore().collection('users').doc(user.uid).update({ auth: JSON.parse(stringifyData) });
+
+      setState({ isLoading: false, isAuth: user });
+      }else {
+        console.log('ยังไม่ได้มีการ login เลยอ่ะ 😒');
+        setState({ isLoading: false, isAuth: null });
+      }
+    });
+    return unsubscribe;
+  }, [props]);
+  return updateAuth;
+}
+
 
 function App(props) {
-  const [isAuth, setAuth] = useState(null);
-  const [isLoading, setLoading] = useState(true);
-  const [isLocation, setLocation] = useState(props.position);
+  // const [isAuth, setAuth] = useState(null);
+  // const [isLoading, setLoading] = useState(true);
   // const [isUsersPrivate, setUsersPrivate] = useState(null);
-  // const { isLoading, isAuth } = useAuth(props);
+  const { isLoading, isAuth } = useAuth(props);
   // const { isUsersPrivate } = useUsersPrivate(props)
   // const { isLocation } = useLocation(props);
 
-  useEffect(() => {
-    props.db.auth().onAuthStateChanged((user) => {
-      // const db = props.db.firebase.firestore();
-      let stringifyData = JSON.stringify(user)
-      if (user) {
-        props.db.firestore().collection('users').doc(user.uid+'auth').set(JSON.parse(stringifyData))
-        props.db.database().ref(`users/${user.uid}/location`).update(isLocation)
-
-        setLocation(props.position)
-        setAuth(JSON.parse(stringifyData));
-      }
-    }
-    );
-    setLoading(false)
-  })
 
   return (
     <React.Fragment>
@@ -47,16 +56,16 @@ function App(props) {
             {isAuth !== null
               ? (<React.Fragment>
                 <Route path="/" exact>
-                  <Private db={props.db} isAuth={isAuth} isLocation={isLocation} />
+                  <Private db={props.db} isAuth={isAuth} />
                 </Route>
                 <Route path="/private" >
-                  <Private db={props.db} isAuth={isAuth} isLocation={isLocation} />
+                  <Private db={props.db} isAuth={isAuth} />
                 </Route>
                 <Route path="/profile/:id" >
                   <Profile db={props.db} isAuth={isAuth} />
                 </Route>
                 <Route path="/share_location" >
-                  <ShareLocation db={props.db} isAuth={isAuth} isLocation={isLocation} />
+                  <ShareLocation db={props.db} isAuth={isAuth} />
                 </Route>
                 <Route path="/history" >
                   <History db={props.db} isAuth={isAuth} />
@@ -85,9 +94,7 @@ function App(props) {
 }
 
 App.propTypes = {
-  db: PropTypes.object,
-  dbStore: PropTypes.object,
-  position: PropTypes.object
+  db: PropTypes.object
 }
 
 export default App;

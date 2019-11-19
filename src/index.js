@@ -31,27 +31,15 @@ window.addEventListener('appinstalled', (evt) => {
 });
 
 if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(showPosition, showError);
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
 } else {
     ReactDOM.render(<GeoError db={firebase} error="Geolocation is not supported" />, document.getElementById('root'));
     console.log("Geolocation is not supported by this browser.");
 }
 
 function showPosition(position) {
-    let pos = {
-        coords: {
-            accuracy: position.coords.accuracy,
-            altitude: position.coords.altitude,
-            altitudeAccuracy: position.coords.altitudeAccuracy,
-            heading: position.coords.heading,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            speed: position.coords.speed,
-        },
-        timestamp: position.timestamp
-    }
-
-    return ReactDOM.render(<App db={firebase} position={pos} />, document.getElementById('root'));
+   
+    return ReactDOM.render(<App db={firebase} />, document.getElementById('root'));
 }
 
 function showError(error) {

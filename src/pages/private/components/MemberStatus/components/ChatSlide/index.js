@@ -52,7 +52,7 @@ function ChatSlide(props) {
     }
 
     useEffect(() => {
-        async function fetchData() {
+        async function update() {
 
             await props.db.database().ref(`share/${props.isMemberStatus.share_id}/chat`).once("value").then(function (chat_value) {
                 let chatData = (chat_value.val())
@@ -61,7 +61,7 @@ function ChatSlide(props) {
                 }
             })
         }
-        fetchData();
+        update();
     })
 
     return (

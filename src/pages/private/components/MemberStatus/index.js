@@ -19,6 +19,96 @@ import ModelExitShare from './components/ModelExitShare';
 import Loading from '../../../loading';
 // import { useShare, useProfile, useUsers } from '../../../../controllers';
 
+function useAlertStatus(props) {
+    const [updateAlertStatus, setState] = useState({
+        isAlertStatus: null
+    });
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = props.db.database().ref(`status/${props.isAuth.uid}/alert`).once("value").then(function (snapshot) {
+                    let data = (snapshot.val());
+                    let stringifyData = JSON.stringify(data);
+
+                    if (data !== null) {
+                        setState({ isAlertStatus: data })
+                    } else {
+                        let statusData = {
+                            share_id: '',
+                            uid: `${props.isAuth.uid}`,
+                            value: false
+
+                        }
+
+                        props.db.database().ref(`status/${props.isAuth.uid}/alert`).update(statusData)
+
+                        setState({ isAlertStatus: statusData })
+                    }
+                });
+                return unsubscribe;
+            }
+        }
+        update();
+    })
+    return updateAlertStatus;
+}
+
+function useProfile(props) {
+    const [updateProfile, setState] = useState({
+        isProfile: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).collection('profile').get().then(function (doc) {
+
+                    if (!doc.exists) {
+                        console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
+
+                        props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
+                        setState({ isProfile: props.isAuth.providerData[0] })
+                    } else {
+                        console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
+                        setState({ isProfile: doc.data() })
+
+                    }
+                });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateProfile;
+};
+
+function useShare(props) {
+    const [updateShare, setState] = useState({
+        isShare: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id).get().then(function (doc) {
+
+                    if (!doc.exists) {
+                        console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
+                        setState({ isShare: null })
+                    } else {
+                        console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
+                        setState({ isShare: doc.data() })
+                    }
+                });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateShare;
+};
+
 
 const MemberStatus = (props) => {
 
@@ -28,57 +118,10 @@ const MemberStatus = (props) => {
     const [openModelExitShare, setOpenModelExitShare] = useState(false)
     const [alertShare, setAlertShare] = useState({})
     const [isMap, setMap] = useState(null);
-    const [isAlertStatus, setAlertStatus] = useState(null);
-    const [isProfile, setProfile] = useState(null);
-    const [isShare, setShare] = useState(null);
+    const { isAlertStatus } = useAlertStatus(props);
+    const { isProfile } = useProfile(props);
+    const { isShare } = useShare(props);
 
-
-    useEffect(() => {
-        if (props.isAuth !== null) {
-
-            props.db.database().ref(`status/${props.isAuth.uid}/alert`).once("value").then(function (snapshot) {
-                let data = (snapshot.val());
-                let stringifyData = JSON.stringify(data);
-
-                if (data !== null) {
-                    setAlertStatus(stringifyData)
-                } else {
-                    let statusData = {
-                        share_id: '',
-                        uid: `${props.isAuth.uid}`,
-                        value: false
-
-                    }
-
-                    props.db.database().ref(`status/${props.isAuth.uid}/alert`).update(statusData)
-
-                    setAlertStatus(statusData)
-                }
-            });
-
-            props.db.firestore().collection('users').doc(props.isAuth.uid+'/profile').get().then(function (doc) {
-
-                if (!doc.exists) {
-                    props.db.firestore().collection('users').doc(props.isAuth.uid+'/profile').set(props.isAuth.providerData[0])
-
-                    setProfile(props.isAuth.providerData[0])
-                } else {
-                    setProfile(doc.data())
-
-                }
-            });
-
-            props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id).get().then(function (doc) {
-
-                if (!doc.exists) {
-                    console.log('ไม่มีข้อมูล');
-
-                } else {
-                    setShare(doc.data())
-                }
-            });
-        }
-    });
 
     const onChatSlide = () => {
         setOpenChatSlide(true)
@@ -403,7 +446,7 @@ const MemberStatus = (props) => {
                     </StyleBaseLine>
                 </React.Fragment>
                 )
-                : (<React.Fragment><Loading/></React.Fragment>)
+                : (<React.Fragment><Loading /></React.Fragment>)
             }
         </React.Fragment>
     )

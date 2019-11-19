@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
 import HistoryBar from './components/HistoryBar';
@@ -14,25 +14,47 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import WcIcon from '@material-ui/icons/Wc';
 // import { useHistory } from '../../controllers';
 
+function useHistory(props) {
+    const [updateHistory, setState] = useState({
+        isHistory: null
+    });
 
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+
+                const unsubscribe = await props.db.firestore().collection('history').doc(props.isAuth.uid).collection('store').get().then(function (querySnapshot) {
+
+                    const tempDoc = querySnapshot.docs.map((doc) => {
+                        return doc.data() 
+                      })
+                    
+                    setState({ isHistory: tempDoc })
+
+                    // if (!doc.exists) {
+                    //     console.log('ข้อมูลประวัติ ใน database ไม่มี K นะ 👌');
+
+                    // } else {
+                    //     console.log('ข้อมูลประวัติ ใน ฐานข้อมูล ✔');
+                    //     setState({ isHistory: doc.data() })
+
+                    // }
+                });
+                return unsubscribe;
+            }
+        }
+        update()
+    }, [props]);
+    return updateHistory;
+}
 
 function History(props) {
 
-    const [isHistory, setHistory] = useState(null);
     const [expanded, setExpanded] = useState(true);
+    const { isHistory } = useHistory(props);
     // const { isHistory } = useHistory(props)
 
-    useEffect(() => {
-        if (props.isAuth !== null) {
 
-            props.db.firestore().collection(`history`).doc(props.isAuth.uid).then(function (doc) {
-
-                setHistory(doc.data())
-
-            });
-        }
-
-    });
 
 
     // const updateHistory = data => {
@@ -95,9 +117,9 @@ function History(props) {
                                         <h4 style={{ padding: '10px' }}><CommuteIcon></CommuteIcon>ต้นทาง - ปลายทาง</h4>
                                     </center>
                                     <center>
-                                        <b><u>ต้นทาง:</u></b> {isHistory[key].location.routes[0].legs[0].start_address}
+                                        <b><u>ต้นทาง:</u></b> {isHistory[key].location.start_address}
                                         <br></br>
-                                        <b><u>ปลายทาง:</u></b> {isHistory[key].location.routes[0].legs[0].end_address}
+                                        <b><u>ปลายทาง:</u></b> {isHistory[key].location.end_address}
                                     </center>
                                     <center style={{ backgroundColor: 'darkgray' }}>
                                         <h4 style={{ padding: '10px' }}>  <AccessTimeIcon></AccessTimeIcon>  เริ่มการแชร์ - ปิดการแชร์</h4>

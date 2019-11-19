@@ -38,18 +38,15 @@ const ModelExitShare = (props) => {
             value: false
         }
 
-        props.db.firestore().collection(`history`).doc(props.uid).add(props.isShare);
+        props.db.firestore().collection('history').doc(props.uid).collection('store').add(props.isShare);
         props.db.database().ref(`status/${props.uid}`).update({
             owner: updateStatus,
             member: updateStatus,
             alert: updateStatus
         });
-        props.db.firestore().collection(`share`).doc(props.share_id+'/member').delete().then(function () {
-            console.log("Remove succeeded.")
-            window.location.reload()
-        }).catch(function (error) {
-            console.log("Remove failed: " + error.message)
-        });
+        props.db.firestore().collection(`share`).doc(props.share_id).update({
+            member: null
+        })
 
         // setTimeout(() => {
         //     props.history.goBack()

@@ -62,44 +62,38 @@ export default function CustomDateTimePicker(props) {
 
     const days = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส']
     const months = ["มกราคม", "กุมภาพันธ์", "มีนาคม ", "เมษายน", "พฤษภาคม ", "มิถุนายน ", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
-    const timer = {
-      start_time: {
-        date: {
-          date: d.getDate(),
-          day: d.getDay(),
-          year: d.getFullYear(),
-          hour: d.getHours(),
-          milliseconds: d.getMilliseconds(),
-          minutes: d.getMinutes(),
-          month: d.getMonth(),
-          seconds: d.getSeconds(),
-          time: d.getTime(),
-          now: Date.now()
-        },
-        value: `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
-      },
-      end_time: {
-        date: {
-          date: date.getDate(),
-          day: date.getDay(),
-          year: date.getFullYear(),
-          hour: date.getHours(),
-          milliseconds: date.getMilliseconds(),
-          minutes: date.getMinutes(),
-          month: date.getMonth(),
-          seconds: date.getSeconds(),
-          time: date.getTime(),
-          now: Date.now()
-        },
-        value: `${days[date.getDay()]} ${date.getDate()} ${months[d.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
-      }
-    }
 
     // socket.emit('boarding_time', timer)
     // firebase.auth().onAuthStateChanged((user) => {
     //   post.share.date(user.uid, timer, dateTime)
     // })
-    props.db.firestore().collection(`share`).doc(props.isAuth.uid+'/date').update(timer)
+    props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
+      date: {
+        start_time: {
+          value: `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
+        },
+        end_time: {
+          value: `${days[date.getDay()]} ${date.getDate()} ${months[d.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+        }
+      }
+    }).then(() => {
+      console.log('อัพเดต เวลา แล้วนะ 🤗');
+
+    })
+
+    props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
+      date: {
+        start_time: {
+          value: `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
+        },
+        end_time: {
+          value: `${days[date.getDay()]} ${date.getDate()} ${months[d.getMonth()]} ${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+        }
+      }
+    }).then(() => {
+      console.log('อัพเดต เวลา แล้วนะ 🤗');
+
+    })
   }
 
   function updateOpen() {

@@ -30,8 +30,13 @@ export default function RadioButtonsGroup(props) {
     function handleChange(event) {
         setValue(event.target.value);
     }
+  
+    props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
+        sex: { value: value }
+    }).then(() => {
+        console.log('อัพเดต เพศ แล้วนะ 😍');
 
-    props.db.firestore().collection(`share`).doc(props.isAuth.uid+'/sex').update({ value: value })
+    })
 
     // firebase.auth().onAuthStateChanged((user) => {
     //     post.share.sex(user.uid, { value: value }, dateTime)

@@ -52,7 +52,7 @@ function ChatSlide(props) {
     }
 
     useEffect(() => {
-        async function fetchData() {
+        async function update() {
 
             await props.db.database().ref(`share/${props.uid}/chat`).once("value").then(function (chat_value) {
                 let chatData = (chat_value.val())
@@ -61,7 +61,7 @@ function ChatSlide(props) {
                 }
             })
         }
-        fetchData();
+        update();
     })
 
     return (
@@ -95,7 +95,7 @@ function ChatSlide(props) {
                                     ? (<Fragment>
                                         {Object.keys(isChat).map((key) => (
                                             <Fragment>
-                                                {props.isUsersPrivate.uid === isChat[key].uid
+                                                {props.uid === isChat[key].uid
                                                     ? (<Fragment>
                                                         <div class="container darker">
                                                             <img src={`${isChat[key].photoURL}`} alt="Avatar" class="right" />

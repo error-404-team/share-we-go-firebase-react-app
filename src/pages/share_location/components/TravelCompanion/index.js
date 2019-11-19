@@ -31,8 +31,13 @@ export default function RadioButtonsGroup(props) {
         setValue(event.target.value);
     }
 
+    props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
+        max_number: { value: value }
+    }).then(() => {
+        console.log('อัพเดต จำนวนผู้เข้าร่วมแชร์ แล้วนะ 😁');
 
-    props.db.firestore().collection(`share`).doc(props.isAuth.uid + '/max_number').update({ value: value })
+    })
+
     // firebase.auth().onAuthStateChanged((user) => {
     //     post.share.max_number(user.uid, { value: value }, dateTime)
     // })

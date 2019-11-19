@@ -19,9 +19,64 @@ import SearchMap from '../SearchMap';
 import MenuSlide from '../MenuSlide';
 
 import './styles/marker-custom.css';
-import { useUsers, useShareAll, useShare, useStatusAll } from '../../../../controllers';
+// import { useUsers, useShareAll, useShare, useStatusAll } from '../../../../controllers';
 // import { dateTime } from '../../../../model/dateTime';
 import Loading from '../../../loading';
+
+function useProfile(props) {
+    const [updateProfile, setState] = useState({
+        isProfile: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).collection('profile').get().then(function (doc) {
+
+                    if (!doc.exists) {
+                        console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
+
+                        props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
+                        setState({ isProfile: props.isAuth.providerData[0] })
+                    } else {
+                        console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
+                        setState({ isProfile: doc.data() })
+
+                    }
+                });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateProfile;
+};
+
+function useShare(props) {
+    const [updateShare, setState] = useState({
+        isShare: null
+    })
+
+    useEffect(() => {
+        async function update() {
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection(`share`).where('status', '==', true).get().then(function (doc) {
+
+                    if (!doc.exists) {
+                        console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
+                        setState({ isShare: null })
+                    } else {
+                        console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
+                        setState({ isShare: doc.data() })
+                    }
+                });
+                return unsubscribe;
+            }
+        };
+        update();
+    }, [props]);
+    return updateShare;
+};
 
 const UserStatus = (props) => {
 
@@ -33,42 +88,16 @@ const UserStatus = (props) => {
         key: '',
         bool: false
     });
-    const [isProfile, setProfile] = useState(null);
-    const [isShare, setShare] = useState(null);
+    // const [isProfile, setProfile] = useState(null);
+    // const [isShare, setShare] = useState(null);
 
     // const { isUsers } = useUsers(props)
-    // const { isShareAll } = useShareAll(props);
-    // const {isShare} = useShare(props);
+    const { isProfile } = useProfile(props);
+    const { isShare } = useShare(props);
     // const { isStatusAll } = useStatusAll(props);
 
 
-    useEffect(() => {
-        if (props.isAuth !== null) {
 
-
-            props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').get().then(function (doc) {
-
-                if (!doc.exists) {
-                    props.db.firestore().collection('users').doc(props.isAuth.uid + '/profile').set(props.isAuth.providerData[0])
-
-                    setProfile(props.isAuth.providerData[0])
-                } else {
-                    setProfile(doc.data())
-
-                }
-            });
-
-            props.db.firestore().collection(`share`).where('status', '==', true).get().then(function (doc) {
-
-                if (!doc.exists) {
-                    console.log('ไม่มีข้อมูล');
-
-                } else {
-                    setShare(doc.data())
-                }
-            });
-        }
-    });
 
     const onVisibility = () => {
         setOpenVisibility(true)

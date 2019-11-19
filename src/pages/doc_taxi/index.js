@@ -51,17 +51,19 @@ class DocTaxi extends React.Component {
     onSend() {
 
 
-        this.props.db.firestore().collection(`share`).doc(this.props.match.params.id+'/alert').update({
-            uid: `${this.props.match.params.id}`,
-            sahre_id: `${this.props.match.params.id}`,
-            select: `${this.state.select}`,
-            license_plate: `${this.state.license_plate}`
+        this.props.db.firestore().collection(`share`).doc(this.props.match.params.id ).update({
+            alert: {
+                uid: `${this.props.match.params.id}`,
+                sahre_id: `${this.props.match.params.id}`,
+                select: `${this.state.select}`,
+                license_plate: `${this.state.license_plate}`
+            }
         });
 
         this.props.db.database().ref(`status/${this.props.match.params.id}/alert`).update({
             uid: `${this.props.match.params.id}`,
             share_id: `${this.props.match.params.id}`,
-            value: 'true'
+            value: true
         });
 
         this.setState({ status: true })
