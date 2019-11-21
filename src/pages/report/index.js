@@ -10,60 +10,110 @@ import Button from '@material-ui/core/Button';
 import { Link, withRouter } from 'react-router-dom';
 
 function useProfile(props) {
+
+    console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+
     const [updateProfile, setState] = useState({
         isProfile: null
     })
 
     useEffect(() => {
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+
         async function update() {
+
+            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+
             if (props.isAuth !== null) {
-                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).collection('profile').get().then(function (doc) {
 
-                    if (!doc.exists) {
-                        console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(function (doc) {
 
-                        props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
-                        setState({ isProfile: props.isAuth.providerData[0] })
+                    if (doc.exists) {
+
+                        console.log("Document data:", doc.data());
+
+                        setState({ isProfile: doc.data().profile })
+
                     } else {
-                        console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
-                        setState({ isProfile: doc.data() })
+                        // doc.data() will be undefined in this case
+                        console.log("No such document!");
 
                     }
+
+                }).catch(function (error) {
+
+                    console.log("Error getting document:", error);
+
                 });
+
                 return unsubscribe;
             }
+
+            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+
         };
+
         update();
+
+        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+
     }, [props]);
+
+    console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+
     return updateProfile;
 };
 
 function useShare(props) {
+
+    console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+
     const [updateShare, setState] = useState({
         isShare: null
     })
 
     useEffect(() => {
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+
         async function update() {
+
             if (props.isAuth !== null) {
                 const unsubscribe = await props.db.firestore().collection(`share`).doc(props.isAuth.uid).get().then(function (doc) {
 
                     if (!doc.exists) {
+
                         console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
-                        setState({ isShare: null })
+
+                        setState({ isShare: null });
+
                     } else {
+
                         console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
                         console.log('share: ', doc.data());
 
-                        setState({ isShare: doc.data() })
-                    }
+                        setState({ isShare: doc.data() });
+
+                    };
+
                 });
+
                 return unsubscribe;
-            }
+            };
+
         };
+
         update();
+
+        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+
     }, [props]);
+
+    console.timeEnd('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+
     return updateShare;
+
 };
 
 function Report(props) {
@@ -82,26 +132,35 @@ function Report(props) {
 
     function handleReset() {
 
+        console.time('ฉันคาดว่า 🤔 status => uid => owner ใช้เวลาในการ อัพเดต ไป');
 
         props.db.database().ref(`status/${props.match.params.id}/owner`).update({
             value: true,
             uid: props.isAuth.uid,
             id: props.isAuth.uid
-        }).then(()=>{
+        }).then(() => {
+
             console.log('อัพเดต สถานะ owner แล้ว เคป๊ะ 😛');
-            
-        })
+
+        });
+
+        console.timeEnd('ฉันคาดว่า 🤔 status => uid => owner ใช้เวลาในการ อัพเดต ไป');
+        console.time('ฉันคาดว่า 🤔 share => uid => status ใช้เวลาในการ อัพเดต ไป');
 
         props.db.firestore().collection(`share`).doc(props.match.params.id).update({
-            statu: {
+            status: {
                 value: true,
                 uid: props.isAuth.uid,
                 id: props.match.params.id
             }
-        }).then(()=>{
+        }).then(() => {
+
             console.log('อัพเดต สถานะ share แล้ว เคป๊ะ 😛');
-            
-        })
+
+        });
+
+        console.timeEnd('ฉันคาดว่า 🤔 share => uid => status ใช้เวลาในการ อัพเดต ไป');
+        console.time('ฉันคาดว่า 🤔 share => uid => owner ใช้เวลาในการ อัพเดต ไป');
 
         props.db.firestore().collection(`share`).doc(props.match.params.id).update({
             owner: {
@@ -109,10 +168,14 @@ function Report(props) {
                 photoURL: isProfile.photoURL,
                 displayName: isProfile.displayName
             }
-        }).then(()=>{
+        }).then(() => {
+
             console.log('อัพเดต ข้อมูล owner ของ share แล้ว เคนะ 😛');
-            
+
         });
+
+        console.timeEnd('ฉันคาดว่า 🤔 share => uid => owner ใช้เวลาในการ อัพเดต ไป');
+        console.time('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
 
         props.db.firestore().collection(`share`).doc(props.match.params.id).update({
             member: {
@@ -123,15 +186,17 @@ function Report(props) {
                     displayName: isProfile.displayName
                 }
             }
-        }).then(()=>{
-            console.log('อัพเดต ข้อมูล membe ของ share แล้ว เคนะ 😛');
-            
+        }).then(() => {
+
+            console.log('อัพเดต ข้อมูล member ของ share แล้ว เคนะ 😛');
+
         });
 
+        console.timeEnd('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
 
         setOpen(true)
         //    props.history.goBack()
-    }
+    };
 
     return (
         <React.Fragment>

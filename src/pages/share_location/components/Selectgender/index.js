@@ -22,21 +22,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function RadioButtonsGroup(props) {
+
     const classes = useStyles();
     const [value, setValue] = React.useState('MaleAndFemale');
 
     // const socket = io(`http://localhost:8080/`);
 
     function handleChange(event) {
+
         setValue(event.target.value);
-    }
-  
+
+    };
+
+    console.time('ฉันคาดว่า 🤔 share => uid => sex');
+
     props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
         sex: { value: value }
     }).then(() => {
+
         console.log('อัพเดต เพศ แล้วนะ 😍');
 
-    })
+    });
+
+    console.timeEnd('ฉันคาดว่า 🤔 share => uid => sex');
 
     // firebase.auth().onAuthStateChanged((user) => {
     //     post.share.sex(user.uid, { value: value }, dateTime)
@@ -66,10 +74,10 @@ export default function RadioButtonsGroup(props) {
             </center>
         </div>
     );
-}
+};
 
 RadioButtonsGroup.propTypes = {
     db: PropTypes.object,
     isAuth: PropTypes.object,
     backgroundColor: PropTypes.string
-}
+};

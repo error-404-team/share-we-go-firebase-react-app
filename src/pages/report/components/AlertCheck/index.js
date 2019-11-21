@@ -23,19 +23,28 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Fade = React.forwardRef(function Fade(props, ref) {
+
   const { in: open, children, onEnter, onExited, ...other } = props;
   const style = useSpring({
     from: { opacity: 0 },
     to: { opacity: open ? 1 : 0 },
     onStart: () => {
+      
       if (open && onEnter) {
+       
         onEnter();
-      }
+      
+      };
+
     },
     onRest: () => {
+      
       if (!open && onExited) {
+        
         onExited();
-      }
+      
+      };
+
     },
   });
 
@@ -47,15 +56,23 @@ const Fade = React.forwardRef(function Fade(props, ref) {
 });
 
 function AlertCheck(props) {
+
   const classes = useStyles();
 
   function updateChat() {
-    let path_chat = `share/${props.isAuth.uid}/chat`
+
+    console.time('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ อ่าน ไป');
 
     props.db.database().ref(`share/${props.isAuth.uid}/chat`).once("value").then(function (chat_value) {
-      let chatData = (chat_value.val())
+
+      let chatData = (chat_value.val());
+
       if (chatData !== null) {
+
       } else {
+
+        console.time('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ เพิ่ม ไป');
+
         props.db.database().ref(`share/${props.isAuth.uid}/chat`).push({
           uid: props.isAuth.uid,
           share_id: props.isAuth.uid,
@@ -66,16 +83,26 @@ function AlertCheck(props) {
           msg: 'เริ่มการสนทนา',
           date: dateTime
         }).then(() => {
-          props.history.push('/')
-          window.location.reload()
-        })
-      }
+
+          props.history.push('/');
+
+          window.location.reload();
+
+        });
+
+      };
 
     }).then(() => {
-      props.history.push('/')
-      window.location.reload()
-    })
-  }
+
+      props.history.push('/');
+
+      window.location.reload();
+
+    });
+
+    console.timeEnd('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ อ่าน ไป');
+
+  };
 
   return (
     <div>
@@ -105,7 +132,7 @@ function AlertCheck(props) {
       </Modal>
     </div>
   );
-}
+};
 
 
 AlertCheck.propTypes = {
@@ -113,6 +140,6 @@ AlertCheck.propTypes = {
   onClose: PropTypes.func,
   db: PropTypes.object,
   isAuth: PropTypes.object
-}
+};
 
-export default withRouter(AlertCheck)
+export default withRouter(AlertCheck);

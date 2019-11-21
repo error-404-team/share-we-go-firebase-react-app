@@ -15,36 +15,49 @@ import WcIcon from '@material-ui/icons/Wc';
 // import { useHistory } from '../../controllers';
 
 function useHistory(props) {
+
+    console.time('ฉันคาดว่า 🤔 function useHistory ใช้เวลาในการทำงานไป');
+
     const [updateHistory, setState] = useState({
         isHistory: null
     });
 
     useEffect(() => {
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory ใช้เวลาในการทำงานไป');
+
         async function update() {
+
             if (props.isAuth !== null) {
+
+                console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory => function update ใช้เวลาในการทำงานไป');
 
                 const unsubscribe = await props.db.firestore().collection('history').doc(props.isAuth.uid).collection('store').get().then(function (querySnapshot) {
 
                     const tempDoc = querySnapshot.docs.map((doc) => {
-                        return doc.data() 
-                      })
-                    
+                        return doc.data();
+                    });
+
                     setState({ isHistory: tempDoc })
 
-                    // if (!doc.exists) {
-                    //     console.log('ข้อมูลประวัติ ใน database ไม่มี K นะ 👌');
-
-                    // } else {
-                    //     console.log('ข้อมูลประวัติ ใน ฐานข้อมูล ✔');
-                    //     setState({ isHistory: doc.data() })
-
-                    // }
                 });
+
+                console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory => function update ใช้เวลาในการทำงานไป');
+
                 return unsubscribe;
-            }
-        }
-        update()
+
+            };
+
+        };
+
+        update();
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory ใช้เวลาในการทำงานไป');
+
     }, [props]);
+
+    console.timeEnd('ฉันคาดว่า 🤔 function useHistory ใช้เวลาในการทำงานไป');
+
     return updateHistory;
 }
 
@@ -73,9 +86,11 @@ function History(props) {
 
 
     const goBack = () => {
-        props.history.push('/')
-        window.location.reload()
-    }
+
+        props.history.push('/');
+        window.location.reload();
+
+    };
 
     return (
         <React.Fragment>
@@ -149,11 +164,12 @@ function History(props) {
             </div>
         </React.Fragment>
     );
-}
+
+};
 
 History.propTypes = {
     db: PropTypes.object,
     isAuth: PropTypes.object,
-}
+};
 
 export default withRouter(History)

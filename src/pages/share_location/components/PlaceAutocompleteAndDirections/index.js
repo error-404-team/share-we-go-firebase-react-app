@@ -74,26 +74,39 @@ function PlaceAutocompleteAndDirections(props) {
         autocomplete.bindTo('bounds', this.map);
 
         autocomplete.addListener('place_changed', function () {
+
             var place = autocomplete.getPlace();
+
             console.log(place);
 
             if (!place.place_id) {
+
                 alert('Please select an option from the dropdown list.');
+
                 return;
-            }
+            };
+
             if (mode === 'ORIG') {
+
                 me.originPlaceId = place.place_id;
+
             } else {
+
                 me.destinationPlaceId = place.place_id;
-            }
+
+            };
+
             me.route();
+
         });
     };
 
     AutocompleteDirectionsHandler.prototype.route = function () {
+
         if (!this.originPlaceId || !this.destinationPlaceId) {
             return;
-        }
+        };
+
         var me = this;
 
         this.directionsService.route(
@@ -103,11 +116,14 @@ function PlaceAutocompleteAndDirections(props) {
                 travelMode: this.travelMode
             },
             function (response, status) {
+
                 if (status === 'OK') {
+
                     me.directionsRenderer.setDirections(response);
+
                     console.log(response);
                     // socket.emit('origin_destination_route', response)
-                    const res = JSON.stringify(response)
+                    const res = JSON.stringify(response);
 
                     props.db.firestore().collection(`share`).doc(props.isAuth.uid).set({
                         location: {
@@ -128,32 +144,31 @@ function PlaceAutocompleteAndDirections(props) {
                     }).then(() => {
 
                         console.log('สร้าง locationc ขึ้นมาใหม่ 😁');
-                    })
 
-
-                    // firebase.auth().onAuthStateChanged((user) => {
-                    //     post.share.location(user.uid, response, dateTime)
-                    // })
+                    });
 
                     console.log(response);
 
                 } else {
-                    //     alert('Directions request failed due to ' + status);
-                    // console.log(response, status);
 
-                }
+                };
+
             });
 
     };
 
 
     function originRouteUpdate(e) {
+
         setOriginRoute(e.target.value);
-    }
+
+    };
 
     function destinationRouteUpdate(e) {
+
         setDestinationRoute(e.target.value);
-    }
+
+    };
 
     // function onFocusOrigin() {
     //     originSearchInput.value = ''
@@ -193,8 +208,6 @@ function PlaceAutocompleteAndDirections(props) {
                         //    setGoogle(google);
                         //    setMap(map)
                         console.log();
-
-
 
                         new AutocompleteDirectionsHandler(google, map);
                     }}
@@ -251,16 +264,16 @@ function PlaceAutocompleteAndDirections(props) {
                 )
                 : (<React.Fragment><Loading /></React.Fragment>)}
         </React.Fragment>
-    )
+    );
 
-}
+};
 
 PlaceAutocompleteAndDirections.propTypes = {
     isAuth: PropTypes.object,
     db: PropTypes.object
-}
+};
 
 export default ConnectApiMaps({
     apiKey: "AIzaSyBy2VY1e11qs-60Ul6aYT5klWYRI1K3RB0",
     libraries: ['places', 'geometry'],
-})(PlaceAutocompleteAndDirections)
+})(PlaceAutocompleteAndDirections);

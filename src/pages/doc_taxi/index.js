@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
@@ -17,39 +17,40 @@ import DocTaxiBar from './components/DocTaxiBar';
 class DocTaxi extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             select: 'เหลือง',
             license_plate: "",
             status: false
-        }
+        };
 
-        this.displayNameInput = React.createRef()
-        this.emailInput = React.createRef()
-        this.sexInput = React.createRef()
-        this.ageInput = React.createRef()
-    }
+        this.displayNameInput = React.createRef();
+        this.emailInput = React.createRef();
+        this.sexInput = React.createRef();
+        this.ageInput = React.createRef();
 
+    };
 
     InputUpdate(e) {
-        this.setState({ license_plate: e.target.value })
-    }
 
+        this.setState({ license_plate: e.target.value });
+
+    };
 
     onEdit() {
 
-        this.setState({ statusEdit: false })
-    }
+        this.setState({ statusEdit: false });
+
+    };
 
     handleChange = (e) => {
-        this.setState({ select: e.target.value })
-    }
 
+        this.setState({ select: e.target.value });
 
+    };
 
     onSend() {
-
 
         this.props.db.firestore().collection(`share`).doc(this.props.match.params.id ).update({
             alert: {
@@ -66,13 +67,13 @@ class DocTaxi extends React.Component {
             value: true
         });
 
-        this.setState({ status: true })
+        this.setState({ status: true });
 
-    }
+    };
 
     goBack() {
         this.props.history.push('/')
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -154,9 +155,8 @@ class DocTaxi extends React.Component {
             </React.Fragment>
 
         );
-    }
-}
-
+    };
+};
 
 const styles = {
     drawerHeader: {
@@ -199,10 +199,10 @@ const styles = {
     selectEmpty: {
         marginTop: 0,
     },
-}
+};
 
 DocTaxi.propType = {
     db: PropTypes.object
-}
+};
 
 export default withStyles(styles)(withRouter(DocTaxi));

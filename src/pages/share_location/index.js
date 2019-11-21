@@ -7,22 +7,13 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import ShareLocationBar from './components/ShareLocationBar';
 import PlaceAutocompleteAndDirections from './components/PlaceAutocompleteAndDirections';
 import CustomDateTimePicker from './components/CustomDateTimePicker';
 import TravelCompanion from './components/TravelCompanion';
 import Selectgender from './components/Selectgender';
 import { withRouter } from 'react-router-dom';
-
-
-
-// require('es6-promise').polyfill();
-// require('isomorphic-fetch');
-
-////useisShare///
-
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -67,10 +58,13 @@ function ShareLocation(props) {
     // })
 
     function getSteps() {
+
         return ['เส้นทาง', 'วันเวลา', 'จำนวน', 'เพศ'];
-    }
+
+    };
 
     function getStepContent(stepIndex) {
+
         switch (stepIndex) {
             case 0:
                 // หน้าสร้างเเชร์ Form 1 ต้นทาง-ปลายทาง 
@@ -89,53 +83,67 @@ function ShareLocation(props) {
 
             default:
                 return 'Uknown stepIndex';
-        }
-    }
+        };
+
+    };
 
     const steps = getSteps();
 
     // console.log(Router);
 
     function totalSteps() {
+
         return getSteps().length;
-    }
+
+    };
 
     function isStepOptional(step) {
+
         return step === 1;
-    }
 
-    function handleSkip() {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
+    };
 
-        setActiveStep(prevActiveStep => prevActiveStep + 1);
-        setSkipped(prevSkipped => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    }
+    // function handleSkip() {
+    //     if (!isStepOptional(activeStep)) {
+    //         // You probably want to guard against something like this
+    //         // it should never occur unless someone's actively trying to break something.
+    //         throw new Error("You can't skip a step that isn't optional.");
+    //     }
+
+    //     setActiveStep(prevActiveStep => prevActiveStep + 1);
+    //     setSkipped(prevSkipped => {
+    //         const newSkipped = new Set(prevSkipped.values());
+    //         newSkipped.add(activeStep);
+    //         return newSkipped;
+    //     });
+    // }
 
     function skippedSteps() {
+
         return skipped.size;
-    }
+
+    };
 
     function completedSteps() {
+
         return completed.size;
-    }
+
+    };
 
     function allStepsCompleted() {
+
         return completedSteps() === totalSteps() - skippedSteps();
-    }
+
+    };
 
     function isLastStep() {
+
         return activeStep === totalSteps() - 1;
-    }
+
+    };
 
     function handleNext() {
+
         const newActiveStep =
             isLastStep() && !allStepsCompleted()
                 ? // It's the last step, but not all steps have been completed
@@ -144,29 +152,36 @@ function ShareLocation(props) {
                 : activeStep + 1;
 
         setActiveStep(newActiveStep);
-    }
 
-    function handleBack() {
-        setActiveStep(prevActiveStep => prevActiveStep - 1);
-    }
-
-    const handleStep = step => () => {
-        setActiveStep(step);
     };
 
+    function handleBack() {
 
+        setActiveStep(prevActiveStep => prevActiveStep - 1);
+
+    };
+
+    const handleStep = step => () => {
+
+        setActiveStep(step);
+
+    };
 
     function handleComplete() {
+
         const newCompleted = new Set(completed);
+
         newCompleted.add(activeStep);
+
         setCompleted(newCompleted);
+
         console.log(activeStep);
 
         if (completedSteps() === totalSteps() - 1) {
-            props.history.push(`/report/${props.isAuth.uid}`)
-        }
 
+            props.history.push(`/report/${props.isAuth.uid}`);
 
+        };
 
         /**
          * Sigh... it would be much nicer to replace the following if conditional with
@@ -174,30 +189,44 @@ function ShareLocation(props) {
          * thus we have to resort to not being very DRY.
          */
         if (completed.size !== totalSteps() - skippedSteps()) {
+
             handleNext();
-        }
-    }
+
+        };
+
+    };
 
     function isStepSkipped(step) {
+
         return skipped.has(step);
-    }
+
+    };
 
     function isStepComplete(step) {
+
         return completed.has(step);
-    }
+
+    };
 
     function handleGoBackPage() {
+
         props.history.goBack();
-    }
+
+    };
 
     function goBack() {
-        if (activeStep === 0) {
-            handleGoBackPage();
-        } else {
-            handleBack();
-        }
-    }
 
+        if (activeStep === 0) {
+
+            handleGoBackPage();
+
+        } else {
+
+            handleBack();
+
+        };
+
+    };
 
     return (
         <React.Fragment>
@@ -253,23 +282,6 @@ function ShareLocation(props) {
                                         bottom: '0px',
                                         width: '-webkit-fill-available'
                                     }}>
-                                        {/* <center> */}
-                                        {/* <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>Back</Button> */}
-                                        {/* <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={handleNext}
-                                        className={classes.button}
-                                    >Next</Button>
-                                    {isStepOptional(activeStep) && !completed.has(activeStep) && (
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={handleSkip}
-                                            className={classes.button}
-                                        >Skip</Button>
-                                    )} */}
-
                                         {activeStep !== steps.length &&
                                             (completed.has(activeStep) ? (
                                                 <Typography variant="caption" className={classes.completed}>Step {activeStep + 1} already completed</Typography>

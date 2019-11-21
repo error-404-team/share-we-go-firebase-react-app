@@ -24,66 +24,126 @@ import './styles/marker-custom.css';
 import Loading from '../../../loading';
 
 function useProfile(props) {
+
+    console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+
     const [updateProfile, setState] = useState({
         isProfile: null
     })
 
     useEffect(() => {
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+
         async function update() {
+
+            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+
             if (props.isAuth !== null) {
-                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).collection('profile').get().then(function (doc) {
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(function (doc) {
 
                     if (!doc.exists) {
+
                         console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
 
+                        console.time('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
+
                         props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
-                        setState({ isProfile: props.isAuth.providerData[0] })
+                        
+                        console.timeEnd('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
+                        
+                        setState({ isProfile: props.isAuth.providerData[0] });
+
                     } else {
+
                         console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
-                        setState({ isProfile: doc.data() })
+
+                        setState({ isProfile: doc.data() });
 
                     }
                 });
+
                 return unsubscribe;
-            }
+
+            };
+
+            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+
         };
+
         update();
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+        
     }, [props]);
+
+    console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+
     return updateProfile;
+
 };
 
 function useShare(props) {
+
+    console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+
     const [updateShare, setState] = useState({
         isShare: null
     })
 
     useEffect(() => {
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+
         async function update() {
+
+            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
+
             if (props.isAuth !== null) {
+
                 const unsubscribe = await props.db.firestore().collection(`share`).where('status', '==', true).get().then(function (doc) {
 
                     if (!doc.exists) {
+
                         console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
-                        setState({ isShare: null })
+
+                        setState({ isShare: null });
+
                     } else {
+
                         console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
-                        setState({ isShare: doc.data() })
+
+                        setState({ isShare: doc.data() });
+
                     }
                 });
+
                 return unsubscribe;
+
             }
+
+            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
+
         };
+
         update();
+
+        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+
     }, [props]);
+
+    console.timeEnd('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+
     return updateShare;
+
 };
 
 const UserStatus = (props) => {
 
-    const [map, setMap] = useState(null)
-    const [google, setGoogle] = useState(null)
-    const [openVisibility, setOpenVisibility] = useState(false)
-    const [openMenuSlide, setOpenMenuSlide] = useState(false)
+    const [map, setMap] = useState(null);
+    const [google, setGoogle] = useState(null);
+    const [openVisibility, setOpenVisibility] = useState(false);
+    const [openMenuSlide, setOpenMenuSlide] = useState(false);
     const [openModelJoinShare, setOpenModelJoinShare] = useState({
         key: '',
         bool: false
@@ -96,59 +156,80 @@ const UserStatus = (props) => {
     const { isShare } = useShare(props);
     // const { isStatusAll } = useStatusAll(props);
 
-
-
-
     const onVisibility = () => {
-        setOpenVisibility(true)
-    }
+
+        setOpenVisibility(true);
+
+    };
 
     const offVisibility = () => {
-        setOpenVisibility(false)
-    }
+
+        setOpenVisibility(false);
+
+    };
 
     const onMenuSlide = () => {
-        setOpenMenuSlide(true)
-    }
+
+        setOpenMenuSlide(true);
+
+    };
 
     const offMenuSlide = () => {
-        setOpenMenuSlide(false)
-    }
+
+        setOpenMenuSlide(false);
+
+    };
+
     const onModelJoinShare = (key) => {
+
+        console.time('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
 
         props.db.database().ref(`status/${props.isAuth.uid}/member`).update({
             share_id: key,
             uid: props.isAuth.uid,
             value: true
-        })
+        }).then(() => {
+
+            console.log('อัพเดต status => key => member => uid เสร็จสิ้น ✔');
+
+        });
+
+        console.timeEnd('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
+        console.time('ฉันคาดว่า 🤔 share => key => member => uid ใช้เวลาในการ อัพเดต ไป');
 
         props.db.firestore().collection(`share`).doc(`${key}/member/${props.isAuth.uid}`).update({
             share_id: key,
             uid: props.isAuth.uid,
             photoURL: isProfile.photoURL,
             displayName: isProfile.displayName
-        })
+        }).then(() => {
+
+            console.log('อัพเดต share => key => member => uid เสร็จสิ้น ✔');
+
+        });
+
+        console.timeEnd('ฉันคาดว่า 🤔 share => key => member => uid ใช้เวลาในการ อัพเดต ไป');
 
         setOpenModelJoinShare({
             key: `${key}`,
             bool: true
-        })
+        });
 
-        window.location.reload()
-    }
+        window.location.reload();
+
+    };
 
     const offModelJoinShare = () => {
         setOpenModelJoinShare({
             key: '',
             bool: false
-        })
-    }
-
+        });
+    };
 
     const latlng = {
         lat: 14.012107100000001,
         lng: 100.7210703
-    }
+    };
 
     // console.log(isUsers);
 
@@ -181,41 +262,54 @@ const UserStatus = (props) => {
                                     opts={(google, map) => {
 
                                         function CustomMarker(latlng, map, args, img) {
+
                                             this.latlng = latlng;
                                             this.args = args;
                                             this.img = img;
                                             this.setMap(map);
                                             this.maps = map
-                                            setMap(map)
-                                            setGoogle(google)
+
+                                            setMap(map);
+                                            setGoogle(google);
+
                                         }
 
                                         CustomMarker.prototype = new google.maps.OverlayView();
 
                                         CustomMarker.prototype.onAdd = function () {
+
                                             var self = this;
                                             var div = this.div;
+
                                             if (!div) {
                                                 // Generate marker html
                                                 div = this.div = document.createElement('div');
                                                 div.className = 'custom-marker';
                                                 div.style.position = 'absolute';
+
                                                 var innerDiv = document.createElement('div');
+
                                                 innerDiv.className = 'custom-marker-inner';
                                                 innerDiv.innerHTML = `<img  src="${this.img}" style="border-radius: inherit;width: 20px;height: 20px;margin: 2px;"/>`
                                                 div.appendChild(innerDiv);
 
                                                 if (typeof (self.args.marker_id) !== 'undefined') {
+
                                                     div.dataset.marker_id = self.args.marker_id;
-                                                }
+
+                                                };
 
                                                 google.maps.event.addDomListener(div, "click", function (event) {
+
                                                     google.maps.event.trigger(self, "click");
+
                                                 });
 
                                                 var panes = this.getPanes();
+
                                                 panes.overlayImage.appendChild(div);
-                                            }
+                                            };
+
                                         };
 
                                         CustomMarker.prototype.draw = function () {
@@ -228,24 +322,32 @@ const UserStatus = (props) => {
                                                 // console.log(this.pos);
                                                 this.div.style.left = this.pos.x + 'px';
                                                 this.div.style.top = this.pos.y + 'px';
-                                            }
+                                            };
+
                                         };
 
                                         CustomMarker.prototype.getPosition = function () {
+
                                             return this.latlng;
+
                                         };
 
                                         var myLatlng = new google.maps.LatLng(props.isLocation.coords.latitude, props.isLocation.coords.longitude);
+
                                         if (isProfile !== undefined) {
+
                                             var marker1 = new CustomMarker(
                                                 myLatlng,
                                                 map,
                                                 {},
                                                 isProfile.photoURL
                                             );
+
                                         } else {
-                                            window.location.reload()
-                                        }
+
+                                            window.location.reload();
+
+                                        };
 
                                         var pos = {
                                             lat: props.isLocation.coords.latitude,
@@ -254,7 +356,6 @@ const UserStatus = (props) => {
 
                                         marker1.latlng = { lat: pos.lat, lng: pos.lng };
                                         marker1.draw();
-
                                         map.setCenter(pos);
 
                                         // console.log(isShareAll);
@@ -266,14 +367,12 @@ const UserStatus = (props) => {
                                                 if (isShare[key].status !== false) {
                                                     let latlng = new google.maps.LatLng(isShare[key].location.routes[0].legs[0].start_location.lat, isShare[key].location.routes[0].legs[0].start_location.lng);
 
-
                                                     const marker = new CustomMarker(
                                                         latlng,
                                                         map,
                                                         { marker_id: `${key}` },
                                                         "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAABmJLR0QA/wD/AP+gvaeTAAACRklEQVRIie2Vu2tUQRSHz7iPgDEvA6K9teAfkMZCBYOFja/CJgQEDUEkoJWF4FqIraS1FauQRtQNpnBbFS18NLqKj9UYsi5G5bO455rDZO51btYQAv7gcmfPnDnfnNlz5opsBgFV4AzwEGgDS8AccARw6wUtAQ2y1QEWdCMnC21EM7oKvAWaQA2o6lyP2l4Cx4Ed+pxQm68ZYGssuBYIUPM2Vg6sKwO9wIAe+3Nd+xloAfeAQ3ngZgDcjD6ylTjDwKNArMvrCtZYFWAI2AVMAT803urMM476is4dCMz5WgaeAKfxikvhAHdD4KrCm5jiAhxwJwJsdc2LvVPtX4scWxnojfDrAcaAX/rsMXNDCu4AW6LhRQTcUsgNb1Ov1D5mnW0PQ9IKt4FTwLDxO6z/4/0c8KjGWAS2Gft+tT+zzqHCSvUTqJPcSqnmcsAV4IOfHUmvA3Ssc6iVUn0344/AWaCi684D74GnwAPgJkkF19W/YRgjoYzz1A8cBc4Bg+pfAiZZ6c887dM1x/T3VBQ4cJQHgccRwFQdYK+u3Y3t8RgwcAmYLwC0ms0qiBhwrC6QFNJFY1u0PGeDBnckIs459zcfT33OuSWgT0T+ANM4IiL2BpmPDBqjCZL+nchy8C/yNKPrOjcpsqaMwzCT8aqPuuqFv6l/rSzwp40CtzLsX/TdLyIlHbdFZFnHCyKCvtsiMlIUHMzYObc9K1BIeTWR9V1sKbxbvTHj13bCz7guyTG+k+TIGiLyrQvwuIhMa6zxLuL819r1G2V6qhlNJzPyAAAAAElFTkSuQmCC"
                                                     )
-
 
                                                     var pos = {
                                                         lat: isShare[key].location.routes[0].legs[0].start_location.lat,
@@ -320,13 +419,14 @@ const UserStatus = (props) => {
 
                                                     marker.addListener('click', function (key) {
 
-                                                        infowindow.setContent(content)
+                                                        infowindow.setContent(content);
                                                         infowindow.open(map, marker);
 
                                                     });
 
                                                     $(document).on('click', `#join-share-${key}`, function () {
-                                                        onModelJoinShare(key)
+
+                                                        onModelJoinShare(key);
 
                                                     })
 

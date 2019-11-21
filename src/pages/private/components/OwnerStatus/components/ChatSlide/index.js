@@ -39,11 +39,14 @@ function ChatSlide(props) {
             photoURL: props.isProfile.photoURL,
             msg: `${isMsg}`,
             date: Date.now()
-        })
-        setMsg('')
+        });
+
+        setMsg('');
+
     }
 
     const updateMsg = (e) => {
+
         setMsg(e.target.value);
 
         if (isChat !== null) {
@@ -52,16 +55,33 @@ function ChatSlide(props) {
     }
 
     useEffect(() => {
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
+
         async function update() {
 
+            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
+
             await props.db.database().ref(`share/${props.uid}/chat`).once("value").then(function (chat_value) {
-                let chatData = (chat_value.val())
+
+                let chatData = (chat_value.val());
+
                 if (chatData !== null) {
-                    setChat(chatData)
-                }
-            })
-        }
+
+                    setChat(chatData);
+
+                };
+
+            });
+
+            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
+
+        };
+
         update();
+
+        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
+
     })
 
     return (

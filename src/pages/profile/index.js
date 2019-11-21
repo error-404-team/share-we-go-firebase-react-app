@@ -32,34 +32,63 @@ import FaceIcon from '@material-ui/icons/Face';
 // import { useProfile } from '../../controllers';
 
 function useProfile(props) {
+
+    console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+    
     const [updateProfile, setState] = useState({
         isProfile: null
     })
 
     useEffect(() => {
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+
         async function update() {
+
+            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+
             if (props.isAuth !== null) {
+
                 const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(function (doc) {
+                    
                     if (doc.exists) {
+                        
                         console.log("Document data:", doc.data());
+                        
                         setState({ isProfile: doc.data().profile })
+                   
                     } else {
                         // doc.data() will be undefined in this case
                         console.log("No such document!");
+                    
                     }
+
                 }).catch(function (error) {
+                    
                     console.log("Error getting document:", error);
+                
                 });
+                
                 return unsubscribe;
             }
+
+            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+
         };
+
         update();
+
+        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+
     }, [props]);
+
+    console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+
     return updateProfile;
 };
 
-
 function TextMaskCustom(props) {
+    
     const { inputRef, ...other } = props;
 
     return (
@@ -110,103 +139,145 @@ function Profile(props) {
     useEffect(() => {
 
         if (statusEdit !== false) {
+
             if (isProfile !== null) {
-                setNullProfile(false)
+
+                setNullProfile(false);
 
                 if (isProfile.photoURL !== undefined) {
 
                     setPhotoURL(isProfile.photoURL);
+
                 } else {
+
                     if (photoURL === null) {
-                        setPhotoURL('https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiTltSo4MDkAhURUI8KHffBDJUQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.onlinewebfonts.com%2Ficon%2F227642&psig=AOvVaw0nPTqj6ZudRIcCKQWYbHEk&ust=1568015831780316')
-                    }
-                }
+
+                        setPhotoURL('https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiTltSo4MDkAhURUI8KHffBDJUQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.onlinewebfonts.com%2Ficon%2F227642&psig=AOvVaw0nPTqj6ZudRIcCKQWYbHEk&ust=1568015831780316');
+                   
+                    };
+                };
 
                 if (isProfile.displayName !== undefined) {
 
                     setDisplayName(isProfile.displayName);
+
                 } else {
+
                     if (displayName === null) {
+
                         setDisplayName('ไม่ระบุ');
-                    }
-                }
+                   
+                    };
+
+                };
 
                 if (isProfile.email !== undefined) {
 
                     setEmail(isProfile.email);
+
                 } else {
+                   
                     if (email === null) {
+                        
                         setEmail('ไม่ระบุ');
-                    }
-                }
+                    
+                    };
+
+                };
 
                 if (isProfile.phoneNumber !== undefined) {
 
                     setPhoneNumber(isProfile.phoneNumber);
+
                 } else {
+                    
                     if (phoneNumber === null) {
+                        
                         setPhoneNumber('ไม่ระบุ');
-                    }
-                }
+                    
+                    };
+               
+                };
 
                 if (isProfile.sex !== undefined) {
 
                     setSex(isProfile.sex);
+               
                 } else {
+                    
                     if (sex === null) {
+                       
                         setSex('ไม่ระบุ');
-                    }
-                }
+                   
+                    };
+                
+                };
 
                 if (isProfile.age !== undefined) {
 
                     setAge(isProfile.age);
+               
                 } else {
+                   
                     if (age === null) {
+                       
                         setAge('ไม่ระบุ');
-                    }
-                }
+                    
+                    };
+                };
+
             } else {
-                setNullProfile(true)
-            }
+
+                setNullProfile(true);
+
+            };
+
         }
-    })
+
+    });
 
 
     const displayNameInputUpdate = event => {
-        setDisplayName(event.target.value)
-    }
+
+        setDisplayName(event.target.value);
+
+    };
 
     const emailInputUpdate = event => {
-        setEmail(event.target.value)
-    }
+
+        setEmail(event.target.value);
+
+    };
 
     const phoneNumberInputUpdate = event => {
-        setPhoneNumber(event.target.value)
+
+        setPhoneNumber(event.target.value);
+
         console.log(event.target.value);
 
     }
 
     const sexInputUpdate = event => {
-        setSex(event.target.value)
-    }
+
+        setSex(event.target.value);
+
+    };
 
     const ageInputUpdate = event => {
-        setAge(event.target.value)
-    }
 
-    // const goBack = () => {
-    //     props.history.goBack()
-    // }
+        setAge(event.target.value);
+
+    };
 
     const onEdit = () => {
 
-        setStatusEdit(false)
+        setStatusEdit(false);
+
     }
 
-
     const onSave = () => {
-        // console.log(data);
+
+        console.time('ฉันคาดว่า 🤔 collection users => uid ใช้เวลาในการ อัพเดต ไป');
 
         props.db.firestore().collection('users').doc(props.isAuth.uid).update({
             profile: {
@@ -218,16 +289,16 @@ function Profile(props) {
                 age: age
             }
         }).then(() => {
-            setStatusEdit(true)
-            window.location.reload()
-        })
 
+            setStatusEdit(true);
 
+            window.location.reload();
 
-    }
+        });
 
+        console.timeEnd('ฉันคาดว่า 🤔 collection users => uid ใช้เวลาในการ อัพเดต ไป');
 
-
+    };
 
     const { classes } = props;
 
@@ -388,7 +459,7 @@ function Profile(props) {
         </React.Fragment>
     );
 
-}
+};
 
 
 const styles = {
@@ -404,11 +475,11 @@ const styles = {
         padding: 5,
         justifyContent: 'flex-end',
     },
-}
+};
 
 Profile.propTypes = {
     db: PropTypes.object,
     isAuth: PropTypes.object
-}
+};
 
 export default withStyles(styles)(withRouter(Profile));

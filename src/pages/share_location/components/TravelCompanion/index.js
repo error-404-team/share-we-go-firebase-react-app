@@ -22,21 +22,30 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function RadioButtonsGroup(props) {
+
     const classes = useStyles();
     const [value, setValue] = React.useState('1');
 
     // const socket = io(`http://localhost:8080/`);
 
     function handleChange(event) {
+
         setValue(event.target.value);
-    }
+
+    };
+
+    console.time('ฉันคาดว่า 🤔 share => uid => max_number ใช้เวลาในการ อัพเดต ไป')
 
     props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
         max_number: { value: value }
     }).then(() => {
+
         console.log('อัพเดต จำนวนผู้เข้าร่วมแชร์ แล้วนะ 😁');
 
-    })
+    });
+
+    console.timeEnd('ฉันคาดว่า 🤔 share => uid => max_number ใช้เวลาในการ อัพเดต ไป')
+
 
     // firebase.auth().onAuthStateChanged((user) => {
     //     post.share.max_number(user.uid, { value: value }, dateTime)
@@ -68,11 +77,10 @@ export default function RadioButtonsGroup(props) {
             </center>
         </div>
     );
-}
-
+};
 
 RadioButtonsGroup.propTypes = {
     isAuth: PropTypes.object,
     db: PropTypes.object,
     backgroundColor: PropTypes.string
-}
+};

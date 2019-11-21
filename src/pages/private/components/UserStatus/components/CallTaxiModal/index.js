@@ -10,9 +10,9 @@ import Fab from './node_modules/@material-ui/core/Fab';
 import Grid from './node_modules/@material-ui/core/Grid';
 
 
-import CallIcon from './node_modules/@material-ui/icons/Call'
+import CallIcon from './node_modules/@material-ui/icons/Call';
 
-import taxiIcon from './img/icon-taxi.png'
+import taxiIcon from './img/icon-taxi.png';
 
 
 const useStyles = makeStyles(theme => ({
@@ -28,9 +28,10 @@ const useStyles = makeStyles(theme => ({
   callIcon: {
     marginRight: theme.spacing(1),
   }
-}))
+}));
 
 const CallTaxiModal = (props) => {
+
   const classes = useStyles();
 
   return (
@@ -70,13 +71,13 @@ const CallTaxiModal = (props) => {
         </Fade>
       </Modal>
     </Fragment>
-  )
-}
+  );
+};
 
 CallTaxiModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func
-}
+};
 
 
 

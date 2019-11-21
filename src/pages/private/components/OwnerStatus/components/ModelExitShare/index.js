@@ -8,7 +8,7 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-import { dateTime } from '../../../../../../model/dateTime';
+// import { dateTime } from '../../../../../../model/dateTime';
 
 const useStyles = makeStyles(theme => ({
     modal: {
@@ -86,16 +86,13 @@ const ModelExitShare = (props) => {
                                     <center>รอแป๊บ....</center>
                                 </Grid>
                             </div></React.Fragment>)
-
                     }
                 </Fade>
             </Modal>
         </React.Fragment>
-    )
+    );
 
-}
-
-
+};
 
 ModelExitShare.propTypes = {
     open: PropTypes.bool,
@@ -103,6 +100,6 @@ ModelExitShare.propTypes = {
     uid: PropTypes.string,
     isShare: PropTypes.object,
     db: PropTypes.object
-}
+};
 
 export default withRouter(ModelExitShare)
