@@ -39,16 +39,17 @@ function useProfile(props) {
     useEffect(() => {
         async function update() {
             if (props.isAuth !== null) {
-                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(doc => {
-                    if (!doc.exists) {
-                      console.log('No such document!');
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(function (doc) {
+                    if (doc.exists) {
+                        console.log("Document data:", doc.data());
+                        setState({ isProfile: doc.data().profile })
                     } else {
-                      console.log('Document data:', doc.data());
+                        // doc.data() will be undefined in this case
+                        console.log("No such document!");
                     }
-                  })
-                  .catch(err => {
-                    console.log('Error getting document', err);
-                  });
+                }).catch(function (error) {
+                    console.log("Error getting document:", error);
+                });
                 return unsubscribe;
             }
         };
@@ -207,17 +208,18 @@ function Profile(props) {
     const onSave = () => {
         // console.log(data);
 
-        props.db.firestore().collection('users').doc(props.isAuth.uid ).update({
-            profile:{
-            displayName: displayName,
-            email: email,
-            photoURL: photoURL,
-            phoneNumber: phoneNumber,
-            sex: sex,
-            age: age
-        }}).then(() => {
+        props.db.firestore().collection('users').doc(props.isAuth.uid).update({
+            profile: {
+                displayName: displayName,
+                email: email,
+                photoURL: photoURL,
+                phoneNumber: phoneNumber,
+                sex: sex,
+                age: age
+            }
+        }).then(() => {
             setStatusEdit(true)
-            // window.location.reload()
+            window.location.reload()
         })
 
 

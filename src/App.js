@@ -13,39 +13,85 @@ import Report from './pages/report';
 // import { useAuth, useLocation, useUsersPrivate } from './controllers'
 
 const useAuth = (props) => {
+
+  console.time('ฉันคาดว่า 🤔 function useAuth ใช้เวลาในการทำงานไป');
+
   const [updateAuth, setState] = useState({
     isLoading: true,
     isAuth: null
   });
 
   useEffect(() => {
-    const unsubscribe = props.db.auth().onAuthStateChanged((user) => {
-      let stringifyData = JSON.stringify(user)
-      if(user) {
-        console.log('มีการ login อยู่นะ 😂');
-        
-      props.db.firestore().collection('users').doc(user.uid).update({ auth: JSON.parse(stringifyData) });
 
-      setState({ isLoading: false, isAuth: user });
-      }else {
+    console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAuth ใช้เวลาในการทำงานไป');
+
+    const unsubscribe = props.db.auth().onAuthStateChanged((user) => {
+
+      let stringifyData = JSON.stringify(user)
+
+      if (user) {
+
+        console.log('มีการ login อยู่นะ 😂');
+        console.time('ฉันคาดว่า 🤔 การดึงข้อมูลจาก collection users ของ firestore ใช้เวลาในการทำงานไป');
+
+        props.db.firestore().collection('users').doc(user.uid).get().then(function (doc) {
+
+          if (doc.exists) {
+
+            console.log("ฉันได้ทำการเชคข้อมูล users ok! 😮 มีข้อมูล users อยู่ในฐานข้อมูล: ", doc.data());
+
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("ฉันไม่เจอข้อมูล users อยู่ในฐานข้อมูล ฉันจะทำการสร้างมันใหม่ 🥱");
+            console.time('ฉันคาดว่า 🤔 ใช้เวลาในการสร้าง ฐานข้อมูล users => uid => auth ไป');
+
+            props.db.firestore().collection('users').doc(user.uid).set({ auth: JSON.parse(stringifyData) }).then(() => {
+
+              console.log('สร้างฐานข้อมูล users => uid => auth เสร็จสิ้น ✔');
+
+            });
+
+            console.timeEnd('ฉันคาดว่า 🤔 ใช้เวลาในการสร้าง ฐานข้อมูล users => uid => auth ไป');
+
+          };
+
+          console.log('อ่านฐานข้อมูล users => uid => auth เสร็จสิ้น ✔ ');
+
+        }).catch(function (error) {
+
+          console.log("มันมีการผิดพลาด ในการรับข้อมูลใน ฐานข้อมูล 😨:", error);
+
+        });
+
+        console.timeEnd('ฉันคาดว่า 🤔 การดึงข้อมูลจาก collection users ของ firestore ใช้เวลาในการทำงานไป');
+
+        setState({ isLoading: false, isAuth: user });
+
+      } else {
+
         console.log('ยังไม่ได้มีการ login เลยอ่ะ 😒');
+
         setState({ isLoading: false, isAuth: null });
+
       }
     });
+
+    console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAuth ใช้เวลาในการทำงานไป');
+
     return unsubscribe;
+
   }, [props]);
+
+  console.timeEnd('ฉันคาดว่า 🤔 function useAuth ใช้เวลาในการทำงานไป');
+
   return updateAuth;
+
 }
 
 
 function App(props) {
-  // const [isAuth, setAuth] = useState(null);
-  // const [isLoading, setLoading] = useState(true);
-  // const [isUsersPrivate, setUsersPrivate] = useState(null);
-  const { isLoading, isAuth } = useAuth(props);
-  // const { isUsersPrivate } = useUsersPrivate(props)
-  // const { isLocation } = useLocation(props);
 
+  const { isLoading, isAuth } = useAuth(props);
 
   return (
     <React.Fragment>
