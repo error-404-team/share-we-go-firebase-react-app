@@ -34,16 +34,19 @@ function ChatSlide(props) {
     const sendMsg = () => {
 
         props.db.database().ref(`share/${props.isMemberStatus.share_id}/chat`).push({
-            uid: props.isMemberStatus.uid,
-            share_id: props.isMemberStatus.uid,
+            uid: props.isMemberStatus.share_id,
+            share_id: props.isMemberStatus.share_id,
             photoURL: props.isProfile.photoURL,
             msg: `${isMsg}`,
             date: Date.now()
-        })
-        setMsg('')
+        });
+
+        setMsg('');
+
     }
 
     const updateMsg = (e) => {
+
         setMsg(e.target.value);
 
         if (isChat !== null) {
@@ -52,16 +55,33 @@ function ChatSlide(props) {
     }
 
     useEffect(() => {
+
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
+
         async function update() {
 
+            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
+
             await props.db.database().ref(`share/${props.isMemberStatus.share_id}/chat`).once("value").then(function (chat_value) {
-                let chatData = (chat_value.val())
+
+                let chatData = (chat_value.val());
+
                 if (chatData !== null) {
-                    setChat(chatData)
-                }
-            })
-        }
+
+                    setChat(chatData);
+
+                };
+
+            });
+
+            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
+
+        };
+
         update();
+
+        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
+
     })
 
     return (
@@ -95,7 +115,7 @@ function ChatSlide(props) {
                                     ? (<Fragment>
                                         {Object.keys(isChat).map((key) => (
                                             <Fragment>
-                                                {props.isUsersPrivate.uid === isChat[key].uid
+                                                {props.isMemberStatus.share_id === isChat[key].uid
                                                     ? (<Fragment>
                                                         <div class="container darker">
                                                             <img src={`${isChat[key].photoURL}`} alt="Avatar" class="right" />
@@ -141,10 +161,9 @@ function ChatSlide(props) {
 ChatSlide.protoType = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
-    uid: PropTypes.string,
-    isProfile: PropTypes.object,
-    isMemberStatus: PropTypes.object,
+    isMemberStatus: PropTypes.string,
     db: PropTypes.object,
+    isProfile: PropTypes.object,
 }
 
 export default ChatSlide;

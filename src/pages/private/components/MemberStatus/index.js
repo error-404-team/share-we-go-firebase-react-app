@@ -109,16 +109,16 @@ function useProfile(props) {
                         console.time('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
 
                         props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
-                        
+
                         console.timeEnd('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
-                        
+
                         setState({ isProfile: props.isAuth.providerData[0] });
 
                     } else {
 
                         console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
 
-                        setState({ isProfile: doc.data() });
+                        setState({ isProfile: doc.data().profile });
 
                     }
                 });
@@ -134,7 +134,7 @@ function useProfile(props) {
         update();
 
         console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
-        
+
     }, [props]);
 
     console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
@@ -159,9 +159,9 @@ function useShare(props) {
 
             console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
 
-            if (props.isAuth !== null) {
+            if (props.isMemberStatus !== null) {
 
-                const unsubscribe = await props.db.firestore().collection(`share`).doc(props.isAuth.uid).get().then(function (doc) {
+                const unsubscribe = await props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id).get().then(function (doc) {
 
                     if (!doc.exists) {
 
@@ -198,7 +198,6 @@ function useShare(props) {
 
     return updateShare;
 };
-
 
 const MemberStatus = (props) => {
 
@@ -355,13 +354,13 @@ const MemberStatus = (props) => {
                                     var me = this
 
                                     if (data === true) {
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
+                                        me.setupPlaceChangedListener(data.request.origin.placeId, 'ORIG');
+                                        me.setupPlaceChangedListener(data.request.destination.placeId, 'DEST');
                                         me.setupClickListener(data.request.travelMode);
 
                                     } else {
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
+                                        me.setupPlaceChangedListener(data.request.origin.placeId, 'ORIG');
+                                        me.setupPlaceChangedListener(data.request.destination.placeId, 'DEST');
                                         me.setupClickListener(data.request.travelMode);
                                     }
                                 }
@@ -516,6 +515,7 @@ const MemberStatus = (props) => {
                                 isMemberStatus={props.isMemberStatus}
                                 open={openModelExitShare}
                                 onClose={offModelExitShare}
+                                isAuth={props.isAuth}
                             />
 
                         </Map>

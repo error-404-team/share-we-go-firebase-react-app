@@ -170,7 +170,7 @@ const Private = (props) => {
                         timestamp: position.timestamp
                     }
 
-                    props.db.database().ref(`status/${props.isAuth.uid}/location`).update(locationData)
+                    props.db.database().ref(`users/${props.isAuth.uid}/location`).update(locationData)
                     setLocation(locationData)
                 })
             }

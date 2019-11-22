@@ -126,7 +126,7 @@ function useProfile(props) {
 
                         console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
 
-                        setState({ isProfile: doc.data() });
+                        setState({ isProfile: doc.data().profile });
 
                     }
                 });
