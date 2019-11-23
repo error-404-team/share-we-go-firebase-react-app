@@ -16,7 +16,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Loading } from './components/Loading';
-import { useProfile } from '../../../../controllers';
+// import { useProfile } from '../../../../controllers';
 
 
 const useStyles = makeStyles(theme => ({

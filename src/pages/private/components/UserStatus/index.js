@@ -24,7 +24,6 @@ import Loading from '../../../loading';
 import ModelAlertNotShare from './components/ModelAlertNotShare';
 import MapOffShare from './components/MapOffShare';
 import MapOnShare from './components/MapOnShare';
-
 function useProfile(props) {
 
     console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
@@ -59,7 +58,7 @@ function useProfile(props) {
                     } else {
 
                         console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
-                        if (doc.data().profile !== null) {
+                        if (doc.data().profile !== undefined) {
 
                             setState({ isProfile: doc.data().profile });
 
