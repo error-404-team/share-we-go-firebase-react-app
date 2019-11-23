@@ -1,0 +1,102 @@
+[debug] [2019-11-23T14:27:44.744Z] ----------------------------------------------------------------------
+[debug] [2019-11-23T14:27:44.747Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\dev\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2019-11-23T14:27:44.747Z] CLI Version:   7.6.1
+[debug] [2019-11-23T14:27:44.747Z] Platform:      win32
+[debug] [2019-11-23T14:27:44.747Z] Node Version:  v10.16.3
+[debug] [2019-11-23T14:27:44.758Z] Time:          Sat Nov 23 2019 21:27:44 GMT+0700 (Indochina Time)
+[debug] [2019-11-23T14:27:44.758Z] ----------------------------------------------------------------------
+[debug] [2019-11-23T14:27:44.759Z] 
+[debug] [2019-11-23T14:27:44.777Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-23T14:27:44.778Z] > authorizing via signed-in user
+[debug] [2019-11-23T14:27:44.778Z] [iam] checking project swg-users-bata-test for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2019-11-23T14:27:44.780Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/swg-users-bata-test:testIamPermissions  
+
+[debug] [2019-11-23T14:27:48.638Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-23T14:27:48.649Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/swg-users-bata-test  
+ 
+[debug] [2019-11-23T14:27:49.737Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'swg-users-bata-test'...
+[info] 
+[info] i  deploying database, firestore, hosting
+[info] i  database: checking rules syntax...
+[debug] [2019-11-23T14:27:49.750Z] >>> HTTP REQUEST PUT https://swg-users-bata-test.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+[debug] [2019-11-23T14:27:53.326Z] <<< HTTP RESPONSE 200
+[info] +  database: rules syntax for database swg-users-bata-test is valid
+[info] i  firestore: checking firestore.rules for compilation errors...
+[info] i  firestore: reading indexes from firestore.indexes.json...
+[debug] [2019-11-23T14:27:53.392Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/swg-users-bata-test:test  
+
+[debug] [2019-11-23T14:27:57.220Z] <<< HTTP RESPONSE 200
+[info] +  firestore: rules file firestore.rules compiled successfully
+[debug] [2019-11-23T14:27:57.224Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/swg-users-bata-test/versions  
+
+[debug] [2019-11-23T14:27:59.854Z] <<< HTTP RESPONSE 200
+[info] i  firestore: uploading rules firestore.rules...
+[debug] [2019-11-23T14:27:59.858Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/swg-users-bata-test/rulesets  
+
+[debug] [2019-11-23T14:27:59.859Z] >>> HTTP REQUEST GET https://firestore.googleapis.com/v1beta2/projects/swg-users-bata-test/databases/(default)/collectionGroups/-/indexes  
+ 
+[debug] [2019-11-23T14:28:01.455Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-23T14:28:01.456Z] >>> HTTP REQUEST GET https://firestore.googleapis.com/v1beta2/projects/swg-users-bata-test/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false  
+ 
+[debug] [2019-11-23T14:28:01.910Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-23T14:28:01.910Z] [rules] created ruleset projects/swg-users-bata-test/rulesets/f9d68979-01b7-4d82-9d74-b1c0b0a102f1
+[debug] [2019-11-23T14:28:02.639Z] <<< HTTP RESPONSE 200
+[info] +  firestore: deployed indexes in firestore.indexes.json successfully
+[info] i  hosting[swg-users-bata-test]: beginning deploy...
+[info] i  hosting[swg-users-bata-test]: found 19 files in build
+[debug] [2019-11-23T14:28:03.820Z] [hosting] hash cache [YnVpbGQ] stored for 19 files
+[debug] [2019-11-23T14:28:03.820Z] [hosting][hash queue][FINAL]
+[debug] [2019-11-23T14:28:03.820Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/swg-users-bata-test/versions/ab5288d88a0b92ad:populateFiles  
+ <request body omitted>
+[debug] [2019-11-23T14:28:08.114Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-23T14:28:08.124Z] [hosting][populate queue][FINAL]
+[debug] [2019-11-23T14:28:08.124Z] [hosting] uploads queued: 8
+[debug] [2019-11-23T14:29:49.258Z] ----------------------------------------------------------------------
+[debug] [2019-11-23T14:29:49.260Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\dev\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2019-11-23T14:29:49.261Z] CLI Version:   7.6.1
+[debug] [2019-11-23T14:29:49.261Z] Platform:      win32
+[debug] [2019-11-23T14:29:49.261Z] Node Version:  v10.16.3
+[debug] [2019-11-23T14:29:49.261Z] Time:          Sat Nov 23 2019 21:29:49 GMT+0700 (Indochina Time)
+[debug] [2019-11-23T14:29:49.262Z] ----------------------------------------------------------------------
+[debug] [2019-11-23T14:29:49.262Z] 
+[debug] [2019-11-23T14:29:49.270Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-23T14:29:49.271Z] > authorizing via signed-in user
+[debug] [2019-11-23T14:29:49.271Z] [iam] checking project swg-users-bata-test for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2019-11-23T14:29:49.273Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/swg-users-bata-test:testIamPermissions  
+
+[debug] [2019-11-23T14:30:05.910Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-23T14:30:05.916Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/swg-users-bata-test  
+ 
+[debug] [2019-11-23T14:30:07.186Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'swg-users-bata-test'...
+[info] 
+[info] i  deploying database, firestore, hosting
+[info] i  database: checking rules syntax...
+[debug] [2019-11-23T14:30:07.196Z] >>> HTTP REQUEST PUT https://swg-users-bata-test.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+[debug] [2019-11-23T14:30:10.819Z] <<< HTTP RESPONSE 200
+[info] +  database: rules syntax for database swg-users-bata-test is valid
+[info] i  firestore: checking firestore.rules for compilation errors...
+[info] i  firestore: reading indexes from firestore.indexes.json...
+[debug] [2019-11-23T14:30:10.833Z] >>> HTTP REQUEST POST https://firebaserules.googleapis.com/v1/projects/swg-users-bata-test:test  
+
+[debug] [2019-11-23T14:30:12.015Z] <<< HTTP RESPONSE 200
+[info] +  firestore: rules file firestore.rules compiled successfully
+[debug] [2019-11-23T14:30:12.020Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/swg-users-bata-test/versions  
+

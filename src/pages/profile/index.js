@@ -33,7 +33,7 @@ import FaceIcon from '@material-ui/icons/Face';
 
 function useProfile(props) {
 
-    console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+    // console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
     
     const [updateProfile, setState] = useState({
         isProfile: null
@@ -41,11 +41,11 @@ function useProfile(props) {
 
     useEffect(() => {
 
-        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
 
         async function update() {
 
-            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
 
             if (props.isAuth !== null) {
 
@@ -53,36 +53,36 @@ function useProfile(props) {
                     
                     if (doc.exists) {
                         
-                        console.log("Document data:", doc.data());
+                        // console.log("Document data:", doc.data());
                         
                         setState({ isProfile: doc.data().profile })
                    
                     } else {
                         // doc.data() will be undefined in this case
-                        console.log("No such document!");
+                        // console.log("No such document!");
                     
                     }
 
                 }).catch(function (error) {
                     
-                    console.log("Error getting document:", error);
+                    // console.log("Error getting document:", error);
                 
                 });
                 
                 return unsubscribe;
             }
 
-            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
 
         };
 
         update();
 
-        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+        // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
 
     }, [props]);
 
-    console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+    // console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
 
     return updateProfile;
 };
@@ -253,7 +253,7 @@ function Profile(props) {
 
         setPhoneNumber(event.target.value);
 
-        console.log(event.target.value);
+        // console.log(event.target.value);
 
     }
 
@@ -277,7 +277,7 @@ function Profile(props) {
 
     const onSave = () => {
 
-        console.time('ฉันคาดว่า 🤔 collection users => uid ใช้เวลาในการ อัพเดต ไป');
+        // console.time('ฉันคาดว่า 🤔 collection users => uid ใช้เวลาในการ อัพเดต ไป');
 
         props.db.firestore().collection('users').doc(props.isAuth.uid).update({
             profile: {
@@ -296,7 +296,7 @@ function Profile(props) {
 
         });
 
-        console.timeEnd('ฉันคาดว่า 🤔 collection users => uid ใช้เวลาในการ อัพเดต ไป');
+        // console.timeEnd('ฉันคาดว่า 🤔 collection users => uid ใช้เวลาในการ อัพเดต ไป');
 
     };
 

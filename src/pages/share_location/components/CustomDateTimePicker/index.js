@@ -59,7 +59,7 @@ export default function CustomDateTimePicker(props) {
 
     setSelectedDate(date);
 
-    console.log(date);
+    // console.log(date);
 
     var d = new Date();
     const days = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
@@ -70,7 +70,7 @@ export default function CustomDateTimePicker(props) {
     //   post.share.date(user.uid, timer, dateTime)
     // })
 
-    console.time('แันคาดว่า 🤔 share => uid => dete ใช้เวลาในการ อัพเดต ไป');
+    // console.time('แันคาดว่า 🤔 share => uid => dete ใช้เวลาในการ อัพเดต ไป');
 
     props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
       date: {
@@ -83,11 +83,11 @@ export default function CustomDateTimePicker(props) {
       }
     }).then(() => {
 
-      console.log('อัพเดต เวลา แล้วนะ 🤗');
+      // console.log('อัพเดต เวลา แล้วนะ 🤗');
 
     });
 
-    console.timeEnd('แันคาดว่า 🤔 share => uid => date ใช้เวลาในการ อัพเดต ไป');
+    // console.timeEnd('แันคาดว่า 🤔 share => uid => date ใช้เวลาในการ อัพเดต ไป');
 
   };
 

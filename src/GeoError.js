@@ -15,14 +15,14 @@ function GeoError(props) {
           function success(pos) {
             var crd = pos.coords;
           
-            console.log('Your current position is:');
-            console.log(`Latitude : ${crd.latitude}`);
-            console.log(`Longitude: ${crd.longitude}`);
-            console.log(`More or less ${crd.accuracy} meters.`);
+            // console.log('Your current position is:');
+            // console.log(`Latitude : ${crd.latitude}`);
+            // console.log(`Longitude: ${crd.longitude}`);
+            // console.log(`More or less ${crd.accuracy} meters.`);
           }
           
           function error(err) {
-            console.warn(`ERROR(${err.code}): ${err.message}`);
+            // console.warn(`ERROR(${err.code}): ${err.message}`);
           }
           
           navigator.geolocation.getCurrentPosition(success, error, options);
@@ -32,7 +32,7 @@ function GeoError(props) {
         // }
         // $.cookie("geoperm", "true")
         // Cookies.set("geoperm", "true")
-        console.log(Cookies.get("geoperm"));
+        // console.log(Cookies.get("geoperm"));
         
         // positionOptions.enableHighAccuracy = true;
         // positionOptions.maximumAge = 0;

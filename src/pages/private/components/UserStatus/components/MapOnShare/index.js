@@ -99,7 +99,7 @@ const MapOnShare = (props) => {
                 let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
                 this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
-                // console.log(this.pos);
+                // // console.log(this.pos);
                 this.div.style.left = this.pos.x + 'px';
                 this.div.style.top = this.pos.y + 'px';
               };
@@ -143,7 +143,7 @@ const MapOnShare = (props) => {
             // share
             if (props.isShare !== null) {
               Object.keys(props.isShare).map((key) => {
-                console.log(key); // all key
+                // console.log(key); // all key
                 // get.status.share(key).then(function (status) {
                 if (props.isShare[key].status.value !== false) {
                   let latlng = new google.maps.LatLng(props.isShare[key].location.start_location.lat, props.isShare[key].location.start_location.lng);
@@ -208,7 +208,7 @@ const MapOnShare = (props) => {
 
                   $(document).on('click', `#join-share-${key}`, function () {
 
-                    console.time('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
+                    // console.time('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
 
                     props.db.database().ref(`status/${props.isAuth.uid}/member`).update({
                       share_id: key,
@@ -216,12 +216,12 @@ const MapOnShare = (props) => {
                       value: true
                     }).then(() => {
 
-                      console.log('อัพเดต status => key => member => uid เสร็จสิ้น ✔');
+                      // console.log('อัพเดต status => key => member => uid เสร็จสิ้น ✔');
 
                     });
 
-                    console.timeEnd('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
-                    console.time('ฉันคาดว่า 🤔 share => key => member => uid ใช้เวลาในการ อัพเดต ไป');
+                    // console.timeEnd('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
+                    // console.time('ฉันคาดว่า 🤔 share => key => member => uid ใช้เวลาในการ อัพเดต ไป');
 
                     props.db.firestore().collection(`share`).doc(key).update({
                       member: {
@@ -235,13 +235,13 @@ const MapOnShare = (props) => {
                       }
                     }).then(() => {
 
-                      console.log('อัพเดต share => key => member => uid เสร็จสิ้น ✔');
+                      // console.log('อัพเดต share => key => member => uid เสร็จสิ้น ✔');
 
                       window.location.reload();
 
                     });
 
-                    console.timeEnd('ฉันคาดว่า 🤔 share => key => member => uid ใช้เวลาในการ อัพเดต ไป');
+                    // console.timeEnd('ฉันคาดว่า 🤔 share => key => member => uid ใช้เวลาในการ อัพเดต ไป');
 
                   })
 

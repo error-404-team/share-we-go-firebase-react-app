@@ -27,14 +27,14 @@ firebase.initializeApp(firebaseConfig);
 
 window.addEventListener('appinstalled', (evt) => {
     evt.preventDefault();
-    console.log('a2hs installed');
+    // console.log('a2hs installed');
 });
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition, showError);
 } else {
     ReactDOM.render(<GeoError db={firebase} error="Geolocation is not supported" />, document.getElementById('root'));
-    console.log("Geolocation is not supported by this browser.");
+    // console.log("Geolocation is not supported by this browser.");
 }
 
 function showPosition(position) {

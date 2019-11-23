@@ -77,7 +77,7 @@ function PlaceAutocompleteAndDirections(props) {
 
             var place = autocomplete.getPlace();
 
-            console.log(place);
+            // console.log(place);
 
             if (!place.place_id) {
 
@@ -121,7 +121,7 @@ function PlaceAutocompleteAndDirections(props) {
 
                     me.directionsRenderer.setDirections(response);
 
-                    console.log(response);
+                    // console.log(response);
                     // socket.emit('origin_destination_route', response)
                     const res = JSON.stringify(response);
 
@@ -143,11 +143,11 @@ function PlaceAutocompleteAndDirections(props) {
                         }
                     }).then(() => {
 
-                        console.log('สร้าง locationc ขึ้นมาใหม่ 😁');
+                        // console.log('สร้าง locationc ขึ้นมาใหม่ 😁');
 
                     });
 
-                    console.log(response);
+                    // console.log(response);
 
                 } else {
 
@@ -207,7 +207,7 @@ function PlaceAutocompleteAndDirections(props) {
                         // initMap(google, map)
                         //    setGoogle(google);
                         //    setMap(map)
-                        console.log();
+                        // console.log();
 
                         new AutocompleteDirectionsHandler(google, map);
                     }}

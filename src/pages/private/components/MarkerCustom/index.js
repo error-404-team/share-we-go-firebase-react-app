@@ -19,7 +19,7 @@ const MarkerCustom = (props) => {
     CustomMarker.prototype.onAdd = function () {
         var self = this;
         var div = this.div;
-        console.log('aa');
+        // console.log('aa');
 
         if (!div) {
             div = this.div = customMarke;

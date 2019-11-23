@@ -34,17 +34,17 @@ export default function RadioButtonsGroup(props) {
 
     };
 
-    console.time('ฉันคาดว่า 🤔 share => uid => sex');
+    // console.time('ฉันคาดว่า 🤔 share => uid => sex');
 
     props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
         sex: { value: value }
     }).then(() => {
 
-        console.log('อัพเดต เพศ แล้วนะ 😍');
+        // console.log('อัพเดต เพศ แล้วนะ 😍');
 
     });
 
-    console.timeEnd('ฉันคาดว่า 🤔 share => uid => sex');
+    // console.timeEnd('ฉันคาดว่า 🤔 share => uid => sex');
 
     // firebase.auth().onAuthStateChanged((user) => {
     //     post.share.sex(user.uid, { value: value }, dateTime)

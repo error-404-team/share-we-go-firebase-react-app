@@ -10,7 +10,7 @@ const useProfile = (props) => {
   useEffect(() => {
     async function fetchData() {
       if (props.isUsersPrivate !== null) {
-        // console.log(props.isUsersPrivate.uid);
+        // // console.log(props.isUsersPrivate.uid);
 
         // const pathUser = `users/${props.isUsersPrivate.uid}/user`
         const pathProfile = `users/${props.isUsersPrivate.uid}/profile`;
@@ -19,7 +19,7 @@ const useProfile = (props) => {
         const unsubscribe = await props.db.database().ref(`${pathProfile}`).once("value").then(function (snapshot) {
           const data = (snapshot.val())
           if (data !== null) {
-            // console.log((snapshot.val()));
+            // // console.log((snapshot.val()));
 
             setState({isProfile: data})
           } else {

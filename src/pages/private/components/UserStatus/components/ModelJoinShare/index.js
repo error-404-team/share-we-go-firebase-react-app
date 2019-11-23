@@ -33,7 +33,7 @@ const ModelJoinShare = (props) => {
 
     const joinShare = () => {
 
-        console.time('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
+        // console.time('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
 
         props.db.database().ref(`status/${props.isUsersPrivate.uid}/member`).update({
             uid: `${props.isUsersPrivate.uid}`,
@@ -41,8 +41,8 @@ const ModelJoinShare = (props) => {
             value: true
         });
 
-        console.timeEnd('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
-        console.time('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
+        // console.timeEnd('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
+        // console.time('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
 
         props.db.database().ref(`share/${props.isUsersPrivate.uid}/member`).update({
             uid: `${props.isUsersPrivate.uid}`,
@@ -51,7 +51,7 @@ const ModelJoinShare = (props) => {
 
         });
 
-        console.timeEnd('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
+        // console.timeEnd('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
 
         props.history.push('/');
 

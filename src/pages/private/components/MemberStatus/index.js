@@ -21,7 +21,7 @@ import Loading from '../../../loading';
 
 function useAlertStatus(props) {
 
-    console.time('ฉันคาดว่า 🤔 function useAlertStatus ใช้เวลาในการทำงานไป');
+    // console.time('ฉันคาดว่า 🤔 function useAlertStatus ใช้เวลาในการทำงานไป');
 
     const [updateAlertStatus, setState] = useState({
         isAlertStatus: null
@@ -29,11 +29,11 @@ function useAlertStatus(props) {
 
     useEffect(() => {
 
-        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus ใช้เวลาในการทำงานไป');
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus ใช้เวลาในการทำงานไป');
 
         async function update() {
 
-            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus => function update ใช้เวลาในการทำงานไป');
+            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus => function update ใช้เวลาในการทำงานไป');
 
             if (props.isAuth !== null) {
                 const unsubscribe = props.db.database().ref(`status/${props.isAuth.uid}/alert`).once("value").then(function (snapshot) {
@@ -52,11 +52,11 @@ function useAlertStatus(props) {
                             value: false
                         };
 
-                        console.time('ฉันคาดว่า 🤔 status => uid => alert ใช้เวลาในการ อัพเดต ไป');
+                        // console.time('ฉันคาดว่า 🤔 status => uid => alert ใช้เวลาในการ อัพเดต ไป');
 
                         props.db.database().ref(`status/${props.isAuth.uid}/alert`).update(statusData);
 
-                        console.timeEnd('ฉันคาดว่า 🤔 status => uid => alert ใช้เวลาในการ อัพเดต ไป');
+                        // console.timeEnd('ฉันคาดว่า 🤔 status => uid => alert ใช้เวลาในการ อัพเดต ไป');
 
                         setState({ isAlertStatus: statusData });
 
@@ -67,17 +67,17 @@ function useAlertStatus(props) {
                 return unsubscribe;
             }
 
-            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus => function update ใช้เวลาในการทำงานไป');
+            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus => function update ใช้เวลาในการทำงานไป');
 
         };
 
         update();
 
-        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus ใช้เวลาในการทำงานไป');
+        // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus ใช้เวลาในการทำงานไป');
 
     });
 
-    console.timeEnd('ฉันคาดว่า 🤔 function useAlertStatus ใช้เวลาในการทำงานไป');
+    // console.timeEnd('ฉันคาดว่า 🤔 function useAlertStatus ใช้เวลาในการทำงานไป');
 
     return updateAlertStatus;
 
@@ -85,7 +85,7 @@ function useAlertStatus(props) {
 
 function useProfile(props) {
 
-    console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+    // console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
 
     const [updateProfile, setState] = useState({
         isProfile: null
@@ -93,30 +93,30 @@ function useProfile(props) {
 
     useEffect(() => {
 
-        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
 
         async function update() {
 
-            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
 
             if (props.isAuth !== null) {
                 const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(function (doc) {
 
                     if (!doc.exists) {
 
-                        console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
+                        // console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
 
-                        console.time('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
+                        // console.time('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
 
                         props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
 
-                        console.timeEnd('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
+                        // console.timeEnd('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
 
                         setState({ isProfile: props.isAuth.providerData[0] });
 
                     } else {
 
-                        console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
+                        // console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
 
                         setState({ isProfile: doc.data().profile });
 
@@ -127,17 +127,17 @@ function useProfile(props) {
 
             };
 
-            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
 
         };
 
         update();
 
-        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
 
     }, [props]);
 
-    console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+    // console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
 
     return updateProfile;
 
@@ -145,7 +145,7 @@ function useProfile(props) {
 
 function useShare(props) {
 
-    console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+    // console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
 
     const [updateShare, setState] = useState({
         isShare: null
@@ -153,11 +153,11 @@ function useShare(props) {
 
     useEffect(() => {
 
-        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
 
         async function update() {
 
-            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
+            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
 
             if (props.isMemberStatus !== null) {
 
@@ -165,14 +165,14 @@ function useShare(props) {
 
                     if (!doc.exists) {
 
-                        console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
+                        // console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
 
                         setState({ isShare: null });
 
                     } else {
 
-                        console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
-                        console.log('share: ', doc.data());
+                        // console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
+                        // console.log('share: ', doc.data());
 
                         setState({ isShare: doc.data() });
 
@@ -184,17 +184,17 @@ function useShare(props) {
 
             };
 
-            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
+            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
 
         };
 
         update();
 
-        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+        // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
 
     }, [props]);
 
-    console.timeEnd('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+    // console.timeEnd('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
 
     return updateShare;
 };
@@ -333,7 +333,7 @@ const MemberStatus = (props) => {
                                         let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
                                         this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
-                                        // console.log(this.pos);
+                                        // // console.log(this.pos);
                                         this.div.style.left = this.pos.x + 'px';
                                         this.div.style.top = this.pos.y + 'px';
                                     }
@@ -378,7 +378,7 @@ const MemberStatus = (props) => {
                                     place, mode) {
                                     var me = this;
 
-                                    console.log(place);
+                                    // console.log(place);
 
                                     if (!place) {
                                         alert('Please select an option from the dropdown list.');
@@ -407,11 +407,11 @@ const MemberStatus = (props) => {
                                         function (response, status) {
                                             if (status === 'OK') {
                                                 me.directionsRenderer.setDirections(response);
-                                                // console.log(response);
+                                                // // console.log(response);
 
                                             } else {
                                                 alert('Directions request failed due to ' + status);
-                                                // console.log(response, status);
+                                                // // console.log(response, status);
 
                                             }
                                         });

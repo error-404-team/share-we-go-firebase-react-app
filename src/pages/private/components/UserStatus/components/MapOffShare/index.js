@@ -98,7 +98,7 @@ const MapOffShare = (props) => {
               let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
               this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
-              // console.log(this.pos);
+              // // console.log(this.pos);
               this.div.style.left = this.pos.x + 'px';
               this.div.style.top = this.pos.y + 'px';
             };

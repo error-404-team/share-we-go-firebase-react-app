@@ -9,7 +9,7 @@ function useStatus(props) {
   useEffect(() => {
     async function fetchData() {
       if (props.isUsersPrivate !== null) {
-        // console.log(props.isUsersPrivate.uid);
+        // // console.log(props.isUsersPrivate.uid);
         let path = `status/${props.isUsersPrivate.uid}`
 
         const unsubscribe = await props.db.database().ref(`${path}`).once("value").then(function (snapshot) {

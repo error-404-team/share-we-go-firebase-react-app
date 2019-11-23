@@ -61,7 +61,7 @@ function AlertCheck(props) {
 
   function updateChat() {
 
-    console.time('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ อ่าน ไป');
+    // console.time('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ อ่าน ไป');
 
     props.db.database().ref(`share/${props.isAuth.uid}/chat`).once("value").then(function (chat_value) {
 
@@ -71,7 +71,7 @@ function AlertCheck(props) {
 
       } else {
 
-        console.time('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ เพิ่ม ไป');
+        // console.time('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ เพิ่ม ไป');
 
         props.db.database().ref(`share/${props.isAuth.uid}/chat`).push({
           uid: props.isAuth.uid,
@@ -100,7 +100,7 @@ function AlertCheck(props) {
 
     });
 
-    console.timeEnd('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ อ่าน ไป');
+    // console.timeEnd('ฉันคาดว่า 🤔 share => uid => chat ใช้เวลาในการ อ่าน ไป');
 
   };
 

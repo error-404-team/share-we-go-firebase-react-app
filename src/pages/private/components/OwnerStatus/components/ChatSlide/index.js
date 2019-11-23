@@ -56,11 +56,11 @@ function ChatSlide(props) {
 
     useEffect(() => {
 
-        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
 
         async function update() {
 
-            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
+            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
 
             await props.db.database().ref(`share/${props.uid}/chat`).once("value").then(function (chat_value) {
 
@@ -74,13 +74,13 @@ function ChatSlide(props) {
 
             });
 
-            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
+            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
 
         };
 
         update();
 
-        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
+        // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
 
     })
 

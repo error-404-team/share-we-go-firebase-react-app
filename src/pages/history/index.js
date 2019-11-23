@@ -16,7 +16,7 @@ import WcIcon from '@material-ui/icons/Wc';
 
 function useHistory(props) {
 
-    console.time('ฉันคาดว่า 🤔 function useHistory ใช้เวลาในการทำงานไป');
+    // console.time('ฉันคาดว่า 🤔 function useHistory ใช้เวลาในการทำงานไป');
 
     const [updateHistory, setState] = useState({
         isHistory: null
@@ -24,13 +24,13 @@ function useHistory(props) {
 
     useEffect(() => {
 
-        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory ใช้เวลาในการทำงานไป');
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory ใช้เวลาในการทำงานไป');
 
         async function update() {
 
             if (props.isAuth !== null) {
 
-                console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory => function update ใช้เวลาในการทำงานไป');
+                // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory => function update ใช้เวลาในการทำงานไป');
 
                 const unsubscribe = await props.db.firestore().collection('history').doc(props.isAuth.uid).collection('store').get().then(function (querySnapshot) {
 
@@ -42,7 +42,7 @@ function useHistory(props) {
 
                 });
 
-                console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory => function update ใช้เวลาในการทำงานไป');
+                // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory => function update ใช้เวลาในการทำงานไป');
 
                 return unsubscribe;
 
@@ -52,11 +52,11 @@ function useHistory(props) {
 
         update();
 
-        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory ใช้เวลาในการทำงานไป');
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory ใช้เวลาในการทำงานไป');
 
     }, [props]);
 
-    console.timeEnd('ฉันคาดว่า 🤔 function useHistory ใช้เวลาในการทำงานไป');
+    // console.timeEnd('ฉันคาดว่า 🤔 function useHistory ใช้เวลาในการทำงานไป');
 
     return updateHistory;
 }

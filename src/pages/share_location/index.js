@@ -89,7 +89,7 @@ function ShareLocation(props) {
 
     const steps = getSteps();
 
-    // console.log(Router);
+    // // console.log(Router);
 
     function totalSteps() {
 
@@ -175,7 +175,7 @@ function ShareLocation(props) {
 
         setCompleted(newCompleted);
 
-        console.log(activeStep);
+        // console.log(activeStep);
 
         if (completedSteps() === totalSteps() - 1) {
 
