@@ -5,28 +5,30 @@ import App from './App';
 import GeoError from './GeoError';
 // import NotSupported from './NotSupported';
 import * as serviceWorker from './serviceWorker';
-import * as firebase from 'firebase/app';
+// import * as admin from "firebase-admin";
+import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
+import 'firebase/firestore'
 
 // Your web app's Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyCe5WE0chj6pwyUd82JfvNKkiv9YW5U45k",
-    authDomain: "share-we-go-app.firebaseapp.com",
-    databaseURL: "https://share-we-go-app.firebaseio.com",
-    projectId: "share-we-go-app",
-    storageBucket: "share-we-go-app.appspot.com",
-    messagingSenderId: "323869691396",
-    appId: "1:323869691396:web:a0471adc525dc674b12f51",
-    measurementId: "G-RP811B1PKK"
-};
+const firebaseConfig = {
+    apiKey: "AIzaSyB1F6O_Obk0xkqbN_0_tLOlz9L2US0yWQo",
+    authDomain: "swg-dev-test.firebaseapp.com",
+    databaseURL: "https://swg-dev-test.firebaseio.com",
+    projectId: "swg-dev-test",
+    storageBucket: "swg-dev-test.appspot.com",
+    messagingSenderId: "712121508420",
+    appId: "1:712121508420:web:04966f8bd2c813046a9211",
+    measurementId: "G-7PVYKPJW62"
+  };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 window.addEventListener('appinstalled', (evt) => {
     evt.preventDefault();
     console.log('a2hs installed');
-  });
+});
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -36,7 +38,7 @@ if (navigator.geolocation) {
 }
 
 function showPosition(position) {
-
+   
     return ReactDOM.render(<App db={firebase} />, document.getElementById('root'));
 }
 

@@ -4,6 +4,7 @@ import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 
 function ContaiterBackGround(props) {
+
     return (
         <CssBaseline>
             <Container style={{
@@ -21,12 +22,13 @@ function ContaiterBackGround(props) {
                 </div>
             </Container>
         </CssBaseline>
-    )
-}
+    );
+
+};
 
 ContaiterBackGround.propTypes = {
     backgroundColor: PropTypes.string,
     height: PropTypes.string
-}
+};
 
 export default ContaiterBackGround;

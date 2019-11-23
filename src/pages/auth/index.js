@@ -5,9 +5,7 @@ import logo from './img/logo.png';
 
 function SignInScreen(props) {
 
-  
   const uiConfig = {
-   
     signInFlow: 'popup',
     signInSuccessUrl: '/',
     signInOptions: [
@@ -48,6 +46,6 @@ function SignInScreen(props) {
     </ContaiterBackGround>
   );
 
-}
+};
 
-export default SignInScreen
+export default SignInScreen;

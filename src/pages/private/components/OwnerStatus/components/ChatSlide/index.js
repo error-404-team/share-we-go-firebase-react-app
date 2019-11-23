@@ -6,11 +6,11 @@ import Drawer from '@material-ui/core/Drawer';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Loading } from './components/Loading';
-import ChatBar from '../ChatBar';
+import ChatBar from '../../../ChatBar';
 import InputCaht from '../InputChat';
-import { dateTime } from '../../../../model/dateTime';
+// import { dateTime } from '../../../../model/dateTime';
 import './styles/chat-box.css';
-import { useProfile, useShare } from '../../../../controllers';
+// import { useProfile, useShare } from '../../../../controllers';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
@@ -26,45 +26,62 @@ function ChatSlide(props) {
 
     const theme = useTheme();
     const classes = useStyles();
-    const [chat, setChat] = useState(null)
-    const [msg, setMsg] = React.useState(null)
-    const { isProfile } = useProfile(props)
-    const { isShare } = useShare(props)
+    const [isChat, setChat] = useState(null)
+    const [isMsg, setMsg] = React.useState(null)
+    // const { isProfile } = useProfile(props)
+    // const { isShare } = useShare(props)
 
     const sendMsg = () => {
 
-        let path = `share/${props.isStatus.member.share_id}/chat`
+        props.db.database().ref(`share/${props.uid}/chat`).push({
+            uid: props.uid,
+            share_id: props.uid,
+            photoURL: props.isProfile.photoURL,
+            msg: `${isMsg}`,
+            date: Date.now()
+        });
 
-        props.db.database().ref(`${path}`).push({
-            uid: props.isStatus.share.uid,
-            share_id: props.isStatus.share.id,
-            profile: isProfile,
-            msg: `${msg}`,
-            date: dateTime
-        })
-        setMsg('')
+        setMsg('');
+
     }
 
     const updateMsg = (e) => {
+
         setMsg(e.target.value);
 
-        if (isShare.chat !== null) {
-            setChat(isShare.chat)
+        if (isChat !== null) {
+            setChat(isChat)
         }
     }
 
     useEffect(() => {
-        async function fetchData() {
-            let path_chat = `share/${props.isStatus.member.share_id}/chat`
 
-            await props.db.database().ref(`${path_chat}`).once("value").then(function (chat_value) {
-                let chatData = (chat_value.val())
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
+
+        async function update() {
+
+            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
+
+            await props.db.database().ref(`share/${props.uid}/chat`).once("value").then(function (chat_value) {
+
+                let chatData = (chat_value.val());
+
                 if (chatData !== null) {
-                    setChat(chatData)
-                }
-            })
-        }
-        fetchData();
+
+                    setChat(chatData);
+
+                };
+
+            });
+
+            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide => function update ใช้เวลาในการทำงานไป');
+
+        };
+
+        update();
+
+        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function ChatSlide ใช้เวลาในการทำงานไป');
+
     })
 
     return (
@@ -78,7 +95,7 @@ function ChatSlide(props) {
                     paper: classes.drawerPaper,
                 }}
             >
-                {chat !== null
+                {isChat !== null
                     ? (<Fragment>
                         <ChatBar>
                             <IconButton onClick={props.onClose} style={{ position: "absolute", left: 0 }}>
@@ -94,27 +111,27 @@ function ChatSlide(props) {
 
                         <div className="box">
                             <div className="chat-box">
-                                {chat !== null
+                                {isChat !== null
                                     ? (<Fragment>
-                                        {Object.keys(chat).map((key) => (
+                                        {Object.keys(isChat).map((key) => (
                                             <Fragment>
-                                                {props.isUsersPrivate.uid === chat[key].uid
+                                                {props.uid === isChat[key].uid
                                                     ? (<Fragment>
                                                         <div class="container darker">
-                                                            <img src={`${chat[key].profile.photoURL}`} alt="Avatar" class="right" />
+                                                            <img src={`${isChat[key].photoURL}`} alt="Avatar" class="right" />
                                                             <h4 style={{
                                                                 marginTop: 0
-                                                            }} class="left">{chat[key].profile.displayName}</h4>
-                                                            <p class="left">{chat[key].msg}</p>
+                                                            }} class="left">{isChat[key].displayName}</h4>
+                                                            <p class="left">{isChat[key].msg}</p>
                                                         </div>
                                                     </Fragment>)
                                                     : (<Fragment>
                                                         <div class="container">
-                                                            <img src={`${chat[key].profile.photoURL}`} alt="Avatar" class="left" />
+                                                            <img src={`${isChat[key].photoURL}`} alt="Avatar" class="left" />
                                                             <h4 tyle={{
                                                                 marginTop: 0
-                                                            }}class="right">{chat[key].profile.displayName}</h4>
-                                                            <p class="right">{chat[key].msg}</p>
+                                                            }} class="right">{isChat[key].displayName}</h4>
+                                                            <p class="right">{isChat[key].msg}</p>
                                                         </div>
                                                     </Fragment>)
                                                 }
@@ -131,7 +148,7 @@ function ChatSlide(props) {
                             width: '-webkit-fill-available',
                             boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)',
                         }}>
-                            <InputCaht value={msg} onChange={updateMsg} onClick={sendMsg} />
+                            <InputCaht value={isMsg} onChange={updateMsg} onClick={sendMsg} />
                         </div>
                     </Fragment>)
                     : (<Loading onClose={props.onClose} />)
@@ -145,10 +162,8 @@ ChatSlide.protoType = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     uid: PropTypes.string,
-    isShare: PropTypes.object,
-    isStatus: PropTypes.object,
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object
+    isProfile: PropTypes.object,
 }
 
 export default ChatSlide;

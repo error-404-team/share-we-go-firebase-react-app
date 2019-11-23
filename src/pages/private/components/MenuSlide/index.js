@@ -46,7 +46,7 @@ function MenuSlide(props) {
 
     const theme = useTheme();
     const classes = useStyles();
-    const { isProfile } = useProfile(props)
+    // const { isProfile } = useProfile(props)
 
     function Logout() {
         props.db.auth().signOut().then(function () {
@@ -66,7 +66,7 @@ function MenuSlide(props) {
                     paper: classes.drawerPaper,
                 }}
             >
-                {isProfile !== null
+                {props.isProfile !== null
                     ? (<Fragment>
                         <div className={classes.drawerHeader}>
                             <IconButton onClick={props.onClose} style={{ position: "absolute" }}>
@@ -79,7 +79,7 @@ function MenuSlide(props) {
                                 <Grid container justify="center" alignItems="center">
                                     <Avatar
                                         alt="Remy Sharp"
-                                        src={isProfile.photoURL}
+                                        src={props.isProfile.photoURL}
                                         className={classes.bigAvatar}
                                         style={{
                                             border: '4px solid #fff',
@@ -88,14 +88,14 @@ function MenuSlide(props) {
                                     />
                                 </Grid>
                                 <center style={{ marginBottom: '10px', fontSize: 'large' }}>
-                                    <span>{isProfile !== null ? isProfile.displayName : null}</span>
+                                    <span>{props.isProfile !== null ? props.isProfile.displayName : null}</span>
                                 </center>
                             </div>
                         </div>
                         <List style={{
                             marginTop: '15px'
                         }}>
-                            <Link to={`/profile/${props.isUsersPrivate.uid}`} style={{
+                            <Link to={`/profile/${props.uid}`} style={{
                                 color: 'dimgray',
                                 textDecoration: 'blink'
                             }}>
@@ -148,9 +148,9 @@ function MenuSlide(props) {
 MenuSlide.protoType = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
-    isUsersPrivate: PropTypes.object,
+    isProfile: PropTypes.object,
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object
+    uid: PropTypes.string
 }
 
 export default MenuSlide;

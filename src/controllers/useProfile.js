@@ -27,10 +27,10 @@ const useProfile = (props) => {
             let privateData = JSON.stringify(props.isUsersPrivate.providerData[0])
 
             props.db.database().ref(`${pathProfile}`).update(JSON.parse(privateData))
-            props.db.database().ref(`${pathProfileLog}`).push({
-              date: dateTime,
-              profile: JSON.parse(privateData)
-            })
+            // props.db.database().ref(`${pathProfileLog}`).push({
+            //   date: dateTime,
+            //   profile: JSON.parse(privateData)
+            // })
           }
         })
         return unsubscribe;

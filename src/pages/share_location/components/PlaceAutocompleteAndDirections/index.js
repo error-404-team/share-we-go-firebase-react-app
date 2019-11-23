@@ -1,8 +1,9 @@
 import React from 'react';
 import ConnectApiMaps, { Map } from 'maps-google-react';
 import PropTypes from 'prop-types';
-import { dateTime } from '../../../../model/dateTime';
+// import { dateTime } from '../../../../model/dateTime';
 import './styles/place-autocomplete-and-directions.css';
+import Loading from '../../../loading';
 
 
 function PlaceAutocompleteAndDirections(props) {
@@ -21,7 +22,7 @@ function PlaceAutocompleteAndDirections(props) {
         this.map = map;
         this.originPlaceId = null;
         this.destinationPlaceId = null;
-        this.travelMode = 'WALKING';
+        this.travelMode = 'DRIVING';
         this.directionsService = new window.google.maps.DirectionsService;
         this.directionsRenderer = new window.google.maps.DirectionsRenderer;
         this.directionsRenderer.setMap(map);
@@ -73,26 +74,39 @@ function PlaceAutocompleteAndDirections(props) {
         autocomplete.bindTo('bounds', this.map);
 
         autocomplete.addListener('place_changed', function () {
+
             var place = autocomplete.getPlace();
+
             console.log(place);
 
             if (!place.place_id) {
+
                 alert('Please select an option from the dropdown list.');
+
                 return;
-            }
+            };
+
             if (mode === 'ORIG') {
+
                 me.originPlaceId = place.place_id;
+
             } else {
+
                 me.destinationPlaceId = place.place_id;
-            }
+
+            };
+
             me.route();
+
         });
     };
 
     AutocompleteDirectionsHandler.prototype.route = function () {
+
         if (!this.originPlaceId || !this.destinationPlaceId) {
             return;
-        }
+        };
+
         var me = this;
 
         this.directionsService.route(
@@ -102,44 +116,59 @@ function PlaceAutocompleteAndDirections(props) {
                 travelMode: this.travelMode
             },
             function (response, status) {
+
                 if (status === 'OK') {
+
                     me.directionsRenderer.setDirections(response);
+
                     console.log(response);
                     // socket.emit('origin_destination_route', response)
-                    const res = JSON.stringify(response)
+                    const res = JSON.stringify(response);
 
-                    let path = `share/${props.isUsersPrivate.uid}/location`;
-                    let _log = `share/${props.isUsersPrivate.uid}/location/_log`;
+                    props.db.firestore().collection(`share`).doc(props.isAuth.uid).set({
+                        location: {
+                            request: response.request,
+                            distance: response.routes[0].legs[0].distance,
+                            duration: response.routes[0].legs[0].duration,
+                            end_address: response.routes[0].legs[0].end_address,
+                            end_location: {
+                                lat: response.routes[0].legs[0].end_location.lat(),
+                                lng: response.routes[0].legs[0].end_location.lng(),
+                            },
+                            start_address: response.routes[0].legs[0].start_address,
+                            start_location: {
+                                lat: response.routes[0].legs[0].start_location.lat(),
+                                lng: response.routes[0].legs[0].start_location.lng(),
+                            },
+                        }
+                    }).then(() => {
 
-                    props.db.database().ref(`${path}`).update(JSON.parse(res))
-                    props.db.database().ref(`${_log}`).push({
-                        location: JSON.parse(res),
-                        date: dateTime
-                    })
+                        console.log('สร้าง locationc ขึ้นมาใหม่ 😁');
 
-                    // firebase.auth().onAuthStateChanged((user) => {
-                    //     post.share.location(user.uid, response, dateTime)
-                    // })
+                    });
 
                     console.log(response);
 
                 } else {
-                    //     alert('Directions request failed due to ' + status);
-                    // console.log(response, status);
 
-                }
+                };
+
             });
 
     };
 
 
     function originRouteUpdate(e) {
+
         setOriginRoute(e.target.value);
-    }
+
+    };
 
     function destinationRouteUpdate(e) {
+
         setDestinationRoute(e.target.value);
-    }
+
+    };
 
     // function onFocusOrigin() {
     //     originSearchInput.value = ''
@@ -151,7 +180,7 @@ function PlaceAutocompleteAndDirections(props) {
 
     return (
         <React.Fragment>
-            {props.isUsersPrivate !== null
+            {props.isAuth !== null
                 ? (<Map google={props.google}
                     setStyle={{
                         marginTop: '100px',
@@ -179,8 +208,6 @@ function PlaceAutocompleteAndDirections(props) {
                         //    setGoogle(google);
                         //    setMap(map)
                         console.log();
-
-
 
                         new AutocompleteDirectionsHandler(google, map);
                     }}
@@ -235,18 +262,18 @@ function PlaceAutocompleteAndDirections(props) {
                     </div>
                 </Map>
                 )
-                : (<React.Fragment>Loading</React.Fragment>)}
+                : (<React.Fragment><Loading /></React.Fragment>)}
         </React.Fragment>
-    )
+    );
 
-}
+};
 
 PlaceAutocompleteAndDirections.propTypes = {
-    isUsersPrivate: PropTypes.object,
+    isAuth: PropTypes.object,
     db: PropTypes.object
-}
+};
 
 export default ConnectApiMaps({
     apiKey: "AIzaSyBy2VY1e11qs-60Ul6aYT5klWYRI1K3RB0",
     libraries: ['places', 'geometry'],
-})(PlaceAutocompleteAndDirections)
+})(PlaceAutocompleteAndDirections);

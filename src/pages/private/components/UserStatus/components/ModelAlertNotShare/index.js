@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
 // import { post, d } from '../../../../../../RESTful_API'
 // import { dateTime } from '../../../../../../module';
-import { useProfile } from '../../../../../../StoreData';
+// import { useProfile } from '../../../../../../StoreData';
 
 const useStyles = makeStyles(theme => ({
     modal: {
@@ -26,32 +26,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const ModelJoinShare = (props) => {
+const ModelAlertNotShare = (props) => {
 
     const classes = useStyles();
-    const { isProfile } = useProfile(props);
 
     const joinShare = () => {
-
-        console.time('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
-
-        props.db.database().ref(`status/${props.isUsersPrivate.uid}/member`).update({
-            uid: `${props.isUsersPrivate.uid}`,
-            share_id: `${props.share_id}`,
-            value: true
-        });
-
-        console.timeEnd('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
-        console.time('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
-
-        props.db.database().ref(`share/${props.isUsersPrivate.uid}/member`).update({
-            uid: `${props.isUsersPrivate.uid}`,
-            share_id: `${props.share_id}`,
-            profile: isProfile
-
-        });
-
-        console.timeEnd('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
 
         props.history.push('/');
 
@@ -88,9 +67,9 @@ const ModelJoinShare = (props) => {
 
 };
 
-ModelJoinShare.propTypes = {
+ModelAlertNotShare.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func
 };
 
-export default withRouter(ModelJoinShare);
+export default withRouter(ModelAlertNotShare);

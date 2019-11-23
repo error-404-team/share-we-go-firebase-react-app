@@ -2,12 +2,12 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import PropsTypes from 'prop-types';
-import { ThemeProvider,withStyles   } from '@material-ui/styles';
+import { withStyles   } from '@material-ui/styles';
 
 class HistoryBar extends React.Component {
     render() {
     
-        const {classes} =this.props
+        // const {classes} =this.props
         return (
             <div style={{
                 flexGrow: 1,
@@ -24,22 +24,22 @@ class HistoryBar extends React.Component {
                         </Toolbar>
                     </AppBar>
             </div>
-        )
-    }
-}
+        );
+
+    };
+
+};
 
 HistoryBar.propsTypes = {
     google: PropsTypes.object,
     map: PropsTypes.object
-}
-
+};
 
 const styles = {
     gutters:{
         paddingLeft:5,
         paddingRight:5
     }
-}
-
+};
 
 export default withStyles(styles)(HistoryBar);

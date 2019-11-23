@@ -28,10 +28,10 @@ const useLocation = (props) => {
           }
 
           props.db.database().ref(`${path}`).update(locationData)
-          props.db.database().ref(`${_log}`).push({
-            date: dateTime,
-            location: locationData
-          })
+          // props.db.database().ref(`${_log}`).push({
+          //   date: dateTime,
+          //   location: locationData
+          // })
 
           setState({ isLocation: locationData })
         })
