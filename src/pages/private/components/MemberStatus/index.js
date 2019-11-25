@@ -13,6 +13,7 @@ import MemberTypeIconStatus from '../MemberModalTypeIconStatus';
 import KeyDataTaxiCar from './components/KeyDataTaxiCar';
 // import SearchBar from '../SearchBar';
 // import SearchMap from '../SearchMap';
+import { withRouter } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuSlide from '../MenuSlide';
 import ModelExitShare from './components/ModelExitShare';
@@ -143,7 +144,7 @@ function useProfile(props) {
 
 };
 
-function useShare(props) {
+function useShare(ref) {
 
     // console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
 
@@ -154,45 +155,27 @@ function useShare(props) {
     useEffect(() => {
 
         // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+        return ref.then(function (doc) {
 
-        async function update() {
+            if (!doc.exists) {
 
-            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
+                // console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
 
-            if (props.isMemberStatus !== null) {
+                setState({ isShare: null });
 
-                const unsubscribe = await props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id).get().then(function (doc) {
+            } else {
 
-                    if (!doc.exists) {
+                // console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
+                // console.log('share: ', doc.data());
 
-                        // console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
-
-                        setState({ isShare: null });
-
-                    } else {
-
-                        // console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
-                        // console.log('share: ', doc.data());
-
-                        setState({ isShare: doc.data() });
-
-                    };
-
-                });
-
-                return unsubscribe;
+                setState({ isShare: doc.data() });
 
             };
 
-            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
-
-        };
-
-        update();
-
+        });
         // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
 
-    }, [props]);
+    }, []);
 
     // console.timeEnd('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
 
@@ -207,13 +190,16 @@ const MemberStatus = (props) => {
     const [openModelExitShare, setOpenModelExitShare] = useState(false)
     const [alertShare, setAlertShare] = useState({})
     const [isMap, setMap] = useState(null);
+    const ref = props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id).get()
     const { isAlertStatus } = useAlertStatus(props);
     const { isProfile } = useProfile(props);
-    const { isShare } = useShare(props);
+    const { isShare } = useShare(ref);
 
 
     const onChatSlide = () => {
-        setOpenChatSlide(true)
+        props.history.push(`chat/${props.isMemberStatus.share_id}`);
+        window.location.reload();
+        // setOpenChatSlide(true)
     }
 
     const offChatSlide = () => {
@@ -575,4 +561,4 @@ MemberStatus.propTypes = {
 export default ConnectApiMaps({
     apiKey: "AIzaSyBy2VY1e11qs-60Ul6aYT5klWYRI1K3RB0",
     libraries: ['places', 'geometry'],
-})(withStyles(styles)(MemberStatus))
+})(withStyles(styles)(withRouter(MemberStatus)))

@@ -117,9 +117,9 @@ function useProfile(props) {
                         // console.time('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
 
                         props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
-                        
+
                         // console.timeEnd('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
-                        
+
                         setState({ isProfile: props.isAuth.providerData[0] });
 
                     } else {
@@ -142,7 +142,7 @@ function useProfile(props) {
         update();
 
         // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
-        
+
     }, [props]);
 
     // console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
@@ -151,7 +151,7 @@ function useProfile(props) {
 
 };
 
-function useShare(props) {
+function useShare(ref) {
 
     // console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
 
@@ -163,44 +163,28 @@ function useShare(props) {
 
         // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
 
-        async function update() {
+        return ref.then(function (doc) {
 
-            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
+            if (!doc.exists) {
 
-            if (props.isAuth !== null) {
+                console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
 
-                const unsubscribe = await props.db.firestore().collection(`share`).doc(props.isAuth.uid).get().then(function (doc) {
+                setState({ isShare: null });
 
-                    if (!doc.exists) {
+            } else {
 
-                        // console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
+                console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
+                console.log('share: ', doc.data());
 
-                        setState({ isShare: null });
-
-                    } else {
-
-                        // console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
-                        // console.log('share: ', doc.data());
-
-                        setState({ isShare: doc.data() });
-
-                    };
-
-                });
-
-                return unsubscribe;
+                setState({ isShare: doc.data() });
 
             };
 
-            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
-
-        };
-
-        update();
+        });
 
         // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
 
-    }, [props]);
+    }, []);
 
     // console.timeEnd('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
 
@@ -218,13 +202,15 @@ const OwnerStatus = (props) => {
     // const [isAlertStatus, setAlertStatus] = useState(null);
     // const [isProfile, setProfile] = useState(null);
     // const [isShare, setShare] = useState(null);
+    const ref = props.db.firestore().collection(`share`).doc(props.isAuth.uid).get()
     const { isAlertStatus } = useAlertStatus(props);
     const { isProfile } = useProfile(props);
-    const { isShare } = useShare(props);
+    const { isShare } = useShare(ref);
 
     const onChatSlide = () => {
-
-        setOpenChatSlide(true)
+        props.history.push(`chat/${props.isAuth.uid}`);
+        window.location.reload();
+        // setOpenChatSlide(true)
     }
 
     const offChatSlide = () => {

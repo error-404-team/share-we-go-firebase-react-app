@@ -11,6 +11,7 @@ import ShareLocation from './pages/share_location';
 import History from './pages/history';
 import Report from './pages/report';
 import InstallApp from './InstallApp';
+import Chat from './pages/chat';
 // import { useAuth, useLocation, useUsersPrivate } from './controllers'
 
 const useAuth = (props) => {
@@ -111,7 +112,7 @@ function App(props) {
 
   const insatallApp = () => {
 
-    
+
     setInstallLoading(true)
 
     deferredPrompt.prompt();
@@ -119,7 +120,8 @@ function App(props) {
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
         // console.log('User accepted the A2HS prompt');
-      } else {;
+      } else {
+        ;
         // console.log('User dismissed the A2HS prompt');
       }
       deferredPrompt = null;
@@ -157,6 +159,9 @@ function App(props) {
                     <Route path="/report/:id" >
                       <Report db={props.db} isAuth={isAuth} />
                     </Route>
+                    <Route path="/chat/:id" >
+                      <Chat db={props.db} isAuth={isAuth} />
+                    </Route>
                   </React.Fragment>
                   )
                   : (<React.Fragment>
@@ -172,7 +177,7 @@ function App(props) {
           </Router>
         </React.Fragment>)
         : (<React.Fragment>
-          <InstallApp loading={installLoading} onClick={insatallApp}  />
+          <InstallApp loading={installLoading} onClick={insatallApp} />
         </React.Fragment>)
       }
     </React.Fragment>
