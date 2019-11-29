@@ -107,25 +107,16 @@ function useShare(props) {
                         // doc.data() is never undefined for query doc snapshots
                         // console.log(doc.id, " => ", doc.data());
 
-                        if (doc.data().status.value === true) {
-
+                        if (doc.data().status !== undefined) {
+                            setState({ isShare: null });
+                            console.log(doc.data().status);
+                            
+                        } else {
                             setState({ isShare: { [doc.id]: doc.data() } });
+                            console.log(doc.data().status);
+
                         }
                     });
-
-                    // if (!doc.exists) {
-
-                    //     // console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
-
-                    //     setState({ isShare: null });
-
-                    // } else {
-
-                    //     // console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
-
-                    //     setState({ isShare: doc.data() });
-
-                    // }
                 });
 
                 return unsubscribe;

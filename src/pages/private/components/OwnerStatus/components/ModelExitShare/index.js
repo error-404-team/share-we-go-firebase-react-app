@@ -14,13 +14,14 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    paper: {
+      },
+      paper: {
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #ffc800',
+        borderRadius: '10px',
+        border: '#faebd700',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-    },
+      },
 }))
 
 const ModelExitShare = (props) => {
@@ -47,9 +48,9 @@ const ModelExitShare = (props) => {
             member: null
         })
 
-        // setTimeout(() => {
-        //     props.history.goBack()
-        // }, 3500)
+        setTimeout(() => {
+            props.history.push('/')
+        }, 15000)
 
     }
     return (

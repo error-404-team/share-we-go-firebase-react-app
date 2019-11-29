@@ -6,6 +6,7 @@ import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import AlertCheck from './components/AlertCheck';
 import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
+import { Loading } from './components/Loading';
 
 function useProfile(props) {
 
@@ -266,7 +267,7 @@ function Report(props) {
                     </div>
                     <AlertCheck open={open} onClose={handleClose} db={props.db} isAuth={props.isAuth} />
                 </React.Fragment>)
-                : (<React.Fragment>Loading</React.Fragment>)
+                : (<React.Fragment><Loading/></React.Fragment>)
             }
         </React.Fragment>
     )

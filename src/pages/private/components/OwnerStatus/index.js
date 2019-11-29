@@ -228,7 +228,8 @@ const OwnerStatus = (props) => {
     }
 
     const startShareGroup = () => {
-        props.history.push(`doc_taxi/${props.isAuth.uid}`)
+        props.history.push(`doc_taxi/${props.isAuth.uid}`);
+        window.location.reload();
     }
 
     const exitShareGroup = () => {
