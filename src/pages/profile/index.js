@@ -28,13 +28,13 @@ import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Phone';
 import WcIcon from '@material-ui/icons/Wc';
 import FaceIcon from '@material-ui/icons/Face';
-// import { dateTime } from '../../model/dateTime';
-// import { useProfile } from '../../controllers';
+
+import { Loading } from './components/Loading';
 
 function useProfile(props) {
 
     // console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
-    
+
     const [updateProfile, setState] = useState({
         isProfile: null
     })
@@ -50,25 +50,25 @@ function useProfile(props) {
             if (props.isAuth !== null) {
 
                 const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(function (doc) {
-                    
+
                     if (doc.exists) {
-                        
+
                         // console.log("Document data:", doc.data());
-                        
+
                         setState({ isProfile: doc.data().profile })
-                   
+
                     } else {
                         // doc.data() will be undefined in this case
                         // console.log("No such document!");
-                    
+
                     }
 
                 }).catch(function (error) {
-                    
+
                     // console.log("Error getting document:", error);
-                
+
                 });
-                
+
                 return unsubscribe;
             }
 
@@ -88,7 +88,7 @@ function useProfile(props) {
 };
 
 function TextMaskCustom(props) {
-    
+
     const { inputRef, ...other } = props;
 
     return (
@@ -153,7 +153,7 @@ function Profile(props) {
                     if (photoURL === null) {
 
                         setPhotoURL('https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwiTltSo4MDkAhURUI8KHffBDJUQjRx6BAgBEAQ&url=https%3A%2F%2Fwww.onlinewebfonts.com%2Ficon%2F227642&psig=AOvVaw0nPTqj6ZudRIcCKQWYbHEk&ust=1568015831780316');
-                   
+
                     };
                 };
 
@@ -166,7 +166,7 @@ function Profile(props) {
                     if (displayName === null) {
 
                         setDisplayName('ไม่ระบุ');
-                   
+
                     };
 
                 };
@@ -176,11 +176,11 @@ function Profile(props) {
                     setEmail(isProfile.email);
 
                 } else {
-                   
+
                     if (email === null) {
-                        
+
                         setEmail('ไม่ระบุ');
-                    
+
                     };
 
                 };
@@ -190,39 +190,39 @@ function Profile(props) {
                     setPhoneNumber(isProfile.phoneNumber);
 
                 } else {
-                    
+
                     if (phoneNumber === null) {
-                        
+
                         setPhoneNumber('ไม่ระบุ');
-                    
+
                     };
-               
+
                 };
 
                 if (isProfile.sex !== undefined) {
 
                     setSex(isProfile.sex);
-               
+
                 } else {
-                    
+
                     if (sex === null) {
-                       
+
                         setSex('ไม่ระบุ');
-                   
+
                     };
-                
+
                 };
 
                 if (isProfile.age !== undefined) {
 
                     setAge(isProfile.age);
-               
+
                 } else {
-                   
+
                     if (age === null) {
-                       
+
                         setAge('ไม่ระบุ');
-                    
+
                     };
                 };
 
@@ -453,8 +453,8 @@ function Profile(props) {
                     }
                 </React.Fragment>)
                 : (<React.Fragment>
-                    ไม่มีโปรไฟล์ที่คนต้องการ
-                    </React.Fragment>)
+                    <Loading />
+                </React.Fragment>)
             }
         </React.Fragment>
     );

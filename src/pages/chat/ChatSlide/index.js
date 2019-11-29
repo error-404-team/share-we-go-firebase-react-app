@@ -9,9 +9,7 @@ import { Loading } from './components/Loading';
 import ChatBar from '../ChatBar';
 import InputCaht from '../InputChat';
 import { withRouter } from 'react-router-dom';
-// import { dateTime } from '../../../../model/dateTime';
 import './styles/chat-box.css';
-// import { useProfile, useShare } from '../../../../controllers';
 
 const useStyles = makeStyles(theme => ({
     drawer: {

@@ -8,9 +8,6 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-// import { post, d } from '../../../../../../RESTful_API'
-// import { dateTime } from '../../../../../../module';
-// import { useProfile } from '../../../../../../StoreData';
 
 const useStyles = makeStyles(theme => ({
     modal: {

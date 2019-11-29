@@ -8,7 +8,6 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-// import { dateTime } from '../../../../../../model/dateTime';
 
 const useStyles = makeStyles(theme => ({
     modal: {

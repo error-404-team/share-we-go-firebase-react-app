@@ -14,7 +14,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-import '../../styles/loading-page.css'
+import './styles/loading-page.css'
 
 export const Loading = (props) => {
     const theme = useTheme();

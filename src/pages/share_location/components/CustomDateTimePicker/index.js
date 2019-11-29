@@ -3,7 +3,6 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import DateFnsUtils from '@date-io/date-fns';
-// import { dateTime } from '../../../../model/dateTime';
 import {
   MuiPickersUtilsProvider,
   KeyboardDateTimePicker

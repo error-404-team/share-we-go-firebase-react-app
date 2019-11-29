@@ -4,10 +4,8 @@ import CommuteIcon from '@material-ui/icons/Commute';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import AlertCheck from './components/AlertCheck';
-// import { useProfile } from '../../controllers';
-import { dateTime } from '../../model/dateTime';
 import Button from '@material-ui/core/Button';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 function useProfile(props) {
 

@@ -1,5 +1,4 @@
 import React from 'react';
-// import CircularDeterminate from './components/CircularDeterminate';
 import PropTypes from 'prop-types';
 import ContaiterBackGround from './components/ContaiterBackGround';
 import logo from './img/logo.png';

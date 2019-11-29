@@ -12,7 +12,6 @@ import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import DocTaxiBar from './components/DocTaxiBar';
-// import { dateTime } from '../../model/dateTime';
 
 class DocTaxi extends React.Component {
 

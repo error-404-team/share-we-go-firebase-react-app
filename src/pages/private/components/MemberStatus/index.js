@@ -8,17 +8,14 @@ import Button from '@material-ui/core/Button';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { StyleBaseLine } from '../StyleBaseLine';
-import ChatSlide from './components/ChatSlide';
+// import ChatSlide from './components/ChatSlide';
 import MemberTypeIconStatus from '../MemberModalTypeIconStatus';
 import KeyDataTaxiCar from './components/KeyDataTaxiCar';
-// import SearchBar from '../SearchBar';
-// import SearchMap from '../SearchMap';
 import { withRouter } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuSlide from '../MenuSlide';
 import ModelExitShare from './components/ModelExitShare';
 import Loading from '../../../loading';
-// import { useShare, useProfile, useUsers } from '../../../../controllers';
 
 function useAlertStatus(props) {
 
@@ -505,13 +502,13 @@ const MemberStatus = (props) => {
                             />
 
                         </Map>
-                        <ChatSlide
+                        {/* <ChatSlide
                             open={openChatSlide}
                             onClose={offChatSlide}
                             isProfile={isProfile}
                             isMemberStatus={props.isMemberStatus}
                             db={props.db}
-                        />
+                        /> */}
                         <MenuSlide
                             open={openMenuSlide}
                             onClose={offMenuSlide}
