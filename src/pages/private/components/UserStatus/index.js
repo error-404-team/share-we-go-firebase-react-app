@@ -211,7 +211,7 @@ const UserStatus = (props) => {
 
         if (showMapShare !== true) {
 
-            setAlertMapNotShare(true);
+            setOpenVisibility(true);
 
         } else {
 
@@ -241,11 +241,11 @@ const UserStatus = (props) => {
 
     };
 
-    const offAlertMapNotShare = () => {
+    // const offAlertMapNotShare = () => {
 
-        setAlertMapNotShare(false);
+    //     setAlertMapNotShare(false);
 
-    };
+    // };
 
     const onModelJoinShare = (key) => {
 
@@ -330,10 +330,10 @@ const UserStatus = (props) => {
                     isProfile={isProfile}
                     uid={props.isAuth.uid}
                 />
-                <ModelAlertNotShare
+                {/* <ModelAlertNotShare
                     open={alertMapNotShare}
                     onClose={offAlertMapNotShare}
-                />
+                /> */}
             </StyleBaseLine>
         </Fragment>
     )
