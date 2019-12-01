@@ -78,7 +78,7 @@ const ModelExitShare = (props) => {
                         : (<React.Fragment>
                             <div className={classes.paper}>
                                 <Grid container justify="center" alignItems="center" >
-                                    <center>รอแป๊บ....</center>
+                                    <center>กรุณารอสักครู่....</center>
                                 </Grid>
                             </div></React.Fragment>)
 
