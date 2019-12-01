@@ -115,7 +115,12 @@ function App(props) {
 
     setInstallLoading(true)
 
+    // android app
     deferredPrompt.prompt();
+
+    // ios app
+    deferredPrompt.manual();
+
     // Wait for the user to respond to the prompt
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
