@@ -38,10 +38,20 @@ const ModelExitShare = (props) => {
         //     share_id: `${props.uid}`,
         //     value: false
         // }
-        
+
         setLoading(true)
 
-        props.db.firestore().collection('history').doc(props.uid).collection('store').add(props.isShare);
+        props.db.firestore().collection('history').doc(props.uid).collection('store').add(props.isShare).then(() => {
+            Object.keys(props.isShare.member).map(key => {
+                console.log(key);
+                
+                props.db.database().ref(`status/${key}/member`).update({
+                    uid: `${key}`,
+                    share_id: `${props.uid}`,
+                    value: false
+                });
+            })
+        });
         props.db.database().ref(`status/${props.uid}/alert`).update({
             uid: `${props.uid}`,
             share_id: `${props.uid}`,
@@ -61,6 +71,7 @@ const ModelExitShare = (props) => {
         });
 
 
+
         props.db.firestore().collection(`share`).doc(props.uid).update({
             member: null
         }).then(function () {
@@ -72,9 +83,9 @@ const ModelExitShare = (props) => {
 
     };
 
-    if(onload === true) {
+    if (onload === true) {
         window.location.reload()
-    } 
+    }
     return (
         <React.Fragment>
             <Modal
