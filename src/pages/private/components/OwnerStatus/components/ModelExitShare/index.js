@@ -14,45 +14,67 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-      },
-      paper: {
+    },
+    paper: {
         backgroundColor: theme.palette.background.paper,
         borderRadius: '10px',
         border: '#faebd700',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-      },
+    },
 }))
 
 const ModelExitShare = (props) => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false)
+    const [onload, setOnload] = useState(false)
 
-    const removeShare = () => {
 
+    function removeShare() {
+
+
+        // let updateStatus = {
+        //     uid: `${props.uid}`,
+        //     share_id: `${props.uid}`,
+        //     value: false
+        // }
+        
         setLoading(true)
 
-        let updateStatus = {
+        props.db.firestore().collection('history').doc(props.uid).collection('store').add(props.isShare);
+        props.db.database().ref(`status/${props.uid}/alert`).update({
             uid: `${props.uid}`,
             share_id: `${props.uid}`,
             value: false
-        }
-
-        props.db.firestore().collection('history').doc(props.uid).collection('store').add(props.isShare);
-        props.db.database().ref(`status/${props.uid}`).update({
-            owner: updateStatus,
-            member: updateStatus,
-            alert: updateStatus
         });
-        props.db.firestore().collection(`share`).doc(props.isShare.owner.id).update({
+
+        props.db.database().ref(`status/${props.uid}/member`).update({
+            uid: `${props.uid}`,
+            share_id: `${props.uid}`,
+            value: false
+        });
+
+        props.db.database().ref(`status/${props.uid}/owner`).update({
+            uid: `${props.uid}`,
+            share_id: `${props.uid}`,
+            value: false
+        });
+
+
+        props.db.firestore().collection(`share`).doc(props.uid).update({
             member: null
+        }).then(function () {
+
+            console.log('ok');
+            setOnload(true)
         })
 
-        setTimeout(() => {
-            props.history.push('/')
-        }, 15000)
 
-    }
+    };
+
+    if(onload === true) {
+        window.location.reload()
+    } 
     return (
         <React.Fragment>
             <Modal
