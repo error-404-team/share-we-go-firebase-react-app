@@ -268,7 +268,11 @@ const MapOnShare = (props) => {
             </Button>
           </Link>
         </Map>)
-        : (<React.Fragment>ไม่มีข้อมูลการเเชร์</React.Fragment>)
+        : (<React.Fragment>
+          {/* {props.visibility} */}
+          <h1>ไม่มีข้อมูลการเเชร์</h1>
+          <button onClick={props.onClick}>กลับสู่หน้าแรก</button>
+        </React.Fragment>)
       }
     </React.Fragment>
   )
@@ -281,7 +285,8 @@ MapOnShare.propTypes = {
   isAuth: PropTypes.object,
   openMenuSlide: PropTypes.func,
   isLocation: PropTypes.object,
-  db: PropTypes.object
+  db: PropTypes.object,
+  onClick: PropTypes.func
 };
 
 const styles = {
