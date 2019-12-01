@@ -268,7 +268,7 @@ const MapOnShare = (props) => {
             </Button>
           </Link>
         </Map>)
-        : (<React.Fragment>ข้อมูลการแชร์ ไม่มี</React.Fragment>)
+        : (<React.Fragment>ไม่มีข้อมูลการเเชร์</React.Fragment>)
       }
     </React.Fragment>
   )
