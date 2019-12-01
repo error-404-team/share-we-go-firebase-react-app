@@ -4,10 +4,9 @@ import CommuteIcon from '@material-ui/icons/Commute';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import RecentActorsIcon from '@material-ui/icons/RecentActors';
 import AlertCheck from './components/AlertCheck';
-// import { useProfile } from '../../controllers';
-import { dateTime } from '../../model/dateTime';
 import Button from '@material-ui/core/Button';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { Loading } from './components/Loading';
 
 function useProfile(props) {
 
@@ -268,7 +267,7 @@ function Report(props) {
                     </div>
                     <AlertCheck open={open} onClose={handleClose} db={props.db} isAuth={props.isAuth} />
                 </React.Fragment>)
-                : (<React.Fragment>Loading</React.Fragment>)
+                : (<React.Fragment><Loading/></React.Fragment>)
             }
         </React.Fragment>
     )

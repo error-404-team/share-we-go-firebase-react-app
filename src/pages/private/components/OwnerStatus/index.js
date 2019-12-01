@@ -16,7 +16,7 @@ import { withRouter } from 'react-router-dom'
 import { StyleBaseLine } from '../StyleBaseLine';
 import ModelExitShare from './components/ModelExitShare'
 
-import ChatSlide from './components/ChatSlide';
+// import ChatSlide from './components/ChatSlide';
 import MemberTypeIconStatus from '../MemberModalTypeIconStatus';
 import CallTaxiModal from './components/CallTaxiModal';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -24,8 +24,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuSlide from '../MenuSlide';
 
 import Loading from '../../../loading';
-// import { useShare, useProfile, useUsers } from '../../../../controllers';
-// import { dateTime } from '../../../../model/dateTime';
 
 function useAlertStatus(props) {
 
@@ -199,9 +197,6 @@ const OwnerStatus = (props) => {
     const [openCallTaxi, setOpenCallTaxi] = useState(false);
     const [openMenuSlide, setOpenMenuSlide] = useState(false);
     const [openModelExitShare, setOpenModelExitShare] = useState(false);
-    // const [isAlertStatus, setAlertStatus] = useState(null);
-    // const [isProfile, setProfile] = useState(null);
-    // const [isShare, setShare] = useState(null);
     const ref = props.db.firestore().collection(`share`).doc(props.isAuth.uid).get()
     const { isAlertStatus } = useAlertStatus(props);
     const { isProfile } = useProfile(props);
@@ -210,7 +205,6 @@ const OwnerStatus = (props) => {
     const onChatSlide = () => {
         props.history.push(`chat/${props.isAuth.uid}`);
         window.location.reload();
-        // setOpenChatSlide(true)
     }
 
     const offChatSlide = () => {
@@ -234,7 +228,8 @@ const OwnerStatus = (props) => {
     }
 
     const startShareGroup = () => {
-        props.history.push(`doc_taxi/${props.isAuth.uid}`)
+        props.history.push(`doc_taxi/${props.isAuth.uid}`);
+        window.location.reload();
     }
 
     const exitShareGroup = () => {
@@ -552,13 +547,13 @@ const OwnerStatus = (props) => {
                                 onClose={offModelExitShare}
                                 db={props.db} />
                         </Map>
-                        <ChatSlide
+                        {/* <ChatSlide
                             open={openChatSlide}
                             onClose={offChatSlide}
                             uid={props.isAuth.uid}
                             db={props.db}
                             isProfile={isProfile}
-                        />
+                        /> */}
                         <MenuSlide
                             open={openMenuSlide}
                             onClose={offMenuSlide}

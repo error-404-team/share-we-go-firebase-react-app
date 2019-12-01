@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    borderRadius: '10px',
+    border: '#faebd700',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -29,20 +30,20 @@ const Fade = React.forwardRef(function Fade(props, ref) {
     from: { opacity: 0 },
     to: { opacity: open ? 1 : 0 },
     onStart: () => {
-      
+
       if (open && onEnter) {
-       
+
         onEnter();
-      
+
       };
 
     },
     onRest: () => {
-      
+
       if (!open && onExited) {
-        
+
         onExited();
-      
+
       };
 
     },

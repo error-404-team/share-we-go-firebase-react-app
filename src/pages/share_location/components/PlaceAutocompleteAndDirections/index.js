@@ -1,7 +1,6 @@
 import React from 'react';
 import ConnectApiMaps, { Map } from 'maps-google-react';
 import PropTypes from 'prop-types';
-// import { dateTime } from '../../../../model/dateTime';
 import './styles/place-autocomplete-and-directions.css';
 import Loading from '../../../loading';
 

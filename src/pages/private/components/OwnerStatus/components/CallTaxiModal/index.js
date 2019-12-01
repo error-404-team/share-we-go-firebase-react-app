@@ -13,9 +13,15 @@ import CallIcon from '@material-ui/icons/Call';
 import taxiIcon from './img/icon-taxi.png';
 
 const useStyles = makeStyles(theme => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #ffc800',
+    borderRadius: '10px',
+    border: '#faebd700',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },

@@ -1,29 +1,14 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
-// import { Link } from 'react-router-dom';
-
-// import ConnectApiMaps, { Map } from 'maps-google-react';
-// import $ from 'jquery';
-
-// import Button from '@material-ui/core/Button';
-
-// import AddIcon from '@material-ui/icons/Add';
-
 import { StyleBaseLine } from '../StyleBaseLine';
-
 import { VisibilityButton } from '../VisibilityButton';
-// import SearchBar from '../SearchBar';
-// import SearchMap from '../SearchMap';
 import MenuSlide from '../MenuSlide';
-
 import './styles/marker-custom.css';
-// import { useUsers, useShareAll, useShare, useStatusAll } from '../../../../controllers';
-// import { dateTime } from '../../../../model/dateTime';
 import Loading from '../../../loading';
 import ModelAlertNotShare from './components/ModelAlertNotShare';
 import MapOffShare from './components/MapOffShare';
 import MapOnShare from './components/MapOnShare';
+
 function useProfile(props) {
 
     // console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
@@ -122,25 +107,16 @@ function useShare(props) {
                         // doc.data() is never undefined for query doc snapshots
                         // console.log(doc.id, " => ", doc.data());
 
-                        if (doc.data().status.value === true) {
-
+                        if (doc.data().status !== undefined) {
+                            setState({ isShare: null });
+                            console.log(doc.data().status);
+                            
+                        } else {
                             setState({ isShare: { [doc.id]: doc.data() } });
+                            console.log(doc.data().status);
+
                         }
                     });
-
-                    // if (!doc.exists) {
-
-                    //     // console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
-
-                    //     setState({ isShare: null });
-
-                    // } else {
-
-                    //     // console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
-
-                    //     setState({ isShare: doc.data() });
-
-                    // }
                 });
 
                 return unsubscribe;

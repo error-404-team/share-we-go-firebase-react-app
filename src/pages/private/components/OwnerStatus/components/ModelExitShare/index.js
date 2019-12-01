@@ -8,20 +8,20 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-// import { dateTime } from '../../../../../../model/dateTime';
 
 const useStyles = makeStyles(theme => ({
     modal: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    paper: {
+      },
+      paper: {
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #ffc800',
+        borderRadius: '10px',
+        border: '#faebd700',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-    },
+      },
 }))
 
 const ModelExitShare = (props) => {
@@ -48,9 +48,9 @@ const ModelExitShare = (props) => {
             member: null
         })
 
-        // setTimeout(() => {
-        //     props.history.goBack()
-        // }, 3500)
+        setTimeout(() => {
+            props.history.push('/')
+        }, 15000)
 
     }
     return (

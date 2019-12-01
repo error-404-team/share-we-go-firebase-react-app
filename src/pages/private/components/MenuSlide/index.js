@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import HistoryIcon from '@material-ui/icons/History';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -119,6 +120,19 @@ function MenuSlide(props) {
                                         marginRight: 15
                                     }}> <HistoryIcon fontSize="large" /></ListItemIcon>
                                     <ListItemText > <span style={{ fontSize: "large" }} >History</span></ListItemText>
+                                </ListItem>
+                            </Link>
+                            <Link to={`/instructive/${props.uid}`} style={{
+                                color: 'dimgray',
+                                textDecoration: 'blink'
+                            }}>
+                                <ListItem button key={0}>
+                                    <ListItemIcon style={{
+                                        minWidth: 0,
+                                        marginLeft: 15,
+                                        marginRight: 15
+                                    }}> <AssignmentIcon fontSize="large" /></ListItemIcon>
+                                    <ListItemText ><span style={{ fontSize: "large" }} >Instructive</span></ListItemText>
                                 </ListItem>
                             </Link>
                         </List>

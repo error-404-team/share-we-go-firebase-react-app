@@ -12,6 +12,7 @@ import History from './pages/history';
 import Report from './pages/report';
 import InstallApp from './InstallApp';
 import Chat from './pages/chat';
+import Instructive from './pages/instructive';
 // import { useAuth, useLocation, useUsersPrivate } from './controllers'
 
 const useAuth = (props) => {
@@ -115,7 +116,12 @@ function App(props) {
 
     setInstallLoading(true)
 
+    // android app
     deferredPrompt.prompt();
+
+    // ios app
+    deferredPrompt.manual();
+
     // Wait for the user to respond to the prompt
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
@@ -161,6 +167,9 @@ function App(props) {
                     </Route>
                     <Route path="/chat/:id" >
                       <Chat db={props.db} isAuth={isAuth} />
+                    </Route>
+                    <Route path="/instructive/:id" >
+                      <Instructive db={props.db} isAuth={isAuth} />
                     </Route>
                   </React.Fragment>
                   )

@@ -8,21 +8,20 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-// import { post, d } from '../../../../../../RESTful_API'
-// import { dateTime } from '../../../../../../module';
 
 const useStyles = makeStyles(theme => ({
     modal: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    paper: {
+      },
+      paper: {
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #ffc800',
+        borderRadius: '10px',
+        border: '#faebd700',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-    },
+      },
 }))
 
 const ModelExitShare = (props) => {

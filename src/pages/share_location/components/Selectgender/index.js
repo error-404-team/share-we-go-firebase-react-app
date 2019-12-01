@@ -6,7 +6,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-// import { dateTime } from '../../../../model/dateTime';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -45,12 +44,6 @@ export default function RadioButtonsGroup(props) {
     });
 
     // console.timeEnd('ฉันคาดว่า 🤔 share => uid => sex');
-
-    // firebase.auth().onAuthStateChanged((user) => {
-    //     post.share.sex(user.uid, { value: value }, dateTime)
-    // })
-    // socket.emit('gender', value)
-
 
     return (
         <div style={{ backgroundColor: props.backgroundColor }} className={classes.root}>
