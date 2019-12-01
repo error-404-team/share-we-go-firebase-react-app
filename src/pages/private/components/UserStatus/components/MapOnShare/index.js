@@ -19,6 +19,9 @@ const MapOnShare = (props) => {
     lng: 100.7210703
   };
 
+    // console.log(props.isShare);
+
+    // console.log(props.isProfile);
   return (
     <React.Fragment>
       {props.isProfile && props.isShare !== null
@@ -145,7 +148,7 @@ const MapOnShare = (props) => {
               Object.keys(props.isShare).map((key) => {
                 // console.log(key); // all key
                 // get.status.share(key).then(function (status) {
-                if (props.isShare[key].status.value !== false) {
+                if (props.isShare[key].status !== false) {
                   let latlng = new google.maps.LatLng(props.isShare[key].location.start_location.lat, props.isShare[key].location.start_location.lng);
 
                   const marker = new CustomMarker(
