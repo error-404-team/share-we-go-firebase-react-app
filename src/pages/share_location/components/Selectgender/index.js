@@ -50,7 +50,7 @@ export default function RadioButtonsGroup(props) {
             <center>
                 <FormControl component="fieldset" className={classes.formControl}>
 
-                    <FormLabel component="legend">Select gender</FormLabel>
+                    <FormLabel component="legend">กำหนดเพศเพื่อนร่วมทาง</FormLabel>
                     <RadioGroup
                         aria-label="gender"
                         name="gender1"
