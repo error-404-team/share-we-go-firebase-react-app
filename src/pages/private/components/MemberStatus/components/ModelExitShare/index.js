@@ -8,21 +8,20 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-// import { post, d } from '../../../../../../RESTful_API'
-// import { dateTime } from '../../../../../../module';
 
 const useStyles = makeStyles(theme => ({
     modal: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    paper: {
+      },
+      paper: {
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #ffc800',
+        borderRadius: '10px',
+        border: '#faebd700',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-    },
+      },
 }))
 
 const ModelExitShare = (props) => {
@@ -30,27 +29,20 @@ const ModelExitShare = (props) => {
     const [loading, setLoading] = useState(false)
 
     const removeShare = () => {
-        let path_history = `history/${props.isStatus.member.uid}`;
-        let path_status_member = `status/${props.isStatus.member.uid}/member`;
-        let path_share_member = `share/${props.isStatus.member.share_id}/member/${props.isUsersPrivate.uid}`
 
         setLoading(true)
 
-        let data_status_member = {
-            uid: `${props.isStatus.member.uid}`,
-            share_id: `${props.isStatus.member.share_id}`,
-            value: 'false'
-        }
-
-        // post.history.id(props.auth.uid, props.share, dateTime);
-
-        props.db.database().ref(`${path_history}`).push(props.isShare)
-
-
-        props.db.database().ref(`${path_status_member}`).update(data_status_member)
-
-        props.db.database().ref(`${path_share_member}`).remove().then(() => {
-            window.location.reload()
+        props.db.firestore().collection(`history`).doc(props.isMemberStatus.uid).collection('store').add(props.isShare);
+        props.db.database().ref(`status/${props.isMemberStatus.uid}/member`).update({
+            uid: `${props.isMemberStatus.uid}`,
+            share_id: `${props.isMemberStatus.share_id}`,
+            value: false
+        });
+        props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id).update({
+            member: {
+                ...props.isShare.member,
+                [props.isAuth.uid]: null
+            }
         })
 
 
@@ -77,7 +69,7 @@ const ModelExitShare = (props) => {
                                     <center>
                                         <h1>คุณต้องการอยากจะออกจากกลุ่มแชร์</h1>
 
-                                        <Button onClick={removeShare} >ตกลง</Button>
+                                        <Button onClick={removeShare} variant="contained" style={{ backgroundColor: '#274D7D', color: '#fff' }} >ตกลง</Button>
                                     </center>
                                 </Grid>
                             </div>
@@ -103,9 +95,9 @@ ModelExitShare.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     isShare: PropTypes.object,
-    isStatus: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
-    db: PropTypes.object
+    isMemberStatus: PropTypes.object,
+    db: PropTypes.object,
+    isAuth: PropTypes.object
 }
 
 export default withRouter(ModelExitShare)

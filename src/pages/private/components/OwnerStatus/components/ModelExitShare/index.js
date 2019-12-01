@@ -8,20 +8,20 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-import { dateTime } from '../../../../../../model/dateTime';
 
 const useStyles = makeStyles(theme => ({
     modal: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    paper: {
+      },
+      paper: {
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #ffc800',
+        borderRadius: '10px',
+        border: '#faebd700',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-    },
+      },
 }))
 
 const ModelExitShare = (props) => {
@@ -29,64 +29,28 @@ const ModelExitShare = (props) => {
     const [loading, setLoading] = useState(false)
 
     const removeShare = () => {
-        let path_history = `history/${props.isUsersPrivate.uid}`;
-        let path_status_owner = `status/${props.isUsersPrivate.uid}/owner`;
-        let path_status_owner_log = `status/${props.isUsersPrivate.uid}/owner/_log`;
-        let path_status_member = `status/${props.isUsersPrivate.uid}/member`;
-        let path_status_member_log = `status/${props.isUsersPrivate.uid}/member/_log`;
-        let path_status_alert = `status/${props.isUsersPrivate.uid}/alert`;
-        let path_status_alert_log = `status/${props.isUsersPrivate.uid}/alert/_log`;
-        let path_share_id = `share/${props.share_id}`
 
         setLoading(true)
 
-        let data_status_owner = {
-            uid: `${props.isUsersPrivate.uid}`,
-            share_id: `${props.share_id}`,
-            value: 'false'
+        let updateStatus = {
+            uid: `${props.uid}`,
+            share_id: `${props.uid}`,
+            value: false
         }
 
-        let data_status_member = {
-            uid: `${props.isUsersPrivate.uid}`,
-            share_id: `${props.share_id}`,
-            value: 'false'
-        }
-
-        let data_status_alert = {
-            uid: `${props.isUsersPrivate.uid}`,
-            share_id: `${props.share_id}`,
-            value: 'false'
-        }
-
-        props.db.database().ref(`${path_history}`).push(props.isShare)
-        props.db.database().ref(`${path_status_owner}`).update(data_status_owner)
-        props.db.database().ref(`${path_status_owner_log}`).push({
-            owner: data_status_owner,
-            date: dateTime
+        props.db.firestore().collection('history').doc(props.uid).collection('store').add(props.isShare);
+        props.db.database().ref(`status/${props.uid}`).update({
+            owner: updateStatus,
+            member: updateStatus,
+            alert: updateStatus
+        });
+        props.db.firestore().collection(`share`).doc(props.share_id).update({
+            member: null
         })
-        props.db.database().ref(`${path_status_member}`).update(data_status_member)
-        props.db.database().ref(`${path_status_member_log}`).push({
-            member: data_status_member,
-            date: dateTime
-        })
-        props.db.database().ref(`${path_status_alert}`).update(data_status_alert)
-        props.db.database().ref(`${path_status_alert_log}`).push({
-            alert: data_status_alert,
-            date: dateTime
-        })
-        const removeShare = props.db.database().ref(`${path_share_id}`)
-        removeShare.remove().then(function () {
-            console.log("Remove succeeded.")
 
-            window.location.reload()
-        })
-            .catch(function (error) {
-                console.log("Remove failed: " + error.message)
-            });
-
-        // setTimeout(() => {
-        //     props.history.goBack()
-        // }, 3500)
+        setTimeout(() => {
+            props.history.push('/')
+        }, 15000)
 
     }
     return (
@@ -122,25 +86,20 @@ const ModelExitShare = (props) => {
                                     <center>รอแป๊บ....</center>
                                 </Grid>
                             </div></React.Fragment>)
-
                     }
                 </Fade>
             </Modal>
         </React.Fragment>
-    )
+    );
 
-}
-
-
+};
 
 ModelExitShare.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     uid: PropTypes.string,
-    share_id: PropTypes.string,
     isShare: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
     db: PropTypes.object
-}
+};
 
 export default withRouter(ModelExitShare)

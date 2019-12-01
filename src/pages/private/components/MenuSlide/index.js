@@ -11,12 +11,13 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import HistoryIcon from '@material-ui/icons/History';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Loading } from './components/Loading';
-import { useProfile } from '../../../../controllers';
+// import { useProfile } from '../../../../controllers';
 
 
 const useStyles = makeStyles(theme => ({
@@ -46,7 +47,7 @@ function MenuSlide(props) {
 
     const theme = useTheme();
     const classes = useStyles();
-    const { isProfile } = useProfile(props)
+    // const { isProfile } = useProfile(props)
 
     function Logout() {
         props.db.auth().signOut().then(function () {
@@ -66,7 +67,7 @@ function MenuSlide(props) {
                     paper: classes.drawerPaper,
                 }}
             >
-                {isProfile !== null
+                {props.isProfile !== null
                     ? (<Fragment>
                         <div className={classes.drawerHeader}>
                             <IconButton onClick={props.onClose} style={{ position: "absolute" }}>
@@ -79,7 +80,7 @@ function MenuSlide(props) {
                                 <Grid container justify="center" alignItems="center">
                                     <Avatar
                                         alt="Remy Sharp"
-                                        src={isProfile.photoURL}
+                                        src={props.isProfile.photoURL}
                                         className={classes.bigAvatar}
                                         style={{
                                             border: '4px solid #fff',
@@ -88,14 +89,14 @@ function MenuSlide(props) {
                                     />
                                 </Grid>
                                 <center style={{ marginBottom: '10px', fontSize: 'large' }}>
-                                    <span>{isProfile !== null ? isProfile.displayName : null}</span>
+                                    <span>{props.isProfile !== null ? props.isProfile.displayName : null}</span>
                                 </center>
                             </div>
                         </div>
                         <List style={{
                             marginTop: '15px'
                         }}>
-                            <Link to={`/profile/${props.isUsersPrivate.uid}`} style={{
+                            <Link to={`/profile/${props.uid}`} style={{
                                 color: 'dimgray',
                                 textDecoration: 'blink'
                             }}>
@@ -119,6 +120,19 @@ function MenuSlide(props) {
                                         marginRight: 15
                                     }}> <HistoryIcon fontSize="large" /></ListItemIcon>
                                     <ListItemText > <span style={{ fontSize: "large" }} >History</span></ListItemText>
+                                </ListItem>
+                            </Link>
+                            <Link to={`/instructive/${props.uid}`} style={{
+                                color: 'dimgray',
+                                textDecoration: 'blink'
+                            }}>
+                                <ListItem button key={0}>
+                                    <ListItemIcon style={{
+                                        minWidth: 0,
+                                        marginLeft: 15,
+                                        marginRight: 15
+                                    }}> <AssignmentIcon fontSize="large" /></ListItemIcon>
+                                    <ListItemText ><span style={{ fontSize: "large" }} >Instructive</span></ListItemText>
                                 </ListItem>
                             </Link>
                         </List>
@@ -148,9 +162,9 @@ function MenuSlide(props) {
 MenuSlide.protoType = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
-    isUsersPrivate: PropTypes.object,
+    isProfile: PropTypes.object,
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object
+    uid: PropTypes.string
 }
 
 export default MenuSlide;

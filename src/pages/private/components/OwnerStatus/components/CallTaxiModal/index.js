@@ -9,16 +9,19 @@ import Fade from '@material-ui/core/Fade';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 
-
-import CallIcon from '@material-ui/icons/Call'
-
-import taxiIcon from './img/icon-taxi.png'
-
+import CallIcon from '@material-ui/icons/Call';
+import taxiIcon from './img/icon-taxi.png';
 
 const useStyles = makeStyles(theme => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #ffc800',
+    borderRadius: '10px',
+    border: '#faebd700',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -28,9 +31,10 @@ const useStyles = makeStyles(theme => ({
   callIcon: {
     marginRight: theme.spacing(1),
   }
-}))
+}));
 
 const CallTaxiModal = (props) => {
+
   const classes = useStyles();
 
   return (
@@ -77,7 +81,5 @@ CallTaxiModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func
 }
-
-
 
 export default CallTaxiModal;

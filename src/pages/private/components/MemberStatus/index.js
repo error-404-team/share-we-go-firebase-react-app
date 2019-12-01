@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import ConnectApiMaps, { Map } from 'maps-google-react';
@@ -8,16 +8,176 @@ import Button from '@material-ui/core/Button';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { StyleBaseLine } from '../StyleBaseLine';
-import ChatSlide from '../ChatSlide';
+// import ChatSlide from './components/ChatSlide';
 import MemberTypeIconStatus from '../MemberModalTypeIconStatus';
 import KeyDataTaxiCar from './components/KeyDataTaxiCar';
-// import SearchBar from '../SearchBar';
-// import SearchMap from '../SearchMap';
+import { withRouter } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuSlide from '../MenuSlide';
 import ModelExitShare from './components/ModelExitShare';
-import { useShare, useProfile, useUsers } from '../../../../controllers';
+import Loading from '../../../loading';
 
+function useAlertStatus(props) {
+
+    // console.time('ฉันคาดว่า 🤔 function useAlertStatus ใช้เวลาในการทำงานไป');
+
+    const [updateAlertStatus, setState] = useState({
+        isAlertStatus: null
+    });
+
+    useEffect(() => {
+
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus ใช้เวลาในการทำงานไป');
+
+        async function update() {
+
+            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus => function update ใช้เวลาในการทำงานไป');
+
+            if (props.isAuth !== null) {
+                const unsubscribe = props.db.database().ref(`status/${props.isAuth.uid}/alert`).once("value").then(function (snapshot) {
+                    let data = (snapshot.val());
+                    // let stringifyData = JSON.stringify(data);
+
+                    if (data !== null) {
+
+                        setState({ isAlertStatus: data });
+
+                    } else {
+
+                        let statusData = {
+                            share_id: '',
+                            uid: `${props.isAuth.uid}`,
+                            value: false
+                        };
+
+                        // console.time('ฉันคาดว่า 🤔 status => uid => alert ใช้เวลาในการ อัพเดต ไป');
+
+                        props.db.database().ref(`status/${props.isAuth.uid}/alert`).update(statusData);
+
+                        // console.timeEnd('ฉันคาดว่า 🤔 status => uid => alert ใช้เวลาในการ อัพเดต ไป');
+
+                        setState({ isAlertStatus: statusData });
+
+                    };
+
+                });
+
+                return unsubscribe;
+            }
+
+            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus => function update ใช้เวลาในการทำงานไป');
+
+        };
+
+        update();
+
+        // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useAlertStatus ใช้เวลาในการทำงานไป');
+
+    });
+
+    // console.timeEnd('ฉันคาดว่า 🤔 function useAlertStatus ใช้เวลาในการทำงานไป');
+
+    return updateAlertStatus;
+
+};
+
+function useProfile(props) {
+
+    // console.time('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+
+    const [updateProfile, setState] = useState({
+        isProfile: null
+    })
+
+    useEffect(() => {
+
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+
+        async function update() {
+
+            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+
+            if (props.isAuth !== null) {
+                const unsubscribe = await props.db.firestore().collection('users').doc(props.isAuth.uid).get().then(function (doc) {
+
+                    if (!doc.exists) {
+
+                        // console.log('ข้อมูลโปรไฟล์ ใน database ไม่มี ฉันจะทำการ ฉันจะทำการสร้างข้อมูลโปรไฟล์ ใน database ให้ oK นะ 👌');
+
+                        // console.time('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
+
+                        props.db.firestore().collection('users').doc(props.isAuth.uid).update({ profile: props.isAuth.providerData[0] })
+
+                        // console.timeEnd('ฉันคาดว่า 🤔 users => uid => profile ใช้เวลาในการ อัพเดต ไป');
+
+                        setState({ isProfile: props.isAuth.providerData[0] });
+
+                    } else {
+
+                        // console.log('ข้อมูลโปรไฟล์ ใน ฐานข้อมูล ✔');
+
+                        setState({ isProfile: doc.data().profile });
+
+                    }
+                });
+
+                return unsubscribe;
+
+            };
+
+            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile => function update ใช้เวลาในการทำงานไป');
+
+        };
+
+        update();
+
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useProfile ใช้เวลาในการทำงานไป');
+
+    }, [props]);
+
+    // console.timeEnd('ฉันคาดว่า 🤔 function useProfile ใช้เวลาในการทำงานไป');
+
+    return updateProfile;
+
+};
+
+function useShare(ref) {
+
+    // console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+
+    const [updateShare, setState] = useState({
+        isShare: null
+    })
+
+    useEffect(() => {
+
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+        return ref.then(function (doc) {
+
+            if (!doc.exists) {
+
+                // console.log('ไม่มีข้อมูลการแชร์เส้นทางเลย 😢');
+
+                setState({ isShare: null });
+
+            } else {
+
+                // console.log('ฉันเจอคนที่แชร์เส้นทางแล้ว 👏');
+                // console.log('share: ', doc.data());
+
+                setState({ isShare: doc.data() });
+
+            };
+
+        });
+        // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+
+    }, []);
+
+    // console.timeEnd('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+
+    return updateShare;
+};
 
 const MemberStatus = (props) => {
 
@@ -26,13 +186,17 @@ const MemberStatus = (props) => {
     const [openMenuSlide, setOpenMenuSlide] = useState(false)
     const [openModelExitShare, setOpenModelExitShare] = useState(false)
     const [alertShare, setAlertShare] = useState({})
-    const [map, setMap] = useState(null);
-    const { isShare } = useShare(props);
+    const [isMap, setMap] = useState(null);
+    const ref = props.db.firestore().collection(`share`).doc(props.isMemberStatus.share_id).get()
+    const { isAlertStatus } = useAlertStatus(props);
     const { isProfile } = useProfile(props);
-    const { isUsers } = useUsers(props);
+    const { isShare } = useShare(ref);
+
 
     const onChatSlide = () => {
-        setOpenChatSlide(true)
+        props.history.push(`chat/${props.isMemberStatus.share_id}`);
+        window.location.reload();
+        // setOpenChatSlide(true)
     }
 
     const offChatSlide = () => {
@@ -40,12 +204,12 @@ const MemberStatus = (props) => {
     }
 
     const onKeyDataTaxiCar = () => {
-        if (props.isStatus.alert.value !== 'false') {
+        if (isAlertStatus.value !== 'false') {
             setAlertShare(isShare.alert)
         } else {
             setAlertShare({
-                uid: `${props.isStatus.alert.uid}`,
-                share_id: `${props.isStatus.alert.share_id}`,
+                uid: `${isAlertStatus.uid}`,
+                share_id: `${isAlertStatus.share_id}`,
                 select: 'กำลังรอข้อมูล',
                 license_plate: 'กำลังรอข้อมูล'
 
@@ -86,7 +250,7 @@ const MemberStatus = (props) => {
 
     return (
         <React.Fragment>
-            {isUsers !== null
+            {isProfile && isShare !== null
                 ? (<React.Fragment>
                     <StyleBaseLine>
                         <Map
@@ -108,13 +272,11 @@ const MemberStatus = (props) => {
                                 }}
                             opts={(google, map) => {
 
-                                // if (isShare !== null) {
-                                //     setLocationShare(isShare)
-                                // }
                                 function CustomMarker(latlng, map, args, img) {
                                     this.latlng = latlng;
                                     this.args = args;
                                     this.img = img;
+                                    this.setMap(map);
                                     this.maps = map
                                     setMap(map)
                                 }
@@ -151,10 +313,10 @@ const MemberStatus = (props) => {
                                     // มี bug icon ไม่เกาะ map
                                     if (this.div) {
                                         // กำหนด ตำแหน่ง ของhtml ที่สร้างไว้
-                                        let positionA = new this.google.maps.LatLng(this.latlng.lat, this.latlng.lng);
+                                        let positionA = new google.maps.LatLng(this.latlng.lat, this.latlng.lng);
 
                                         this.pos = this.getProjection().fromLatLngToDivPixel(positionA);
-                                        // console.log(this.pos);
+                                        // // console.log(this.pos);
                                         this.div.style.left = this.pos.x + 'px';
                                         this.div.style.top = this.pos.y + 'px';
                                     }
@@ -163,7 +325,6 @@ const MemberStatus = (props) => {
                                 CustomMarker.prototype.getPosition = function () {
                                     return this.latlng;
                                 };
-
                                 function AutocompleteDirectionsHandler(google, map, data) {
                                     this.map = map;
                                     this.originPlaceId = null;
@@ -176,13 +337,13 @@ const MemberStatus = (props) => {
                                     var me = this
 
                                     if (data === true) {
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
+                                        me.setupPlaceChangedListener(data.request.origin.placeId, 'ORIG');
+                                        me.setupPlaceChangedListener(data.request.destination.placeId, 'DEST');
                                         me.setupClickListener(data.request.travelMode);
 
                                     } else {
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[0].place_id, 'ORIG');
-                                        me.setupPlaceChangedListener(data.geocoded_waypoints[1].place_id, 'DEST');
+                                        me.setupPlaceChangedListener(data.request.origin.placeId, 'ORIG');
+                                        me.setupPlaceChangedListener(data.request.destination.placeId, 'DEST');
                                         me.setupClickListener(data.request.travelMode);
                                     }
                                 }
@@ -200,7 +361,7 @@ const MemberStatus = (props) => {
                                     place, mode) {
                                     var me = this;
 
-                                    console.log(place);
+                                    // console.log(place);
 
                                     if (!place) {
                                         alert('Please select an option from the dropdown list.');
@@ -229,53 +390,74 @@ const MemberStatus = (props) => {
                                         function (response, status) {
                                             if (status === 'OK') {
                                                 me.directionsRenderer.setDirections(response);
-                                                // console.log(response);
+                                                // // console.log(response);
 
                                             } else {
                                                 alert('Directions request failed due to ' + status);
-                                                // console.log(response, status);
+                                                // // console.log(response, status);
 
                                             }
                                         });
                                 };
 
 
-                                // get.users.location(props.isStatus.owner.uid).then((location) => {
-                                let myLatlng = new google.maps.LatLng(isUsers.location.coords.latitude, isUsers.location.coords.longitude);
+                                var myLatlng = new google.maps.LatLng(props.isLocation.coords.latitude, props.isLocation.coords.longitude);
+                                if (isProfile !== null) {
+                                    var markerUser = new CustomMarker(
+                                        myLatlng,
+                                        map,
+                                        {},
+                                        isProfile.photoURL
+                                    );
+                                } else {
+                                    window.location.reload()
+                                }
 
-                                let marker1 = new CustomMarker(
-                                    myLatlng,
-                                    map,
-                                    {},
-                                    isProfile.photoURL
-                                );
-
-                                let pos = {
-                                    lat: isUsers.location.coords.latitude,
-                                    lng: isUsers.location.coords.longitude
+                                var userPosistion = {
+                                    lat: props.isLocation.coords.latitude,
+                                    lng: props.isLocation.coords.longitude
                                 };
 
-                                marker1.latlng = { lat: pos.lat, lng: pos.lng };
-                                marker1.draw();
+                                markerUser.latlng = { lat: userPosistion.lat, lng: userPosistion.lng };
+                                markerUser.draw();
 
-                                map.setCenter(pos);
+                                map.setCenter(userPosistion);
 
-                                // })
+                                Object.keys(isShare.member).map((key) => {
+                                    if (key !== props.isAuth.uid) {
+                                        props.db.database().ref(`users/${key}/location`).once("value").then(function (snapshot) {
+                                            let data = (snapshot.val());
 
+                                            var memberLatlng = new google.maps.LatLng(data.coords.latitude, data.coords.longitude);
+                                            if (isShare.member !== null) {
+                                                var markerMember = new CustomMarker(
+                                                    memberLatlng,
+                                                    map,
+                                                    {},
+                                                    isShare.member[key].photoURL
+                                                );
+                                            } else {
+                                                window.location.reload()
+                                            }
+
+                                            var memberPosition = {
+                                                lat: data.coords.latitude,
+                                                lng: data.coords.longitude
+                                            };
+
+                                            markerMember.latlng = { lat: memberPosition.lat, lng: memberPosition.lng };
+                                            markerMember.draw();
+
+                                            map.setCenter(memberPosition);
+                                        });
+                                    }
+                                })
                                 // get.share.location(props.isStatus.owner.share_id).then(function (data) {
                                 new AutocompleteDirectionsHandler(google, map, isShare.location);
                                 // })
                                 // })
                             }}
                         >
-                            {/* <SearchBar >
-                                <SearchMap
-                                    onClick={onMenuSlide}
-                                    map={map}
-                                    {...props}
-
-                                />
-                            </SearchBar> */}
 
                             <Grid container style={{
                                 width: 'min-content',
@@ -283,11 +465,11 @@ const MemberStatus = (props) => {
                                 top: '30px',
                                 left: '5px'
                             }} >
-                                <Fab size="medium" onClick={onMenuSlide} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
+                                <Fab size="medium" style={{ backgroundColor: '#274D7D', color: '#fff' }} onClick={onMenuSlide} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
                                     <MenuIcon />
                                 </Fab>
                             </Grid>
-                            <MemberTypeIconStatus isShare={isShare} uid={props.isUsersPrivate.uid} />
+                            <MemberTypeIconStatus isShare={isShare} />
 
                             <Grid container style={{
                                 width: 'min-content',
@@ -296,46 +478,48 @@ const MemberStatus = (props) => {
                                 bottom: '80px',
 
                             }} >
-                                <Fab size="medium" onClick={onKeyDataTaxiCar} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
+                                <Fab size="medium" style={{ backgroundColor: '#274D7D', color: '#fff' }} onClick={onKeyDataTaxiCar} aria-label="doc-taxi" className={classes.buttonTaxiDoc}>
                                     <AssignmentIcon />
                                 </Fab>
-                                <Fab size="medium" onClick={onChatSlide} color="secondary" aria-label="add" className={classes.buttonChat}>
+                                <Fab size="medium" style={{ backgroundColor: '#274D7D', color: '#fff' }} onClick={onChatSlide} color="secondary" aria-label="add" className={classes.buttonChat}>
                                     <QuestionAnswerIcon />
                                 </Fab>
                                 <KeyDataTaxiCar {...alertShare} open={openKeyDataTaxiCar} onClose={offKeyDataTaxiCar} />
                             </Grid>
-                            <Button variant="contained" onClick={exitShareGroup} style={{ backgroundColor: '#ffffff' }} className={classes.fab}>
+                            <Button variant="contained" onClick={exitShareGroup} style={{
+                                backgroundColor: 'slategrey',
+                                color: 'white'
+                            }} className={classes.fab}>
                                 ออกจากกลุ่ม
                         </Button>
                             <ModelExitShare
                                 db={props.db}
                                 isShare={isShare}
-                                isStatus={props.isStatus}
+                                isMemberStatus={props.isMemberStatus}
                                 open={openModelExitShare}
                                 onClose={offModelExitShare}
-                                isUsersPrivate={props.isUsersPrivate} />
+                                isAuth={props.isAuth}
+                            />
 
                         </Map>
-                        <ChatSlide
+                        {/* <ChatSlide
                             open={openChatSlide}
                             onClose={offChatSlide}
-                            isShare={isShare}
-                            isStatus={props.isStatus}
-                            uid={props.isUsersPrivate.uid}
+                            isProfile={isProfile}
+                            isMemberStatus={props.isMemberStatus}
                             db={props.db}
-                            isUsersPrivate={props.isUsersPrivate}
-                        />
+                        /> */}
                         <MenuSlide
                             open={openMenuSlide}
                             onClose={offMenuSlide}
-                            uid={props.isUsersPrivate.uid}
+                            uid={props.isAuth.uid}
+                            isProfile={isProfile}
                             db={props.db}
-                            isUsersPrivate={props.isUsersPrivate}
                         />
                     </StyleBaseLine>
                 </React.Fragment>
                 )
-                : (<React.Fragment>Loading</React.Fragment>)
+                : (<React.Fragment><Loading /></React.Fragment>)
             }
         </React.Fragment>
     )
@@ -365,12 +549,13 @@ const styles = {
 }
 
 MemberStatus.propTypes = {
-    isUsersPrivate: PropTypes.object,
-    isStatus: PropTypes.object,
-    db: PropTypes.object
+    isAuth: PropTypes.object,
+    isMemberStatus: PropTypes.object,
+    db: PropTypes.object,
+    isLocation: PropTypes.object,
 }
 
 export default ConnectApiMaps({
     apiKey: "AIzaSyBy2VY1e11qs-60Ul6aYT5klWYRI1K3RB0",
     libraries: ['places', 'geometry'],
-})(withStyles(styles)(MemberStatus))
+})(withStyles(styles)(withRouter(MemberStatus)))

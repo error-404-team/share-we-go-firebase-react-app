@@ -6,7 +6,6 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import { dateTime } from '../../../../model/dateTime';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,26 +21,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function RadioButtonsGroup(props) {
+
     const classes = useStyles();
     const [value, setValue] = React.useState('MaleAndFemale');
 
     // const socket = io(`http://localhost:8080/`);
 
     function handleChange(event) {
+
         setValue(event.target.value);
-    }
 
-    let path = `share/${props.isUsersPrivate.uid}/sex`
-    let _log = `share/${props.isUsersPrivate.uid}/sex/_log`
+    };
 
-    props.db.database().ref(`${path}`).update({ value: value })
-    props.db.database().ref(`${_log}`).push({ sex: { value: value }, date: dateTime })
+    // console.time('ฉันคาดว่า 🤔 share => uid => sex');
 
-    // firebase.auth().onAuthStateChanged((user) => {
-    //     post.share.sex(user.uid, { value: value }, dateTime)
-    // })
-    // socket.emit('gender', value)
+    props.db.firestore().collection(`share`).doc(props.isAuth.uid).update({
+        sex: { value: value }
+    }).then(() => {
 
+        // console.log('อัพเดต เพศ แล้วนะ 😍');
+
+    });
+
+    // console.timeEnd('ฉันคาดว่า 🤔 share => uid => sex');
 
     return (
         <div style={{ backgroundColor: props.backgroundColor }} className={classes.root}>
@@ -65,10 +67,10 @@ export default function RadioButtonsGroup(props) {
             </center>
         </div>
     );
-}
+};
 
 RadioButtonsGroup.propTypes = {
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
+    isAuth: PropTypes.object,
     backgroundColor: PropTypes.string
-}
+};

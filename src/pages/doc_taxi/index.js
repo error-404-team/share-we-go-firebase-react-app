@@ -6,90 +6,73 @@ import Grid from '@material-ui/core/Grid';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import DocTaxiBar from './components/DocTaxiBar';
-import { dateTime } from '../../model/dateTime';
 
 class DocTaxi extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             select: 'เหลือง',
             license_plate: "",
             status: false
-        }
+        };
 
-        this.displayNameInput = React.createRef()
-        this.emailInput = React.createRef()
-        this.sexInput = React.createRef()
-        this.ageInput = React.createRef()
-    }
+        this.displayNameInput = React.createRef();
+        this.emailInput = React.createRef();
+        this.sexInput = React.createRef();
+        this.ageInput = React.createRef();
 
+    };
 
     InputUpdate(e) {
-        this.setState({ license_plate: e.target.value })
-    }
 
+        this.setState({ license_plate: e.target.value });
+
+    };
 
     onEdit() {
 
-        this.setState({ statusEdit: false })
-    }
+        this.setState({ statusEdit: false });
+
+    };
 
     handleChange = (e) => {
-        this.setState({ select: e.target.value })
-    }
 
+        this.setState({ select: e.target.value });
 
+    };
 
     onSend() {
 
-        let path = `share/${this.props.match.params.id}/alert`;
-        let _log = `share/${this.props.match.params.id}/alert/_log`;
-        let path_status = `status/${this.props.match.params.id}/alert`;
-        let _log_status = `status/${this.props.match.params.id}/alert/_log`;
+        this.props.db.firestore().collection(`share`).doc(this.props.match.params.id ).update({
+            alert: {
+                uid: `${this.props.match.params.id}`,
+                sahre_id: `${this.props.match.params.id}`,
+                select: `${this.state.select}`,
+                license_plate: `${this.state.license_plate}`
+            }
+        });
 
-
-
-        let data = {
-            uid: `${this.props.match.params.id}`,
-            sahre_id: `${this.props.match.params.id}`,
-            select: `${this.state.select}`,
-            license_plate: `${this.state.license_plate}`
-
-        }
-
-        let data_status = {
+        this.props.db.database().ref(`status/${this.props.match.params.id}/alert`).update({
             uid: `${this.props.match.params.id}`,
             share_id: `${this.props.match.params.id}`,
-            value: 'true'
-        }
+            value: true
+        });
 
-        this.props.db.database().ref(`${path}`).update(data)
-        this.props.db.database().ref(`${_log}`).update({
-            alert: data,
-            date: dateTime
-        })
+        this.setState({ status: true });
 
-        this.props.db.database().ref(`${path_status}`).update(data_status)
-        this.props.db.database().ref(`${_log_status}`).update({
-            alert: data_status,
-            date: dateTime
-        })
-
-        this.setState({ status: true })
-
-    }
+    };
 
     goBack() {
         this.props.history.push('/')
-    }
+    };
 
     render() {
         const { classes } = this.props;
@@ -171,9 +154,8 @@ class DocTaxi extends React.Component {
             </React.Fragment>
 
         );
-    }
-}
-
+    };
+};
 
 const styles = {
     drawerHeader: {
@@ -216,12 +198,10 @@ const styles = {
     selectEmpty: {
         marginTop: 0,
     },
-}
+};
 
 DocTaxi.propType = {
-    isUsersPrivate: PropTypes.object,
-    db: PropTypes.object,
-    isLocation: PropTypes.object
-}
+    db: PropTypes.object
+};
 
 export default withStyles(styles)(withRouter(DocTaxi));

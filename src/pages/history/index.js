@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
 import HistoryBar from './components/HistoryBar';
@@ -12,16 +12,62 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CommuteIcon from '@material-ui/icons/Commute';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import WcIcon from '@material-ui/icons/Wc';
-import { useHistory } from '../../controllers';
+// import { useHistory } from '../../controllers';
 
+function useHistory(props) {
 
+    // console.time('ฉันคาดว่า 🤔 function useHistory ใช้เวลาในการทำงานไป');
+
+    const [updateHistory, setState] = useState({
+        isHistory: null
+    });
+
+    useEffect(() => {
+
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory ใช้เวลาในการทำงานไป');
+
+        async function update() {
+
+            if (props.isAuth !== null) {
+
+                // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory => function update ใช้เวลาในการทำงานไป');
+
+                const unsubscribe = await props.db.firestore().collection('history').doc(props.isAuth.uid).collection('store').get().then(function (querySnapshot) {
+
+                    const tempDoc = querySnapshot.docs.map((doc) => {
+                        return doc.data();
+                    });
+
+                    setState({ isHistory: tempDoc })
+
+                });
+
+                // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory => function update ใช้เวลาในการทำงานไป');
+
+                return unsubscribe;
+
+            };
+
+        };
+
+        update();
+
+        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useHistory ใช้เวลาในการทำงานไป');
+
+    }, [props]);
+
+    // console.timeEnd('ฉันคาดว่า 🤔 function useHistory ใช้เวลาในการทำงานไป');
+
+    return updateHistory;
+}
 
 function History(props) {
 
-    // const [history, setHistory] = useState(null)
-    const [expanded, setExpanded] = useState(true)
+    const [expanded, setExpanded] = useState(true);
+    const { isHistory } = useHistory(props);
+    // const { isHistory } = useHistory(props)
 
-    const { isHistory } = useHistory(props)
+
 
 
     // const updateHistory = data => {
@@ -40,9 +86,11 @@ function History(props) {
 
 
     const goBack = () => {
-        props.history.push('/')
-        window.location.reload()
-    }
+
+        props.history.push('/');
+        window.location.reload();
+
+    };
 
     return (
         <React.Fragment>
@@ -63,7 +111,7 @@ function History(props) {
             </HistoryBar>
 
             <div style={{ width: '-webkit-fill-available', height: '-webkit-fill-available' }}>
-                <div style={{padding: 30}}></div>
+                <div style={{ padding: 30 }}></div>
                 {isHistory !== null
                     ? (<React.Fragment>
                         {Object.keys(isHistory).map((key) => (
@@ -84,9 +132,9 @@ function History(props) {
                                         <h4 style={{ padding: '10px' }}><CommuteIcon></CommuteIcon>ต้นทาง - ปลายทาง</h4>
                                     </center>
                                     <center>
-                                        <b><u>ต้นทาง:</u></b> {isHistory[key].location.routes[0].legs[0].start_address}
+                                        <b><u>ต้นทาง:</u></b> {isHistory[key].location.start_address}
                                         <br></br>
-                                        <b><u>ปลายทาง:</u></b> {isHistory[key].location.routes[0].legs[0].end_address}
+                                        <b><u>ปลายทาง:</u></b> {isHistory[key].location.end_address}
                                     </center>
                                     <center style={{ backgroundColor: 'darkgray' }}>
                                         <h4 style={{ padding: '10px' }}>  <AccessTimeIcon></AccessTimeIcon>  เริ่มการแชร์ - ปิดการแชร์</h4>
@@ -116,12 +164,12 @@ function History(props) {
             </div>
         </React.Fragment>
     );
-}
+
+};
 
 History.propTypes = {
     db: PropTypes.object,
-    isUsersPrivate: PropTypes.object,
-    isLocation: PropTypes.object,
-}
+    isAuth: PropTypes.object,
+};
 
 export default withRouter(History)

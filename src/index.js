@@ -5,38 +5,41 @@ import App from './App';
 import GeoError from './GeoError';
 // import NotSupported from './NotSupported';
 import * as serviceWorker from './serviceWorker';
-import * as firebase from 'firebase/app';
+// import * as admin from "firebase-admin";
+import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
+import 'firebase/firestore'
 
 // Your web app's Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyA77no0xwPQBpR5vmWCb1CHn4ofCaAmwj4",
-    authDomain: "test-projeck-share-we-go.firebaseapp.com",
-    databaseURL: "https://test-projeck-share-we-go.firebaseio.com",
-    projectId: "test-projeck-share-we-go",
-    storageBucket: "test-projeck-share-we-go.appspot.com",
-    messagingSenderId: "159987611648",
-    appId: "1:159987611648:web:e472c7802c41ac574c40e5",
-    measurementId: "G-NEQZ0L0PEV"
-};
+const firebaseConfig = {
+    apiKey: "AIzaSyAU9ngoZrzye3ak8eiI5Oz3O_R_JqoRix0",
+    authDomain: "swg-users-bata-test.firebaseapp.com",
+    databaseURL: "https://swg-users-bata-test.firebaseio.com",
+    projectId: "swg-users-bata-test",
+    storageBucket: "swg-users-bata-test.appspot.com",
+    messagingSenderId: "685921240361",
+    appId: "1:685921240361:web:8d0d633019fb02e7b82338",
+    measurementId: "G-YK1YFRRBEQ"
+  };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 window.addEventListener('appinstalled', (evt) => {
     evt.preventDefault();
-    console.log('a2hs installed');
-  });
+    // console.log('a2hs installed');
+});
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition, showError);
 } else {
     ReactDOM.render(<GeoError db={firebase} error="Geolocation is not supported" />, document.getElementById('root'));
-    console.log("Geolocation is not supported by this browser.");
+    // console.log("Geolocation is not supported by this browser.");
 }
 
 function showPosition(position) {
-
+   
     return ReactDOM.render(<App db={firebase} />, document.getElementById('root'));
 }
 

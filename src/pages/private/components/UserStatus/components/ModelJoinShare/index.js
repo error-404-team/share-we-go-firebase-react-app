@@ -8,47 +8,54 @@ import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import { Button } from '@material-ui/core';
-// import { post, d } from '../../../../../../RESTful_API'
-// import { dateTime } from '../../../../../../module';
-import { useProfile } from '../../../../../../StoreData'
+import { useProfile } from '../../../../../../StoreData';
 
 const useStyles = makeStyles(theme => ({
     modal: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    paper: {
+      },
+      paper: {
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #ffc800',
+        borderRadius: '10px',
+        border: '#faebd700',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-    },
-}))
+      },
+}));
 
 const ModelJoinShare = (props) => {
+
     const classes = useStyles();
-    const { isProfile } = useProfile(props)
+    const { isProfile } = useProfile(props);
 
     const joinShare = () => {
-        let path_status_member = `status/${props.isUsersPrivate.uid}/member`;
-        let path_share_member = `share/${props.isUsersPrivate.uid}/member`;
-        let data_status_member = {
+
+        // console.time('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
+
+        props.db.database().ref(`status/${props.isUsersPrivate.uid}/member`).update({
             uid: `${props.isUsersPrivate.uid}`,
             share_id: `${props.share_id}`,
-            value: 'true'
-        }
-        let data_share_member = {
+            value: true
+        });
+
+        // console.timeEnd('ฉันคาดว่า 🤔 status => uid => member ใช้เวลาในการ อัพเดต ไป');
+        // console.time('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
+
+        props.db.database().ref(`share/${props.isUsersPrivate.uid}/member`).update({
             uid: `${props.isUsersPrivate.uid}`,
             share_id: `${props.share_id}`,
             profile: isProfile
 
-        }
-        props.db.database().ref(`${path_status_member}`).update(data_status_member)
-        props.db.database().ref(`${path_share_member}`).update(data_share_member)
+        });
 
-        props.history.push('/')
-    }
+        // console.timeEnd('ฉันคาดว่า 🤔 share => uid => member ใช้เวลาในการ อัพเดต ไป');
+
+        props.history.push('/');
+
+    };
+
     return (
         <React.Fragment>
             <Modal
@@ -76,15 +83,13 @@ const ModelJoinShare = (props) => {
                 </Fade>
             </Modal>
         </React.Fragment>
-    )
+    );
 
-}
-
-
+};
 
 ModelJoinShare.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func
-}
+};
 
-export default withRouter(ModelJoinShare)
+export default withRouter(ModelJoinShare);

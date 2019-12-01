@@ -20,7 +20,7 @@ const MemberTypeIconStatus = (props) => {
             }} >
                 <Avatar
                     alt="Remy Sharp"
-                    src={props.isShare !== null ? props.isShare.owner.profile.photoURL : null}
+                    src={props.isShare !== null ? props.isShare.owner.photoURL : null}
                     className={props.classes.mediumAvatar}
                     style={{
                         border: '4px solid #fff',
@@ -36,7 +36,7 @@ const MemberTypeIconStatus = (props) => {
                                     {key !== props.isShare.owner.id 
                                     ?(<Avatar
                                         alt="Remy Sharp"
-                                        src={props.isShare.member[key].profile.photoURL}
+                                        src={props.isShare.member[key].photoURL}
                                         className={props.classes.mediumAvatar}
                                         style={{
                                             border: '4px solid #fff',
