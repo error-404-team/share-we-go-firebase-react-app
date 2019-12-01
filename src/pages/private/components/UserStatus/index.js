@@ -161,6 +161,7 @@ const MapShareStatusVisibility = (props) => {
                         isLocation={props.isLocation}
                         db={props.db}
                         isAuth={props.isAuth}
+                        onClick={props.onClick}
                     />
                 </React.Fragment>)}
         </React.Fragment>
@@ -176,7 +177,8 @@ MapShareStatusVisibility.propTypes = {
     openMenuSlide: PropTypes.func,
     isLocation: PropTypes.object,
     db: PropTypes.object,
-    isAuth: PropTypes.object
+    isAuth: PropTypes.object,
+    onClick: PropTypes.func
 };
 
 const UserStatus = (props) => {
@@ -211,7 +213,7 @@ const UserStatus = (props) => {
 
         if (showMapShare !== true) {
 
-            setAlertMapNotShare(true);
+            setOpenVisibility(true);
 
         } else {
 
@@ -241,11 +243,11 @@ const UserStatus = (props) => {
 
     };
 
-    const offAlertMapNotShare = () => {
+    // const offAlertMapNotShare = () => {
 
-        setAlertMapNotShare(false);
+    //     setAlertMapNotShare(false);
 
-    };
+    // };
 
     const onModelJoinShare = (key) => {
 
@@ -317,8 +319,10 @@ const UserStatus = (props) => {
                                 isAuth={props.isAuth}
                                 isLocation={props.isLocation}
                                 db={props.db}
+                                onClick={() => {window.location.reload()}}
+                                visibility={<VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />}
                             />
-                            <VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />
+                            
                         </React.Fragment>
                     )
                     : (<React.Fragment><Loading /></React.Fragment>)
@@ -330,10 +334,10 @@ const UserStatus = (props) => {
                     isProfile={isProfile}
                     uid={props.isAuth.uid}
                 />
-                <ModelAlertNotShare
+                {/* <ModelAlertNotShare
                     open={alertMapNotShare}
                     onClose={offAlertMapNotShare}
-                />
+                /> */}
             </StyleBaseLine>
         </Fragment>
     )

@@ -44,7 +44,7 @@ const ModelExitShare = (props) => {
             member: updateStatus,
             alert: updateStatus
         });
-        props.db.firestore().collection(`share`).doc(props.share_id).update({
+        props.db.firestore().collection(`share`).doc(props.isShare.owner.id).update({
             member: null
         })
 

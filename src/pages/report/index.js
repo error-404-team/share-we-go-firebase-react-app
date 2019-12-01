@@ -195,6 +195,7 @@ function Report(props) {
 
         setOpen(true)
         //    props.history.goBack()
+        // window.location.reload();
     };
 
     return (

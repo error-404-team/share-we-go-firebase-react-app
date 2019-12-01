@@ -1,6 +1,6 @@
 import React from 'react';
 // import $ from 'jquery.cookie'
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 import PropTypes from 'prop-types';
 
 function GeoError(props) {

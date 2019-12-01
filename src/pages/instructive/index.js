@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { InputBase, Button } from '@material-ui/core';
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function Instructive(props) {
+function Instructive(props) {
 
     const classes = useStyles();
     const [value, setValue] = React.useState('');
@@ -45,7 +46,7 @@ export default function Instructive(props) {
         }).then(() => {
 
             // console.log('อัพเดต เพศ แล้วนะ 😍');
-
+            props.history.push('/')
         });
     }
 
@@ -90,3 +91,5 @@ Instructive.propTypes = {
     isAuth: PropTypes.object,
     backgroundColor: PropTypes.string
 };
+
+export default withRouter(Instructive)
