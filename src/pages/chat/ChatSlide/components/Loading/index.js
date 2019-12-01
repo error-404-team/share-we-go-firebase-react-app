@@ -53,7 +53,7 @@ export const Loading = (props) => {
                     textDecoration: 'blink'
                 }}>
                     <ListItem button key={0}>
-                        <ListItemIcon style={{
+                      <ListItemIcon style={{
                             minWidth: 0,
                             marginLeft: 15,
                             marginRight: 15
