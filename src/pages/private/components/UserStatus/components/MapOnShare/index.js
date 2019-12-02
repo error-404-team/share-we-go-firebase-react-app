@@ -19,6 +19,9 @@ const MapOnShare = (props) => {
     lng: 100.7210703
   };
 
+    // console.log(props.isShare);
+
+    // console.log(props.isProfile);
   return (
     <React.Fragment>
       {props.isProfile && props.isShare !== null

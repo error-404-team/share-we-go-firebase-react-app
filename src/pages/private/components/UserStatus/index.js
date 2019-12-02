@@ -85,7 +85,7 @@ function useProfile(props) {
 
 function useShare(props) {
 
-    // console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
+    console.time('ฉันคาดว่า 🤔 function useShare ใช้เวลาในการทำงานไป');
 
     const [updateShare, setState] = useState({
         isShare: null
@@ -93,11 +93,11 @@ function useShare(props) {
 
     useEffect(() => {
 
-        // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+        console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
 
         async function update() {
 
-            // console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
+            console.time('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
 
             if (props.isAuth !== null) {
 
@@ -105,12 +105,12 @@ function useShare(props) {
 
                     querySnapshot.forEach(function (doc) {
                         // doc.data() is never undefined for query doc snapshots
-                        // console.log(doc.id, " => ", doc.data());
+                        console.log(doc.id, " => ", doc.data());
 
                         if (doc.data().status !== undefined) {
-                            setState({ isShare: null });
+                            setState({ isShare: { [doc.id]: doc.data() } });
                             console.log(doc.data().status);
-                            
+
                         } else {
                             setState({ isShare: { [doc.id]: doc.data() } });
                             console.log(doc.data().status);
@@ -123,13 +123,13 @@ function useShare(props) {
 
             }
 
-            // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
+            console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare => function update ใช้เวลาในการทำงานไป');
 
         };
 
         update();
 
-        // console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
+        console.timeEnd('ฉันคาดว่า 🤔 useEffect ที่อยู่ใน function useShare ใช้เวลาในการทำงานไป');
 
     }, [props]);
 
@@ -140,6 +140,7 @@ function useShare(props) {
 };
 
 const MapShareStatusVisibility = (props) => {
+    console.log(props);
 
     return (
         <React.Fragment>
@@ -312,6 +313,7 @@ const UserStatus = (props) => {
                     ? (
                         <React.Fragment>
                             <MapShareStatusVisibility
+                                {...props}
                                 open={openVisibility}
                                 isProfile={isProfile}
                                 isShare={isShare}
@@ -319,10 +321,10 @@ const UserStatus = (props) => {
                                 isAuth={props.isAuth}
                                 isLocation={props.isLocation}
                                 db={props.db}
-                                onClick={() => {window.location.reload()}}
+                                onClick={() => { window.location.reload() }}
                                 visibility={<VisibilityButton open={openVisibility} on={onVisibility} off={offVisibility} />}
                             />
-                            
+
                         </React.Fragment>
                     )
                     : (<React.Fragment><Loading /></React.Fragment>)

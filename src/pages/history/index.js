@@ -12,6 +12,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CommuteIcon from '@material-ui/icons/Commute';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import WcIcon from '@material-ui/icons/Wc';
+import TimerIcon from '@material-ui/icons/Timer';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import DriveEtaIcon from '@material-ui/icons/DriveEta';
+import TimerOffIcon from '@material-ui/icons/TimerOff';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 // import { useHistory } from '../../controllers';
 
 function useHistory(props) {
@@ -128,29 +133,29 @@ function History(props) {
                                     <Typography >{isHistory[key].date.start_time.value}</Typography>
                                 </ExpansionPanelSummary>
                                 <div>
-                                    <center style={{ backgroundColor: 'darkgray' }}>
+                                <center style={{ backgroundColor: '#B4CFFc' }}>
                                         <h4 style={{ padding: '10px' }}><CommuteIcon></CommuteIcon>ต้นทาง - ปลายทาง</h4>
                                     </center>
                                     <center>
-                                        <b><u>ต้นทาง:</u></b> {isHistory[key].location.start_address}
+                                    <EmojiPeopleIcon></EmojiPeopleIcon><b><u>ต้นทาง:</u></b><br/>{isHistory[key].location.start_address}
                                         <br></br>
-                                        <b><u>ปลายทาง:</u></b> {isHistory[key].location.end_address}
+                                    <DriveEtaIcon></DriveEtaIcon> <b><u>ปลายทาง:</u></b> <br/> {isHistory[key].location.end_address}
                                     </center>
-                                    <center style={{ backgroundColor: 'darkgray' }}>
+                                    <center style={{ backgroundColor: '#B4CFFc' }}>
                                         <h4 style={{ padding: '10px' }}>  <AccessTimeIcon></AccessTimeIcon>  เริ่มการแชร์ - ปิดการแชร์</h4>
                                     </center>
                                     <center>
-                                        <b><u>เริ่มการแชร์:</u></b> {isHistory[key].date.start_time.value}
+                                    <TimerIcon></TimerIcon> <b><u>เริ่มการแชร์:</u></b> {isHistory[key].date.start_time.value}
                                         <br></br>
-                                        <b><u>ปิดการแชร์:</u></b> {isHistory[key].date.end_time.value}
+                                    <TimerOffIcon></TimerOffIcon> <b><u>ปิดการแชร์:</u></b>  {isHistory[key].date.end_time.value}
                                         <br></br>
                                     </center>
-                                    <center style={{ backgroundColor: 'darkgray' }}>
+                                    <center style={{ backgroundColor: '#B4CFFc' }}>
                                         <h4 style={{ padding: '10px' }}><WcIcon></WcIcon>ผู้ร่วมเดินทาง - เพศผู้ร่วมเดินทาง</h4>
                                     </center>
                                     <center>
-                                        <b><u>ต้องการผู้ร่วมเดินทางเพิ่ม:</u> </b>{Object.keys(isHistory[key].member).length}/{isHistory[key].max_number.value} คน<br />
-                                        <b><u>ต้องการร่วมเดินทางกับเพศ:</u> </b> {isHistory[key].sex.value}
+                                    <PeopleAltIcon></PeopleAltIcon> <b><u>ต้องการผู้ร่วมเดินทางเพิ่ม:</u> </b>{Object.keys(isHistory[key].member).length}/{isHistory[key].max_number.value} คน<br />
+                                    <WcIcon></WcIcon> <b><u>ต้องการร่วมเดินทางกับเพศ:</u> </b> {isHistory[key].sex.value}
                                     </center>
                                     <br />
                                 </div>
