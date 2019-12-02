@@ -27,6 +27,7 @@ const useStyles = makeStyles(theme => ({
 const ModelExitShare = (props) => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false)
+    const [onload, setOnload] = useState(false)
 
     const removeShare = () => {
 
@@ -43,10 +44,17 @@ const ModelExitShare = (props) => {
                 ...props.isShare.member,
                 [props.isAuth.uid]: null
             }
+        }).then(function() {
+            setOnload(true)
         })
 
 
     }
+
+    if (onload === true ) {
+        window.location.reload();
+    }
+    
     return (
         <React.Fragment>
             <Modal
@@ -77,7 +85,7 @@ const ModelExitShare = (props) => {
                         : (<React.Fragment>
                             <div className={classes.paper}>
                                 <Grid container justify="center" alignItems="center" >
-                                    <center>รอแป๊บ....</center>
+                                    <center>กรุณารอสักครู่......</center>
                                 </Grid>
                             </div></React.Fragment>)
 

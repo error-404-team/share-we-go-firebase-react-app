@@ -13,14 +13,14 @@ import 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyAU9ngoZrzye3ak8eiI5Oz3O_R_JqoRix0",
-    authDomain: "swg-users-bata-test.firebaseapp.com",
-    databaseURL: "https://swg-users-bata-test.firebaseio.com",
-    projectId: "swg-users-bata-test",
-    storageBucket: "swg-users-bata-test.appspot.com",
-    messagingSenderId: "685921240361",
-    appId: "1:685921240361:web:8d0d633019fb02e7b82338",
-    measurementId: "G-YK1YFRRBEQ"
+    apiKey: "AIzaSyCcfMMaB419NKD5YtJiq6lRohn35HbsIqc",
+    authDomain: "swg-final.firebaseapp.com",
+    databaseURL: "https://swg-final.firebaseio.com",
+    projectId: "swg-final",
+    storageBucket: "swg-final.appspot.com",
+    messagingSenderId: "478422607653",
+    appId: "1:478422607653:web:519844ffa821a2f0a11ccc",
+    measurementId: "G-SQBZ0EQ3NX"
   };
 
 // Initialize Firebase
