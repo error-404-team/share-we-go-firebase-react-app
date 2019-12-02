@@ -55,7 +55,7 @@ export default function RadioButtonsGroup(props) {
         <div style={{ backgroundColor: props.backgroundColor }} className={classes.root}>
             <center>
                 <FormControl component="fieldset" className={classes.formControl}>
-                    <FormLabel component="legend">Travel Companion</FormLabel>
+                    <FormLabel component="legend">จำนวนเพื่อนร่วมทาง</FormLabel>
                     <RadioGroup
 
                         aria-label="gender"
@@ -68,6 +68,7 @@ export default function RadioButtonsGroup(props) {
                         <FormControlLabel value="1" control={<Radio color="primary" />} label="+1 คน" />
                         <FormControlLabel value="2" control={<Radio color="primary" />} label="+2 คน" />
                         <FormControlLabel value="3" control={<Radio color="primary" />} label="+3 คน" />
+                        <FormControlLabel value="4" control={<Radio color="primary" />} label="+4 คน" />
 
                     </RadioGroup>
 
