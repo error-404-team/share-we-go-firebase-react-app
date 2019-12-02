@@ -19,7 +19,7 @@ class DocTaxi extends React.Component {
         super(props);
 
         this.state = {
-            select: 'เหลือง',
+            select: 'เหลือง/เขียว',
             license_plate: "",
             status: false
         };
@@ -51,7 +51,7 @@ class DocTaxi extends React.Component {
 
     onSend() {
 
-        this.props.db.firestore().collection(`share`).doc(this.props.match.params.id ).update({
+        this.props.db.firestore().collection(`share`).doc(this.props.match.params.id).update({
             alert: {
                 uid: `${this.props.match.params.id}`,
                 sahre_id: `${this.props.match.params.id}`,
@@ -122,18 +122,77 @@ class DocTaxi extends React.Component {
                                                 name="age"
                                             />}
                                         >
+
+                                            <MenuItem value="เหลือง/เขียว">
+                                                <em><div style={{
+                                                    background: '#FFC107',
+                                                    width: '35px',
+                                                    height: '10px',
+                                                }}></div><div style={{
+                                                    background: '#4CAF50',
+                                                    width: '35px',
+                                                    height: '10px',
+                                                }}></div>
+                                                </em></MenuItem>
                                             <MenuItem value="เหลือง">
-                                                <em>เหลือง</em>
+                                                <div style={{
+                                                    background: '#FFC107',
+                                                    width: '35px',
+                                                    height: '10px',
+                                                }}></div>
                                             </MenuItem>
-                                            <MenuItem value="เขียว">เขียว</MenuItem>
-                                            <MenuItem value="ชมพู">ชมพู</MenuItem>
-                                            <MenuItem value="ฟ้า">ฟ้า</MenuItem>
-                                            <MenuItem value="แดง">แดง</MenuItem>
-                                            <MenuItem value="ส้ม">ส้ม</MenuItem>
-                                            <MenuItem value="เหลือง/เขียว">เหลือง/เขียว</MenuItem>
-                                            <MenuItem value="เหลือง/แดง">เหลือง/แดง</MenuItem>
-                                            <MenuItem value="เหลือง/ส้ม">เหลือง/ส้ม</MenuItem>
-                                            <MenuItem value="ฟ้า/แดง">ฟ้า/แดง</MenuItem>
+                                            <MenuItem value="เขียว"><div style={{
+                                                background: '#4CAF50',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div></MenuItem>
+                                            <MenuItem value="ชมพู"><div style={{
+                                                background: '#E91E63',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div></MenuItem>
+                                            <MenuItem value="ฟ้า"><div style={{
+                                                background: '#03A9F4',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div></MenuItem>
+                                            <MenuItem value="แดง"><div style={{
+                                                background: '#F44336',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div></MenuItem>
+                                            <MenuItem value="ส้ม"><div style={{
+                                                background: '#FF5722',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div></MenuItem>
+                                            <MenuItem value="เหลือง/แดง"><div style={{
+                                                background: '#FFC107',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div><div style={{
+                                                background: '#F44336',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div></MenuItem>
+                                            <MenuItem value="เหลือง/ส้ม"><div style={{
+                                                background: '#FFC107',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div><div style={{
+                                                background: '#FF5722',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div></MenuItem>
+                                            <MenuItem value="ฟ้า/แดง"><div style={{
+                                                background: '#03A9F4',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div><div style={{
+                                                background: '#F44336',
+                                                width: '35px',
+                                                height: '10px',
+                                            }}></div></MenuItem>
                                         </Select>
                                     </FormControl>
                                 </center>

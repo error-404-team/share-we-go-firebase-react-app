@@ -106,7 +106,7 @@ function MenuSlide(props) {
                                         marginLeft: 15,
                                         marginRight: 15
                                     }}> <AccountBoxIcon fontSize="large" /></ListItemIcon>
-                                    <ListItemText ><span style={{ fontSize: "large" }} >Profile</span></ListItemText>
+                                    <ListItemText ><span style={{ fontSize: "large" }} >โปรไฟล์</span></ListItemText>
                                 </ListItem>
                             </Link>
                             <Link to="/history" style={{
@@ -119,7 +119,7 @@ function MenuSlide(props) {
                                         marginLeft: 15,
                                         marginRight: 15
                                     }}> <HistoryIcon fontSize="large" /></ListItemIcon>
-                                    <ListItemText > <span style={{ fontSize: "large" }} >History</span></ListItemText>
+                                    <ListItemText > <span style={{ fontSize: "large" }} >ประวัติการแชร์</span></ListItemText>
                                 </ListItem>
                             </Link>
                             <Link to={`/instructive/${props.uid}`} style={{
@@ -132,7 +132,7 @@ function MenuSlide(props) {
                                         marginLeft: 15,
                                         marginRight: 15
                                     }}> <AssignmentIcon fontSize="large" /></ListItemIcon>
-                                    <ListItemText ><span style={{ fontSize: "large" }} >Instructive</span></ListItemText>
+                                    <ListItemText ><span style={{ fontSize: "large" }} >ให้คำแนะนำ</span></ListItemText>
                                 </ListItem>
                             </Link>
                         </List>

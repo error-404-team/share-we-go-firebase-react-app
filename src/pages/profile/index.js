@@ -126,11 +126,11 @@ function Profile(props) {
         },
         {
             value: 1,
-            label: 'Man',
+            label: 'ชาย',
         },
         {
             value: 2,
-            label: 'Women',
+            label: 'หญิง',
         }
     ]);
     // const [isProfile, setProfile] = useState(null);
