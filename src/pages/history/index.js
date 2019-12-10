@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CommuteIcon from '@material-ui/icons/Commute';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import WcIcon from '@material-ui/icons/Wc';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import TimerIcon from '@material-ui/icons/Timer';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import DriveEtaIcon from '@material-ui/icons/DriveEta';
@@ -137,12 +138,14 @@ function History(props) {
                                         <h4 style={{ padding: '10px' }}><CommuteIcon></CommuteIcon>ต้นทาง - ปลายทาง</h4>
                                     </center>
                                     <center>
+                                    <AccountCircleIcon></AccountCircleIcon><b><u>ผู้แชร์เส้นทาง:</u></b><br/>{isHistory[key].owner.displayName}
+                                        <br></br>
                                     <EmojiPeopleIcon></EmojiPeopleIcon><b><u>ต้นทาง:</u></b><br/>{isHistory[key].location.start_address}
                                         <br></br>
                                     <DriveEtaIcon></DriveEtaIcon> <b><u>ปลายทาง:</u></b> <br/> {isHistory[key].location.end_address}
                                     </center>
                                     <center style={{ backgroundColor: '#B4CFFc' }}>
-                                        <h4 style={{ padding: '10px' }}>  <AccessTimeIcon></AccessTimeIcon>  เริ่มการแชร์ - ปิดการแชร์</h4>
+                                        <h4 style={{ padding: '10px' }}>  <AccessTimeIcon></AccessTimeIcon>เริ่มการแชร์ - ปิดการแชร์</h4>
                                     </center>
                                     <center>
                                     <TimerIcon></TimerIcon> <b><u>เริ่มการแชร์:</u></b> {isHistory[key].date.start_time.value}
