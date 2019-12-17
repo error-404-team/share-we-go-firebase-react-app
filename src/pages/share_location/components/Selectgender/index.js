@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 export default function RadioButtonsGroup(props) {
 
     const classes = useStyles();
-    const [value, setValue] = React.useState('MaleAndFemale');
+    const [value, setValue] = React.useState('ทุกเพศ');
 
     // const socket = io(`http://localhost:8080/`);
 
@@ -58,9 +58,9 @@ export default function RadioButtonsGroup(props) {
                         value={value}
                         onChange={handleChange}
                     >
-                        <FormControlLabel value="Male" control={<Radio color="primary" />} label="ชาย" />
-                        <FormControlLabel value="Female" control={<Radio color="primary" />} label="หญิง " />
-                        <FormControlLabel value="MaleAndFemale" control={<Radio color="primary" />} label="ทุกเพศ " />
+                        <FormControlLabel value="ชาย" control={<Radio color="primary" />} label="ชาย" />
+                        <FormControlLabel value="หญิง" control={<Radio color="primary" />} label="หญิง " />
+                        <FormControlLabel value="ทุกเพศ" control={<Radio color="primary" />} label="ทุกเพศ " />
 
                     </RadioGroup>
                 </FormControl>

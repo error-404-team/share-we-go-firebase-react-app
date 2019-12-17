@@ -179,19 +179,29 @@ function ChatSlide(props) {
                                                 ? (<Fragment>
                                                     <div class="container darker">
                                                         <img src={`${isChat[key].photoURL}`} alt="Avatar" class="right" />
-                                                        <h4 style={{
+                                                        {/* <h4 style={{
                                                             marginTop: 0
-                                                        }} class="left">{isChat[key].displayName}</h4>
-                                                        <p class="left">{isChat[key].msg}</p>
+                                                        }} class="left">{isChat[key].displayName}</h4> */}
+                                                        <p style={{
+                                                            float: 'right',
+                                                            padding: '5px 10px',
+                                                            backgroundColor: 'gainsboro',
+                                                            borderRadius: '9px',
+                                                        }}>{isChat[key].msg}</p>
                                                     </div>
                                                 </Fragment>)
                                                 : (<Fragment>
                                                     <div class="container">
                                                         <img src={`${isChat[key].photoURL}`} alt="Avatar" class="left" />
-                                                        <h4 tyle={{
+                                                        {/* <h4 tyle={{
                                                             marginTop: 0
-                                                        }} class="right">{isChat[key].displayName}</h4>
-                                                        <p class="right">{isChat[key].msg}</p>
+                                                        }} class="right">{isChat[key].displayName}</h4> */}
+                                                        <p  style={{
+                                                            float: 'left',
+                                                            padding: '5px 10px',
+                                                            backgroundColor: 'gainsboro',
+                                                            borderRadius: '9px',
+                                                        }}>{isChat[key].msg}</p>
                                                     </div>
                                                 </Fragment>)
                                             }

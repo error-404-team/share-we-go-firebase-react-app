@@ -516,7 +516,8 @@ const OwnerStatus = (props) => {
                                                         color: 'white'
 
                                                     }} className={classes.buttonExitShare}>
-                                                    <MeetingRoomIcon />
+                                                    {/* <MeetingRoomIcon /> */}
+                                                    <p>ออก</p>
                                                 </Fab>
                                             </Grid>
                                             <Button variant="contained" onClick={startShareGroup} style={{
